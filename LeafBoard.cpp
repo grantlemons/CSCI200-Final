@@ -1,8 +1,14 @@
-#include "Shared.cpp"
+#include "Shared.h"
 #include "Board.h"
 #include "LeafBoard.h"
 
-LeafBoard::LeafBoard() : Board() {}
+LeafBoard::LeafBoard() : Board() {
+    this->cells = new LLCell[9];
+}
+
+LeafBoard::~LeafBoard() {
+    delete this->cells;
+}
 
 // navigation
 void LeafBoard::set_cell_owner(const int INDEX, const CellOwner OWNER) {
@@ -47,12 +53,12 @@ bool LeafBoard::check_win(const int INDEX, const CellOwner OWNER) const {
     }
 
     return this->cells[INDEX] == OWNER &&
-           (this->cells[horizontal_other1] == OWNER &&
-                this->cells[horizontal_other2] == OWNER ||
-            this->cells[vertical_other1] == OWNER &&
-                this->cells[vertical_other2] == OWNER ||
-            include_diagonals2 && this->cells[diagonal_other1] == OWNER &&
-                this->cells[diagonal_other2] == OWNER ||
-            include_diagonals4 && this->cells[diagonal_other3] == OWNER &&
-                this->cells[diagonal_other4] == OWNER);
+           ((this->cells[horizontal_other1] == OWNER &&
+             this->cells[horizontal_other2] == OWNER) ||
+            (this->cells[vertical_other1] == OWNER &&
+             this->cells[vertical_other2] == OWNER) ||
+            (include_diagonals2 && this->cells[diagonal_other1] == OWNER &&
+             this->cells[diagonal_other2] == OWNER) ||
+            (include_diagonals4 && this->cells[diagonal_other3] == OWNER &&
+             this->cells[diagonal_other4] == OWNER));
 }

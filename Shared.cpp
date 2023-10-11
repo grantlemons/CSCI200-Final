@@ -1,16 +1,18 @@
-#ifndef SHARED
-#define SHARED
-
 #include <cmath>
+#include <iostream>
 
-enum CellOwner {
-    None,
-    Player1,
-    Player2,
-};
-typedef char LLCell;
+#include "Shared.h"
 
-// Helper functions
+void print_owner(const CellOwner OWNER) {
+    if (OWNER == None) {
+        std::cout << "None";
+    } else if (OWNER == Player1) {
+        std::cout << "Player1";
+    } else if (OWNER == Player2) {
+        std::cout << "Player2";
+    }
+}
+
 unsigned int negative_mod(int a, int b) {
     return a - (b * floor((double)a / b));
 }
@@ -31,5 +33,3 @@ void diagonal_twos_others(const int INDEX, int &other1, int &other2) {
     other1 = negative_mod(INDEX - 2, 10);
     other2 = (INDEX + 2) % 10;
 }
-
-#endif // !SHARED

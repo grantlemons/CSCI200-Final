@@ -1,5 +1,5 @@
 #include "Board.h"
-#include "Shared.cpp"
+#include "Shared.h"
 
 Board::Board() {
     this->winner = None;

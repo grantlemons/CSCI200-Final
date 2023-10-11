@@ -1,13 +1,23 @@
-#include "Shared.cpp"
+#include "Shared.h"
 #include "Board.h"
 #include "PrimaryBoard.h"
 #include "LeafBoard.h"
 
-PrimaryBoard::PrimaryBoard() : Board() {}
+#include <optional>
 
-std::optional<LeafBoard> PrimaryBoard::select_board(const int INDEX) const {
-    const Board CELL = this->cells[INDEX];
-    return CELL.winner == None ? std::optional<LeafBoard>(CELL) : std::nullopt;
+PrimaryBoard::PrimaryBoard() : Board() {
+    this->cells = new LeafBoard[9];
+}
+
+PrimaryBoard::~PrimaryBoard() {
+    delete this->cells;
+}
+
+std::optional<LeafBoard *> PrimaryBoard::select_board(const int INDEX) const {
+    LeafBoard *cell = &this->cells[INDEX];
+    std::optional<LeafBoard *> opt = std::optional(cell);
+
+    return cell->winner == None ? opt : std::nullopt;
 }
 
 bool PrimaryBoard::check_win(const int INDEX, const CellOwner OWNER) const {
@@ -41,14 +51,14 @@ bool PrimaryBoard::check_win(const int INDEX, const CellOwner OWNER) const {
     }
 
     return this->cells[INDEX].winner == OWNER &&
-           (this->cells[horizontal_other1].winner == OWNER &&
-                this->cells[horizontal_other2].winner == OWNER ||
-            this->cells[vertical_other1].winner == OWNER &&
-                this->cells[vertical_other2].winner == OWNER ||
-            include_diagonals2 &&
-                this->cells[diagonal_other1].winner == OWNER &&
-                this->cells[diagonal_other2].winner == OWNER ||
-            include_diagonals4 &&
-                this->cells[diagonal_other3].winner == OWNER &&
-                this->cells[diagonal_other4].winner == OWNER);
+           ((this->cells[horizontal_other1].winner == OWNER &&
+             this->cells[horizontal_other2].winner == OWNER) ||
+            (this->cells[vertical_other1].winner == OWNER &&
+             this->cells[vertical_other2].winner == OWNER) ||
+            (include_diagonals2 &&
+             this->cells[diagonal_other1].winner == OWNER &&
+             this->cells[diagonal_other2].winner == OWNER) ||
+            (include_diagonals4 &&
+             this->cells[diagonal_other3].winner == OWNER &&
+             this->cells[diagonal_other4].winner == OWNER));
 }
