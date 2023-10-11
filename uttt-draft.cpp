@@ -1,5 +1,5 @@
-#include <iostream>
-#include <math.h>
+#include <cmath>
+#include <optional>
 
 using namespace std;
 
@@ -14,10 +14,8 @@ class Board {
 public:
   CellOwner winner;
 
-public:
   Board();
   virtual bool check_win(const int INDEX, const CellOwner OWNER) const;
-  virtual void set_cell_owner(const int INDEX, const CellOwner OWNER);
 };
 
 class SubBoard : virtual public Board {
@@ -32,12 +30,12 @@ public:
 
 class MainBoard : virtual public Board {
 private:
-  SubBoard cells[9];
+  Board cells[9];
 
 public:
   MainBoard();
   bool check_win(const int INDEX, const CellOwner OWNER) const;
-  void set_cell_owner(const int INDEX, const CellOwner OWNER);
+  optional<Board> select_board(const int INDEX) const;
 };
 
 // Helper functions
@@ -49,7 +47,7 @@ void horizontal_others(const int INDEX, int &other1, int &other2) {
   other1 = negative_mod(INDEX - 1, 3);
   other2 = (INDEX + 1) % 3;
 }
-void vertial_others(const int INDEX, int &other1, int &other2) {
+void vertical_others(const int INDEX, int &other1, int &other2) {
   other1 = negative_mod(INDEX - 3, 9);
   other2 = (INDEX + 3) % 9;
 }
@@ -67,8 +65,21 @@ Board::Board() { this->winner = None; }
 SubBoard::SubBoard() : Board() {}
 MainBoard::MainBoard() : Board() {}
 
-void SubBoard::set_cell_owner(const int INDEX, const CellOwner OWNER) {}
-void MainBoard::set_cell_owner(const int INDEX, const CellOwner OWNER) {}
+// navigation
+void SubBoard::set_cell_owner(const int INDEX, const CellOwner OWNER) {
+  if (this->winner == None) {
+    this->cells[INDEX] = OWNER;
+
+    if (this->check_win(INDEX, OWNER)) {
+      this->winner = OWNER;
+    }
+  }
+}
+
+optional<Board> MainBoard::select_board(const int INDEX) const {
+  const Board CELL = this->cells[INDEX];
+  return CELL.winner == None ? optional<Board>(CELL) : nullopt;
+}
 
 // check victory
 bool SubBoard::check_win(const int INDEX, const CellOwner OWNER) const {
@@ -76,7 +87,7 @@ bool SubBoard::check_win(const int INDEX, const CellOwner OWNER) const {
   int vertical_other1, vertical_other2;
 
   horizontal_others(INDEX, horizontal_other1, horizontal_other2);
-  vertial_others(INDEX, vertical_other1, vertical_other2);
+  vertical_others(INDEX, vertical_other1, vertical_other2);
 
   // set diagonal_other indexes
   // diagonals are only sometimes valid:
@@ -117,7 +128,7 @@ bool MainBoard::check_win(const int INDEX, const CellOwner OWNER) const {
   int vertical_other1, vertical_other2;
 
   horizontal_others(INDEX, horizontal_other1, horizontal_other2);
-  vertial_others(INDEX, vertical_other1, vertical_other2);
+  vertical_others(INDEX, vertical_other1, vertical_other2);
 
   // set diagonal_other indexes
   // diagonals are only sometimes valid:
