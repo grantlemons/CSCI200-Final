@@ -40,6 +40,6 @@ depend:
 	@$(CXX) -MM $(SRC_FILES) >> Makefile
 
 zip:
-	@tar czf $(TARGET).tar.gz .
+	@tar czf $(TARGET).tar.gz --exclude-ignore=.gitignore --exclude=".git" --exclude=".gitignore" .
 
 .PHONY: all clean depend
