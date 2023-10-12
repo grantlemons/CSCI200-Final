@@ -17,10 +17,11 @@ int main() {
     }
 
     selectedLeafBoard->set_cell_owner(0, Player1);
-    selectedLeafBoard->set_cell_owner(1, Player1);
     selectedLeafBoard->set_cell_owner(3, Player1);
+    selectedLeafBoard->set_cell_owner(6, Player1);
 
     print_owner(selectedLeafBoard->winner);
+    cout << endl;
 
     return EXIT_SUCCESS;
 }
