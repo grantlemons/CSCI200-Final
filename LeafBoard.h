@@ -9,10 +9,13 @@ private:
     LLCell *cells;
 
 public:
+    CellOwner winner;
+
+public:
     LeafBoard();
     ~LeafBoard();
     CellOwner get_cell_owner(const int INDEX) const;
-    void set_cell_owner(const int INDEX, const CellOwner OWNER);
+    bool set_cell_owner(const int INDEX, const CellOwner OWNER);
 };
 
 #endif // !LEAFBOARD

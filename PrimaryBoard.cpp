@@ -5,7 +5,7 @@
 
 #include <optional>
 
-PrimaryBoard::PrimaryBoard() : Board() {
+PrimaryBoard::PrimaryBoard() {
     this->cells = new LeafBoard[9];
 }
 

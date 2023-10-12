@@ -1,6 +1,8 @@
 #ifndef SHARED
 #define SHARED
 
+#include <ostream>
+
 enum CellOwner {
     None,
     Player1,
@@ -17,5 +19,7 @@ void horizontal_others(const int INDEX, int &other1, int &other2);
 void vertical_others(const int INDEX, int &other1, int &other2);
 void diagonal_fours_others(const int INDEX, int &other1, int &other2);
 void diagonal_twos_others(const int INDEX, int &other1, int &other2);
+
+std::ostream &operator<<(std::ostream &out, const CellOwner OWNER);
 
 #endif // !SHARED

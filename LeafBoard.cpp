@@ -1,10 +1,10 @@
 #include "Shared.h"
 #include "Board.h"
 #include "LeafBoard.h"
-#include <iostream>
 
-LeafBoard::LeafBoard() : Board() {
+LeafBoard::LeafBoard() {
     this->cells = new LLCell[9];
+    this->winner = None;
 }
 
 LeafBoard::~LeafBoard() {
@@ -16,12 +16,14 @@ CellOwner LeafBoard::get_cell_owner(const int INDEX) const {
 }
 
 // navigation
-void LeafBoard::set_cell_owner(const int INDEX, const CellOwner OWNER) {
+bool LeafBoard::set_cell_owner(const int INDEX, const CellOwner OWNER) {
     if (this->cells[INDEX] == None) {
         this->cells[INDEX] = OWNER;
 
         if (this->check_win(INDEX, OWNER)) {
             this->winner = OWNER;
         }
+        return true;
     }
+    return false;
 }

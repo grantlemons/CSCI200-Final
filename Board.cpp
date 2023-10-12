@@ -1,9 +1,7 @@
 #include "Board.h"
 #include "Shared.h"
 
-Board::Board() {
-    this->winner = None;
-}
+#include <ostream>
 
 // check victory
 bool Board::check_win(const int INDEX, const CellOwner OWNER) const {
@@ -45,4 +43,18 @@ bool Board::check_win(const int INDEX, const CellOwner OWNER) const {
              get_cell_owner(diagonal_other2) == OWNER) ||
             (include_diagonals4 && get_cell_owner(diagonal_other3) == OWNER &&
              get_cell_owner(diagonal_other4) == OWNER));
+}
+
+std::ostream &operator<<(std::ostream &out, const Board &BRD) {
+    out << "[";
+    for (int i = 0; i < 9 - 1; i++) {
+        out << BRD.get_cell_owner(i) << ", ";
+
+        if ((i + 1) % 3 == 0) {
+            out << std::endl << " ";
+        }
+    }
+    out << BRD.get_cell_owner(8) << "]";
+
+    return out;
 }

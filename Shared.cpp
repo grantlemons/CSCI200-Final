@@ -1,15 +1,17 @@
 #include <cmath>
-#include <iostream>
+#include <ostream>
 
 #include "Shared.h"
 
-void print_owner(const CellOwner OWNER) {
+std::ostream &operator<<(std::ostream &out, const CellOwner OWNER) {
     if (OWNER == None) {
-        std::cout << "None";
+        return out << "N";
     } else if (OWNER == Player1) {
-        std::cout << "Player1";
+        return out << "1";
     } else if (OWNER == Player2) {
-        std::cout << "Player2";
+        return out << "2";
+    } else {
+        return out << "Unknown CellOwner Variant";
     }
 }
 
