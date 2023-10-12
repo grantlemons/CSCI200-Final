@@ -11,7 +11,7 @@ private:
 public:
     LeafBoard();
     ~LeafBoard();
-    bool check_win(const int INDEX, const CellOwner OWNER) const;
+    CellOwner get_cell_owner(const int INDEX) const;
     void set_cell_owner(const int INDEX, const CellOwner OWNER);
 };
 

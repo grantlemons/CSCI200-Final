@@ -14,7 +14,7 @@ private:
 public:
     PrimaryBoard();
     ~PrimaryBoard();
-    bool check_win(const int INDEX, const CellOwner OWNER) const;
+    CellOwner get_cell_owner(const int INDEX) const;
     std::optional<LeafBoard *> select_board(const int INDEX) const;
 };
 

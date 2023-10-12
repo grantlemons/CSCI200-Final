@@ -10,7 +10,8 @@ public:
 
     Board();
     virtual ~Board() = default;
-    virtual bool check_win(const int INDEX, const CellOwner OWNER) const = 0;
+    virtual bool check_win(const int INDEX, const CellOwner OWNER) const;
+    virtual CellOwner get_cell_owner(const int INDEX) const = 0;
 };
 
 #endif // !BOARD
