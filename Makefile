@@ -1,13 +1,20 @@
-TARGET = FINAL
-SRC_FILES = main.cpp Shared.cpp Board.cpp LeafBoard.cpp PrimaryBoard.cpp
+TARGET = TUI
+SRC_FILES = tui.cpp
+# TARGET = FINAL
+# SRC_FILES = main.cpp Shared.cpp Board.cpp LeafBoard.cpp PrimaryBoard.cpp
 
 # I like this linker
 ifneq ("$(wildcard /usr/bin/mold)","")
 	LINKERFLAG = -fuse-ld=mold
 endif
 
+# For including external libraries
+INCLUDE = -I /usr/include/
+LDLIBS = -lnotcurses-core -lnotcurses
+LDFLAGS = -L /usr/lib/ $(LDLIBS)
+
 CXX = g++
-CXXFLAGS = -Wall -Wextra -Werror -pedantic-errors $(LINKERFLAG)
+CXXFLAGS = -Wall -Wextra -Werror -pedantic-errors $(LINKERFLAG) $(INCLUDE) $(LDFLAGS)
 CXXFLAGS_DEBUG = -g
 CXXVERSION = -std=c++17
 
@@ -25,7 +32,7 @@ endif
 all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
-	$(CXX) -o $@ $^
+	$(CXX) $(CXXFLAGS) $(CXXVERSION) $(CXXFLAGS_DEBUG) -o $@ $^
 
 .cpp.o:
 	$(CXX) $(CXXFLAGS) $(CXXVERSION) $(CXXFLAGS_DEBUG) -o $@ -c $<
