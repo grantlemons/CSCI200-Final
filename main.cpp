@@ -16,21 +16,21 @@ int choose_board(const CellOwner PLAYER) {
 }
 
 int main() {
-    PrimaryBoard *pBoard = new PrimaryBoard();
+    PrimaryBoard pBoard;
     optional<LeafBoard *> optBoard;
     LeafBoard *selectedLeafBoard;
 
-    cout << *pBoard << endl;
+    cout << pBoard << endl;
 
     CellOwner player = Player1;
     int index = choose_board(player);
 
     do {
-        while (pBoard->get_cell_owner(index) != None) {
+        while (pBoard.get_cell_owner(index) != None) {
             cout << "Cell is already owned!" << endl;
             index = choose_board(player);
         }
-        optBoard = pBoard->select_board(index);
+        optBoard = pBoard.select_board(index);
         if (optBoard != nullopt) {
             selectedLeafBoard = optBoard.value();
         }
@@ -49,8 +49,8 @@ int main() {
         else {
             player = Player1;
         }
-        cout << *pBoard << endl;
-    } while (!pBoard->check_win(index, player));
+        cout << pBoard << endl;
+    } while (!pBoard.check_win(index, player));
 
     return EXIT_SUCCESS;
 }

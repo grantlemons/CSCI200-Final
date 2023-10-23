@@ -9,11 +9,11 @@
 
 class PrimaryBoard : virtual public Board {
 private:
-    LeafBoard *cells;
+    LeafBoard *_cells;
 
 public:
     PrimaryBoard();
-    ~PrimaryBoard();
+    ~PrimaryBoard() = default;
     CellOwner get_cell_owner(const int INDEX) const;
     std::optional<LeafBoard *> select_board(const int INDEX) const;
 };

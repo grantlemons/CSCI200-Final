@@ -1,11 +1,15 @@
 #ifndef BOARD
 #define BOARD
 
+#include "GraphicalBoard.h"
 #include "Shared.h"
 #include <optional>
 #include <ostream>
 
 class Board {
+private:
+    GraphicalBoard _gboard;
+
 public:
     Board() = default;
     virtual ~Board() = default;

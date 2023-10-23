@@ -1,5 +1,5 @@
-TARGET = TUI
-SRC_FILES = tui.cpp
+TARGET = GAME
+SRC_FILES = main.cpp
 # TARGET = FINAL
 # SRC_FILES = main.cpp Shared.cpp Board.cpp LeafBoard.cpp PrimaryBoard.cpp
 
