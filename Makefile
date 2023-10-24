@@ -1,4 +1,4 @@
-TARGET = GAME
+TARGET = FINAL
 SRC_FILES = main.cpp Shared.cpp Board.cpp LeafBoard.cpp PrimaryBoard.cpp GraphicalBoard.cpp NcHandler.cpp
 
 # I like this linker
