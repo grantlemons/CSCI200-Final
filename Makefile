@@ -1,7 +1,5 @@
 TARGET = GAME
-SRC_FILES = main.cpp
-# TARGET = FINAL
-# SRC_FILES = main.cpp Shared.cpp Board.cpp LeafBoard.cpp PrimaryBoard.cpp
+SRC_FILES = main.cpp Shared.cpp Board.cpp LeafBoard.cpp PrimaryBoard.cpp GraphicalBoard.cpp NcHandler.cpp
 
 # I like this linker
 ifneq ("$(wildcard /usr/bin/mold)","")

@@ -1,7 +1,62 @@
+#include "NcHandler.h"
 #include "Board.h"
 #include "Shared.h"
 
+#include <cmath>
 #include <ostream>
+#include <notcurses/notcurses.h>
+
+ncplane_options default_nopts(std::shared_ptr<NcHandler> ncHandler) {
+    ncplane *std = ncHandler->get_stdplane();
+
+    const int ROWS = (3 * 11) + 2;
+    const int COLS = (3 * 20) + 2;
+
+    unsigned int std_rows, std_cols;
+    ncplane_dim_yx(std, &std_rows, &std_cols);
+
+    unsigned int std_center_y, std_center_x;
+    std_center_y = std_rows / 2;
+    std_center_x = std_cols / 2;
+
+    int board_origin_y, board_origin_x;
+    board_origin_y = std_center_y - (ROWS / 2);
+    board_origin_x = std_center_x - (COLS / 2);
+
+    ncplane_options nopts = {
+        board_origin_y, board_origin_x, ROWS, COLS, NULL, NULL, NULL, 0, 0, 0,
+    };
+
+    return nopts;
+}
+
+Board::Board(std::shared_ptr<NcHandler> ncHandler, const char **SYMBOLS)
+    : Board::Board(ncHandler, default_nopts(ncHandler), SYMBOLS) {}
+
+Board::Board(std::shared_ptr<NcHandler> ncHandler, ncplane_options nopts,
+             const char **const SYMBOLS)
+    : _gboard(ncHandler, nopts, SYMBOLS) {}
+
+unsigned int negative_mod(int a, int b) {
+    return a - (b * floor((double)a / b));
+}
+
+void horizontal_others(const int INDEX, int &other1, int &other2) {
+    other1 = negative_mod(INDEX - 1, 3);
+    other2 = (INDEX + 1) % 3;
+}
+void vertical_others(const int INDEX, int &other1, int &other2) {
+    other1 = negative_mod(INDEX - 3, 9);
+    other2 = (INDEX + 3) % 9;
+}
+void diagonal_fours_others(const int INDEX, int &other1, int &other2) {
+    other1 = negative_mod(INDEX - 4, 12);
+    other2 = (INDEX + 4) % 12;
+}
+void diagonal_twos_others(const int INDEX, int &other1, int &other2) {
+    other1 = negative_mod(INDEX - 2, 10);
+    other2 = (INDEX + 2) % 10;
+}
 
 // check victory
 bool Board::check_win(const int INDEX, const CellOwner OWNER) const {

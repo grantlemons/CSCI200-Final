@@ -1,6 +1,7 @@
 #include "NcHandler.h"
 
 #include <clocale>
+#include <iostream>
 #include <notcurses/notcurses.h>
 
 NcHandler::NcHandler() {
@@ -10,28 +11,17 @@ NcHandler::NcHandler() {
 
 NcHandler::~NcHandler() {
     notcurses_stop(this->nc);
-}
-
-NcHandler *NcHandler::get_instance() {
-    if (_singleton == nullptr) {
-        _singleton = new NcHandler();
-    }
-
-    return _singleton;
+    this->nc = nullptr;
 }
 
 notcurses *NcHandler::get_nc() {
-    NcHandler *sgltn = NcHandler::get_instance();
-
-    return sgltn->nc;
+    return this->nc;
 }
 
 ncplane *NcHandler::get_stdplane() {
-    NcHandler *sgltn = NcHandler::get_instance();
-
-    return notcurses_stdplane(sgltn->nc);
+    return notcurses_stdplane(this->nc);
 }
 
-void NcHandler::render() const {
+void NcHandler::render() {
     notcurses_render(this->nc);
 }

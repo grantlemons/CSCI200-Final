@@ -4,9 +4,14 @@
 #include "LeafBoard.h"
 
 #include <optional>
+#include <vector>
 
-PrimaryBoard::PrimaryBoard() {
-    this->_cells = new LeafBoard[9];
+const char *THICK_SYMBOLS[3] = {"\u2501", "\u2503", "\u254B"};
+
+PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandler> ncHandler)
+    : Board::Board(ncHandler, THICK_SYMBOLS) {
+    std::vector<LeafBoard> tmp(9, LeafBoard(ncHandler));
+    this->_cells = tmp.data();
 }
 
 CellOwner PrimaryBoard::get_cell_owner(const int INDEX) const {

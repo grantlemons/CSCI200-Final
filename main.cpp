@@ -1,8 +1,11 @@
 #include "Board.h"
+#include "GraphicalBoard.h"
+#include "NcHandler.h"
 #include "LeafBoard.h"
 #include "PrimaryBoard.h"
 #include "Shared.h"
 
+#include <memory>
 #include <optional>
 #include <iostream>
 using namespace std;
@@ -16,41 +19,31 @@ int choose_board(const CellOwner PLAYER) {
 }
 
 int main() {
-    PrimaryBoard pBoard;
-    optional<LeafBoard *> optBoard;
-    LeafBoard *selectedLeafBoard;
+    shared_ptr<NcHandler> ncHandler(new NcHandler());
+    ncplane *std = ncHandler->get_stdplane();
 
-    cout << pBoard << endl;
+    const int ROWS = (3 * 11) + 2;
+    const int COLS = (3 * 20) + 2;
 
-    CellOwner player = Player1;
-    int index = choose_board(player);
+    unsigned int std_rows, std_cols;
+    ncplane_dim_yx(std, &std_rows, &std_cols);
 
-    do {
-        while (pBoard.get_cell_owner(index) != None) {
-            cout << "Cell is already owned!" << endl;
-            index = choose_board(player);
-        }
-        optBoard = pBoard.select_board(index);
-        if (optBoard != nullopt) {
-            selectedLeafBoard = optBoard.value();
-        }
+    unsigned int std_center_y, std_center_x;
+    std_center_y = std_rows / 2;
+    std_center_x = std_cols / 2;
 
-        cout << *selectedLeafBoard << endl;
-        cout << player << ": Enter inner cell: ";
-        cin >> index;
-        while (!selectedLeafBoard->set_cell_owner(index, player)) {
-            cout << "Cell is already owned!" << endl;
-            cout << player << ": Enter inner cell: ";
-            cin >> index;
-        }
+    int board_origin_y, board_origin_x;
+    board_origin_y = std_center_y - (ROWS / 2);
+    board_origin_x = std_center_x - (COLS / 2);
 
-        if (player == Player1)
-            player = Player2;
-        else {
-            player = Player1;
-        }
-        cout << pBoard << endl;
-    } while (!pBoard.check_win(index, player));
+    ncplane_options nopts = {
+        board_origin_y, board_origin_x, ROWS, COLS, NULL, NULL, NULL, 0, 0, 0,
+    };
+
+    const char *THICK_SYMBOLS[3] = {"\u2501", "\u2503", "\u254B"};
+
+    GraphicalBoard gboard(ncHandler, nopts, THICK_SYMBOLS);
+    gboard.draw_board();
 
     return EXIT_SUCCESS;
 }

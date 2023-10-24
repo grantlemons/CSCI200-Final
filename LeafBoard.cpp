@@ -2,7 +2,10 @@
 #include "Board.h"
 #include "LeafBoard.h"
 
-LeafBoard::LeafBoard() {
+const char *THIN_SYMBOLS[3] = {"\u2500", "\u2502", "\u253C"};
+
+LeafBoard::LeafBoard(std::shared_ptr<NcHandler> ncHandler)
+    : Board::Board(ncHandler, THIN_SYMBOLS) {
     this->_cells = new LLCell[9];
     this->winner = None;
 }

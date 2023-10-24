@@ -13,7 +13,7 @@ public:
     CellOwner winner;
 
 public:
-    LeafBoard();
+    LeafBoard(std::shared_ptr<NcHandler> ncHandler);
     ~LeafBoard() = default;
     CellOwner get_cell_owner(const int INDEX) const;
     bool set_cell_owner(const int INDEX, const CellOwner OWNER);
