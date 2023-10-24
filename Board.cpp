@@ -1,3 +1,4 @@
+#include "GraphicalBoard.h"
 #include "NcHandler.h"
 #include "Board.h"
 #include "Shared.h"
@@ -35,9 +36,16 @@ Board::Board(std::shared_ptr<NcHandler> ncHandler, const uint64_t CELL_CHANNELS,
     : Board::Board(ncHandler, default_nopts(ncHandler), CELL_CHANNELS,
                    SYMBOLS) {}
 
+Board::Board(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE,
+             const uint64_t CELL_CHANNELS, const char **const SYMBOLS)
+    : _gboard(ncHandler, default_nopts(ncHandler), PLANE, CELL_CHANNELS,
+              SYMBOLS) {}
+
 Board::Board(std::shared_ptr<NcHandler> ncHandler, ncplane_options nopts,
              const uint64_t CELL_CHANNELS, const char **const SYMBOLS)
-    : _gboard(ncHandler, nopts, CELL_CHANNELS, SYMBOLS) {}
+    : _gboard(ncHandler, nopts, CELL_CHANNELS, SYMBOLS) {
+    this->draw();
+}
 
 unsigned int negative_mod(int a, int b) {
     return a - (b * floor((double)a / b));
@@ -100,6 +108,20 @@ bool Board::check_win(const int INDEX, const CellOwner OWNER) const {
              get_cell_owner(diagonal_other2) == OWNER) ||
             (include_diagonals4 && get_cell_owner(diagonal_other3) == OWNER &&
              get_cell_owner(diagonal_other4) == OWNER));
+}
+
+void Board::draw() {
+    this->_gboard.draw_board();
+}
+// void Board::draw_x(const unsigned int INDEX) {
+//     this->_gboard.draw_x(INDEX);
+// }
+// void Board::draw_o(const unsigned int INDEX) {
+//     this->_gboard.draw_o(INDEX);
+// }
+
+GraphicalBoard *Board::get_gboard() {
+    return &this->_gboard;
 }
 
 std::ostream &operator<<(std::ostream &out, const Board &BRD) {

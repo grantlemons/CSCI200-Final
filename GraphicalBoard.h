@@ -8,10 +8,10 @@
 
 class GraphicalBoard {
 private:
-    ncplane *_plane;
     std::shared_ptr<NcHandler> _ncHandler;
+    ncplane *_primaryPlane;
+    ncplane **_childPlanes;
 
-    unsigned int _y, _x;
     unsigned int _rows, _cols;
     const char **_symbols;
     uint64_t _cell_channels;
@@ -29,10 +29,14 @@ public:
                    const char **const SYMBOLS);
     GraphicalBoard(std::shared_ptr<NcHandler> ncHandler, ncplane_options nopts,
                    const uint64_t CELL_CHANNELS, const char **const SYMBOLS);
+    GraphicalBoard(std::shared_ptr<NcHandler> ncHandler, ncplane_options nopts,
+                   ncplane *const PLANE, const uint64_t CELL_CHANNELS,
+                   const char **const SYMBOLS);
     ~GraphicalBoard() = default;
     void draw_board();
     void draw_x(const unsigned int INDEX);
     void draw_o(const unsigned int INDEX);
+    ncplane **get_child_planes();
 };
 
 #endif // !G_BOARD

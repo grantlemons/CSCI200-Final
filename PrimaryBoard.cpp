@@ -18,7 +18,13 @@ uint64_t def_thick_channels(std::shared_ptr<NcHandler> ncHandler) {
 
 PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandler> ncHandler)
     : Board::Board(ncHandler, def_thick_channels(ncHandler), THICK_SYMBOLS) {
-    std::vector<LeafBoard> tmp(9, LeafBoard(ncHandler));
+    std::vector<LeafBoard> tmp;
+
+    for (int i = 0; i < 9; i++) {
+        tmp.push_back(
+            LeafBoard(ncHandler, this->get_gboard()->get_child_planes()[i]));
+    }
+
     this->_cells = tmp.data();
 }
 
