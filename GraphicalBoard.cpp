@@ -1,6 +1,6 @@
 #include "GraphicalBoard.h"
 #include "NcHandler.h"
-#include <iostream>
+
 #include <notcurses/notcurses.h>
 #include <unistd.h>
 #include <memory>

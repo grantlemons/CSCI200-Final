@@ -7,16 +7,7 @@
 
 #include <memory>
 #include <optional>
-#include <iostream>
 using namespace std;
-
-int choose_board(const CellOwner PLAYER) {
-    int res;
-    cout << PLAYER << ": Enter outer cell: ";
-    cin >> res;
-
-    return res;
-}
 
 int main() {
     shared_ptr<NcHandler> ncHandler(new NcHandler());

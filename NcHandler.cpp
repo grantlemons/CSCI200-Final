@@ -1,7 +1,6 @@
 #include "NcHandler.h"
 
 #include <clocale>
-#include <iostream>
 #include <notcurses/notcurses.h>
 
 const notcurses_options opts = {NULL, NCLOGLEVEL_SILENT,        0, 0, 0,
