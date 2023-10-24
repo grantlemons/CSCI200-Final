@@ -1,5 +1,6 @@
 #include "GraphicalBoard.h"
 #include "NcHandler.h"
+#include <iostream>
 #include <notcurses/notcurses.h>
 #include <unistd.h>
 #include <memory>
@@ -16,20 +17,24 @@ ncplane_options create_nopts(const int Y, const int X, const unsigned int ROWS,
 GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
                                const int Y, const int X,
                                const unsigned int ROWS, const unsigned int COLS,
+                               const uint64_t CELL_CHANNELS,
                                const char **const SYMBOLS)
     : GraphicalBoard::GraphicalBoard(ncHandler, create_nopts(Y, X, ROWS, COLS),
-                                     SYMBOLS) {}
+                                     CELL_CHANNELS, SYMBOLS) {}
 
 GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
                                ncplane_options nopts,
+                               const uint64_t CELL_CHANNELS,
                                const char **const SYMBOLS) {
     this->_y = nopts.y;
     this->_x = nopts.x;
     this->_rows = nopts.rows;
     this->_cols = nopts.cols;
-    this->_symbols = SYMBOLS;
 
+    this->_symbols = SYMBOLS;
+    this->_cell_channels = CELL_CHANNELS;
     this->_ncHandler = ncHandler;
+
     ncplane *std = this->_ncHandler->get_stdplane();
     this->_plane = ncplane_create(std, &nopts);
 }
@@ -51,6 +56,7 @@ int GraphicalBoard::draw_board_yx(const int Y, const int X,
 
     // define cells
     nccell HORI_CELL, VERT_CELL, JUNC_CELL;
+    HORI_CELL = VERT_CELL = JUNC_CELL = NCCELL_TRIVIAL_INITIALIZER;
     nccell_load(_plane, &HORI_CELL, _symbols[0]);
     nccell_load(_plane, &VERT_CELL, _symbols[1]);
     nccell_load(_plane, &JUNC_CELL, _symbols[2]);
@@ -88,7 +94,7 @@ void GraphicalBoard::draw_board() {
     const unsigned int ROWS_PER_BCELL = (_rows - 2) / 3;
     const unsigned int COLS_PER_BCELL = (_cols - 2) / 3;
 
-    draw_board_yx(_y, _x, ROWS_PER_BCELL, COLS_PER_BCELL);
+    draw_board_yx(0, 0, ROWS_PER_BCELL, COLS_PER_BCELL);
     _ncHandler->render();
 }
 

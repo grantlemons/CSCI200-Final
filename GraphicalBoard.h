@@ -25,9 +25,10 @@ private:
 public:
     GraphicalBoard(std::shared_ptr<NcHandler> ncHandler, const int Y,
                    const int X, const unsigned int ROWS,
-                   const unsigned int COLS, const char **const SYMBOLS);
-    GraphicalBoard(std::shared_ptr<NcHandler> ncHandler, ncplane_options nopts,
+                   const unsigned int COLS, const uint64_t CELL_CHANNELS,
                    const char **const SYMBOLS);
+    GraphicalBoard(std::shared_ptr<NcHandler> ncHandler, ncplane_options nopts,
+                   const uint64_t CELL_CHANNELS, const char **const SYMBOLS);
     ~GraphicalBoard() = default;
     void draw_board();
     void draw_x(const unsigned int INDEX);

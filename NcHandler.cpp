@@ -4,9 +4,12 @@
 #include <iostream>
 #include <notcurses/notcurses.h>
 
+const notcurses_options opts = {NULL, NCLOGLEVEL_SILENT,        0, 0, 0,
+                                0,    NCOPTION_SUPPRESS_BANNERS};
+
 NcHandler::NcHandler() {
     setlocale(LC_ALL, "");
-    this->nc = notcurses_init(NULL, NULL);
+    this->nc = notcurses_init(&opts, NULL);
 }
 
 NcHandler::~NcHandler() {

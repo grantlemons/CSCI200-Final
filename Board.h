@@ -4,6 +4,7 @@
 #include "GraphicalBoard.h"
 #include "NcHandler.h"
 #include "Shared.h"
+#include <cstdint>
 #include <memory>
 #include <optional>
 #include <ostream>
@@ -13,9 +14,10 @@ private:
     GraphicalBoard _gboard;
 
 public:
-    Board(std::shared_ptr<NcHandler> ncHandler, const char **const SYMBOLS);
-    Board(std::shared_ptr<NcHandler> ncHandler, ncplane_options nopts,
+    Board(std::shared_ptr<NcHandler> ncHandler, const uint64_t CELL_CHANNELS,
           const char **const SYMBOLS);
+    Board(std::shared_ptr<NcHandler> ncHandler, ncplane_options nopts,
+          const uint64_t CELL_CHANNELS, const char **const SYMBOLS);
     virtual ~Board() = default;
     virtual bool check_win(const int INDEX, const CellOwner OWNER) const;
     virtual CellOwner get_cell_owner(const int INDEX) const = 0;

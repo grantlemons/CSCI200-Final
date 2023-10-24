@@ -26,6 +26,7 @@ int main() {
     const int COLS = (3 * 20) + 2;
 
     unsigned int std_rows, std_cols;
+    std_rows = std_cols = 0;
     ncplane_dim_yx(std, &std_rows, &std_cols);
 
     unsigned int std_center_y, std_center_x;
@@ -41,8 +42,9 @@ int main() {
     };
 
     const char *THICK_SYMBOLS[3] = {"\u2501", "\u2503", "\u254B"};
+    const uint64_t THICK_CHANNELS = ncplane_channels(std);
 
-    GraphicalBoard gboard(ncHandler, nopts, THICK_SYMBOLS);
+    GraphicalBoard gboard(ncHandler, nopts, THICK_CHANNELS, THICK_SYMBOLS);
     gboard.draw_board();
 
     return EXIT_SUCCESS;

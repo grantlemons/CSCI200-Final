@@ -30,12 +30,14 @@ ncplane_options default_nopts(std::shared_ptr<NcHandler> ncHandler) {
     return nopts;
 }
 
-Board::Board(std::shared_ptr<NcHandler> ncHandler, const char **SYMBOLS)
-    : Board::Board(ncHandler, default_nopts(ncHandler), SYMBOLS) {}
+Board::Board(std::shared_ptr<NcHandler> ncHandler, const uint64_t CELL_CHANNELS,
+             const char **SYMBOLS)
+    : Board::Board(ncHandler, default_nopts(ncHandler), CELL_CHANNELS,
+                   SYMBOLS) {}
 
 Board::Board(std::shared_ptr<NcHandler> ncHandler, ncplane_options nopts,
-             const char **const SYMBOLS)
-    : _gboard(ncHandler, nopts, SYMBOLS) {}
+             const uint64_t CELL_CHANNELS, const char **const SYMBOLS)
+    : _gboard(ncHandler, nopts, CELL_CHANNELS, SYMBOLS) {}
 
 unsigned int negative_mod(int a, int b) {
     return a - (b * floor((double)a / b));

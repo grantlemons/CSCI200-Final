@@ -3,13 +3,21 @@
 #include "PrimaryBoard.h"
 #include "LeafBoard.h"
 
+#include <cstdint>
+#include <notcurses/notcurses.h>
 #include <optional>
 #include <vector>
 
 const char *THICK_SYMBOLS[3] = {"\u2501", "\u2503", "\u254B"};
 
+uint64_t def_thick_channels(std::shared_ptr<NcHandler> ncHandler) {
+    const uint64_t THICK_CHANNELS = ncplane_channels(ncHandler->get_stdplane());
+
+    return THICK_CHANNELS;
+}
+
 PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandler> ncHandler)
-    : Board::Board(ncHandler, THICK_SYMBOLS) {
+    : Board::Board(ncHandler, def_thick_channels(ncHandler), THICK_SYMBOLS) {
     std::vector<LeafBoard> tmp(9, LeafBoard(ncHandler));
     this->_cells = tmp.data();
 }
