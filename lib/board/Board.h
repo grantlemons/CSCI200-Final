@@ -1,9 +1,10 @@
 #ifndef BOARD
 #define BOARD
 
-#include "GraphicalBoard.h"
-#include "NcHandler.h"
-#include "Shared.h"
+#include "lib/NcHandler.h"
+#include "lib/Shared.h"
+#include "lib/board/GraphicalBoard.h"
+
 #include <cstdint>
 #include <memory>
 #include <optional>

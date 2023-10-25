@@ -1,10 +1,11 @@
-#include "GraphicalBoard.h"
-#include "NcHandler.h"
+#include "lib/board/GraphicalBoard.h"
 
+#include "lib/NcHandler.h"
+
+#include <array>
+#include <memory>
 #include <notcurses/notcurses.h>
 #include <unistd.h>
-#include <memory>
-#include <array>
 
 ncplane_options create_nopts(const int Y, const int X, const unsigned int ROWS,
                              const unsigned int COLS) {

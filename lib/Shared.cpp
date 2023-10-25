@@ -1,6 +1,6 @@
-#include <ostream>
+#include "lib/Shared.h"
 
-#include "Shared.h"
+#include <ostream>
 
 std::ostream &operator<<(std::ostream &out, const CellOwner OWNER) {
     if (OWNER == None) {

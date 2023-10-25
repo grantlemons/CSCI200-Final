@@ -1,11 +1,13 @@
-#include "GraphicalBoard.h"
-#include "Shared.h"
-#include "Board.h"
-#include "LeafBoard.h"
+#include "lib/board/LeafBoard.h"
 
+#include "lib/NcHandler.h"
+#include "lib/Shared.h"
+#include "lib/board/Board.h"
+#include "lib/board/GraphicalBoard.h"
+
+#include <array>
 #include <cstdint>
 #include <memory>
-#include <array>
 #include <notcurses/notcurses.h>
 
 const char *THIN_SYMBOLS[3] = {"\u2500", "\u2502", "\u253C"};

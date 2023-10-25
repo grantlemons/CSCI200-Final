@@ -1,5 +1,13 @@
 IndentWidth: 4
 AccessModifierOffset: -4
-SortIncludes: false
+SortIncludes: true
 BreakBeforeBraces: Attach
 AllowShortFunctionsOnASingleLine: Empty
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex: '^\"'
+    Priority: 1
+    SortPriority: 1
+  - Regex: '^<'
+    Priority: 2
+    SortPriority: 2

@@ -1,12 +1,15 @@
-#include "Shared.h"
-#include "Board.h"
-#include "PrimaryBoard.h"
-#include "LeafBoard.h"
+#include "lib/board/PrimaryBoard.h"
 
+#include "lib/NcHandler.h"
+#include "lib/Shared.h"
+#include "lib/board/Board.h"
+#include "lib/board/LeafBoard.h"
+
+#include <array>
 #include <cstdint>
+#include <memory>
 #include <notcurses/notcurses.h>
 #include <optional>
-#include <array>
 
 const char *THICK_SYMBOLS[3] = {"\u2501", "\u2503", "\u254B"};
 

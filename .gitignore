@@ -2,3 +2,5 @@
 FINAL
 TUI
 *.tar.gz
+compile_commands.json
+.cache

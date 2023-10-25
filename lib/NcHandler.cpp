@@ -1,4 +1,4 @@
-#include "NcHandler.h"
+#include "lib/NcHandler.h"
 
 #include <clocale>
 #include <notcurses/notcurses.h>

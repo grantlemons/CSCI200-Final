@@ -1,12 +1,14 @@
 #ifndef PRIMARYBOARD
 #define PRIMARYBOARD
 
-#include "Shared.h"
-#include "LeafBoard.h"
-#include "Board.h"
+#include "lib/NcHandler.h"
+#include "lib/Shared.h"
+#include "lib/board/Board.h"
+#include "lib/board/LeafBoard.h"
 
-#include <optional>
 #include <array>
+#include <memory>
+#include <optional>
 
 class PrimaryBoard : virtual public Board {
 private:

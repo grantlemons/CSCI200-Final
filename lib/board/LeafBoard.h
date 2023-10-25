@@ -1,10 +1,12 @@
 #ifndef LEAFBOARD
 #define LEAFBOARD
 
-#include "Board.h"
-#include "Shared.h"
+#include "lib/NcHandler.h"
+#include "lib/Shared.h"
+#include "lib/board/Board.h"
 
 #include <array>
+#include <memory>
 #include <notcurses/notcurses.h>
 
 class LeafBoard : virtual public Board {

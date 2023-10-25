@@ -1,7 +1,8 @@
 #ifndef G_BOARD
 #define G_BOARD
 
-#include "NcHandler.h"
+#include "lib/NcHandler.h"
+
 #include <array>
 #include <cstdint>
 #include <memory>
