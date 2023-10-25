@@ -6,10 +6,11 @@
 #include "Board.h"
 
 #include <optional>
+#include <array>
 
 class PrimaryBoard : virtual public Board {
 private:
-    LeafBoard *_cells;
+    std::array<LeafBoard *, 9> _cells;
 
 public:
     PrimaryBoard(std::shared_ptr<NcHandler> ncHandler);

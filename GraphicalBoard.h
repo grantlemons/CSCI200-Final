@@ -2,6 +2,7 @@
 #define G_BOARD
 
 #include "NcHandler.h"
+#include <array>
 #include <cstdint>
 #include <memory>
 #include <notcurses/notcurses.h>
@@ -10,7 +11,7 @@ class GraphicalBoard {
 private:
     std::shared_ptr<NcHandler> _ncHandler;
     ncplane *_primaryPlane;
-    ncplane **_childPlanes;
+    std::array<ncplane *, 9> _childPlanes;
 
     unsigned int _rows, _cols;
     const char **_symbols;
@@ -36,7 +37,7 @@ public:
     void draw_board();
     void draw_x(const unsigned int INDEX);
     void draw_o(const unsigned int INDEX);
-    ncplane **get_child_planes();
+    std::array<ncplane *, 9> get_child_planes();
 };
 
 #endif // !G_BOARD

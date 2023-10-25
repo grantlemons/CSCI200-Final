@@ -4,12 +4,12 @@
 #include <notcurses/notcurses.h>
 #include <unistd.h>
 #include <memory>
-#include <vector>
+#include <array>
 
 ncplane_options create_nopts(const int Y, const int X, const unsigned int ROWS,
                              const unsigned int COLS) {
     ncplane_options nopts = {
-        (int)Y, (int)X, ROWS, COLS, NULL, NULL, NULL, 0, 0, 0,
+        Y, X, ROWS, COLS, NULL, NULL, NULL, 0, 0, 0,
     };
 
     return nopts;
@@ -46,22 +46,19 @@ GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
     const unsigned int ROWS_PER_BCELL = (_rows - 2) / 3;
     const unsigned int COLS_PER_BCELL = (_cols - 2) / 3;
 
-    std::vector<ncplane *> childTmp;
-    childTmp.reserve(9);
-
     for (int i = 0; i < 9; i++) {
-        unsigned int row = i % 3;
-        unsigned int column = (i - row) / 3;
+        int row = i % 3;
+        int column = (i - row) / 3;
 
-        unsigned int newX = ROWS_PER_BCELL * row + row + 1;
-        unsigned int newY = COLS_PER_BCELL * column + column + 1;
+        int newX = (ROWS_PER_BCELL + 1) * row;
+        int newY = (COLS_PER_BCELL + 1) * column;
 
         ncplane_options child_nopts =
             create_nopts(newY, newX, ROWS_PER_BCELL, COLS_PER_BCELL);
+        ncplane *tmp = ncplane_create(this->_primaryPlane, &child_nopts);
 
-        childTmp.push_back(ncplane_create(this->_primaryPlane, &child_nopts));
+        this->_childPlanes.at(i) = tmp;
     }
-    this->_childPlanes = childTmp.data();
 }
 
 int GraphicalBoard::draw_board_yx(const int Y, const int X,
@@ -126,6 +123,6 @@ void GraphicalBoard::draw_board() {
 // void GraphicalBoard::draw_x(const unsigned int INDEX) {}
 // void GraphicalBoard::draw_o(const unsigned int INDEX) {}
 
-ncplane **GraphicalBoard::get_child_planes() {
+std::array<ncplane *, 9> GraphicalBoard::get_child_planes() {
     return this->_childPlanes;
 }

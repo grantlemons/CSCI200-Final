@@ -3,17 +3,18 @@
 
 #include "Board.h"
 #include "Shared.h"
+
+#include <array>
 #include <notcurses/notcurses.h>
 
 class LeafBoard : virtual public Board {
 private:
-    LLCell *_cells;
+    std::array<LLCell, 9> _cells;
 
 public:
     CellOwner winner;
 
 public:
-    LeafBoard(std::shared_ptr<NcHandler> ncHandler);
     LeafBoard(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE);
     ~LeafBoard() = default;
     CellOwner get_cell_owner(const int INDEX) const;

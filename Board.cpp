@@ -7,43 +7,16 @@
 #include <ostream>
 #include <notcurses/notcurses.h>
 
-ncplane_options default_nopts(std::shared_ptr<NcHandler> ncHandler) {
-    ncplane *std = ncHandler->get_stdplane();
-
-    const int ROWS = (3 * 11) + 2;
-    const int COLS = (3 * 20) + 2;
-
-    unsigned int std_rows, std_cols;
-    ncplane_dim_yx(std, &std_rows, &std_cols);
-
-    unsigned int std_center_y, std_center_x;
-    std_center_y = std_rows / 2;
-    std_center_x = std_cols / 2;
-
-    int board_origin_y, board_origin_x;
-    board_origin_y = std_center_y - (ROWS / 2);
-    board_origin_x = std_center_x - (COLS / 2);
-
-    ncplane_options nopts = {
-        board_origin_y, board_origin_x, ROWS, COLS, NULL, NULL, NULL, 0, 0, 0,
-    };
-
-    return nopts;
+Board::Board(std::shared_ptr<NcHandler> ncHandler, ncplane *PLANE,
+             const ncplane_options NOPTS, const uint64_t CELL_CHANNELS,
+             const char **const SYMBOLS)
+    : _gboard(ncHandler, NOPTS, PLANE, CELL_CHANNELS, SYMBOLS) {
+    this->draw();
 }
 
-Board::Board(std::shared_ptr<NcHandler> ncHandler, const uint64_t CELL_CHANNELS,
-             const char **SYMBOLS)
-    : Board::Board(ncHandler, default_nopts(ncHandler), CELL_CHANNELS,
-                   SYMBOLS) {}
-
-Board::Board(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE,
+Board::Board(std::shared_ptr<NcHandler> ncHandler, const ncplane_options NOPTS,
              const uint64_t CELL_CHANNELS, const char **const SYMBOLS)
-    : _gboard(ncHandler, default_nopts(ncHandler), PLANE, CELL_CHANNELS,
-              SYMBOLS) {}
-
-Board::Board(std::shared_ptr<NcHandler> ncHandler, ncplane_options nopts,
-             const uint64_t CELL_CHANNELS, const char **const SYMBOLS)
-    : _gboard(ncHandler, nopts, CELL_CHANNELS, SYMBOLS) {
+    : _gboard(ncHandler, NOPTS, CELL_CHANNELS, SYMBOLS) {
     this->draw();
 }
 
@@ -111,7 +84,7 @@ bool Board::check_win(const int INDEX, const CellOwner OWNER) const {
 }
 
 void Board::draw() {
-    this->_gboard.draw_board();
+    // this->_gboard.draw_board();
 }
 // void Board::draw_x(const unsigned int INDEX) {
 //     this->_gboard.draw_x(INDEX);
@@ -121,7 +94,7 @@ void Board::draw() {
 // }
 
 GraphicalBoard *Board::get_gboard() {
-    return &this->_gboard;
+    return &(this->_gboard);
 }
 
 std::ostream &operator<<(std::ostream &out, const Board &BRD) {

@@ -3,8 +3,15 @@
 #include <clocale>
 #include <notcurses/notcurses.h>
 
-const notcurses_options opts = {NULL, NCLOGLEVEL_SILENT,        0, 0, 0,
-                                0,    NCOPTION_SUPPRESS_BANNERS};
+const notcurses_options opts = {NULL,
+                                NCLOGLEVEL_SILENT,
+                                0,
+                                0,
+                                0,
+                                0,
+                                NCOPTION_SUPPRESS_BANNERS +
+                                    NCOPTION_NO_ALTERNATE_SCREEN +
+                                    NCOPTION_DRAIN_INPUT};
 
 NcHandler::NcHandler() {
     setlocale(LC_ALL, "");

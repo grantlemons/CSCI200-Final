@@ -14,11 +14,10 @@ private:
     GraphicalBoard _gboard;
 
 public:
-    Board(std::shared_ptr<NcHandler> ncHandler, const uint64_t CELL_CHANNELS,
-          const char **const SYMBOLS);
     Board(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE,
-          const uint64_t CELL_CHANNELS, const char **const SYMBOLS);
-    Board(std::shared_ptr<NcHandler> ncHandler, ncplane_options nopts,
+          const ncplane_options NOPTS, const uint64_t CELL_CHANNELS,
+          const char **const SYMBOLS);
+    Board(std::shared_ptr<NcHandler> ncHandler, const ncplane_options NOPTS,
           const uint64_t CELL_CHANNELS, const char **const SYMBOLS);
     virtual ~Board() = default;
     virtual bool check_win(const int INDEX, const CellOwner OWNER) const;
