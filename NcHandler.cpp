@@ -10,7 +10,6 @@ const notcurses_options opts = {NULL,
                                 0,
                                 0,
                                 NCOPTION_SUPPRESS_BANNERS +
-                                    NCOPTION_NO_ALTERNATE_SCREEN +
                                     NCOPTION_DRAIN_INPUT};
 
 NcHandler::NcHandler() {
