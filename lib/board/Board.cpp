@@ -83,7 +83,7 @@ bool Board::check_win(const int INDEX, const CellOwner OWNER) const {
 }
 
 void Board::draw() {
-    // this->_gboard.draw_board();
+    this->_gboard.draw_board();
 }
 // void Board::draw_x(const unsigned int INDEX) {
 //     this->_gboard.draw_x(INDEX);

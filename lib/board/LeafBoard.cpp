@@ -13,7 +13,7 @@
 const char *THIN_SYMBOLS[3] = {"\u2500", "\u2502", "\u253C"};
 
 uint64_t def_thin_channels(std::shared_ptr<NcHandler> ncHandler) {
-    const uint32_t THIN_FG_CHANNEL = NCCHANNEL_INITIALIZER(0x77, 0x77, 0x77);
+    const uint32_t THIN_FG_CHANNEL = NCCHANNEL_INITIALIZER(0x00, 0xff, 0xff);
     const uint32_t THIN_BG_CHANNEL =
         ncplane_bchannel(ncHandler->get_stdplane());
     const uint64_t THIN_CHANNELS =

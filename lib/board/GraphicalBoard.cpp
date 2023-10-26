@@ -51,8 +51,8 @@ GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
         int row = i % 3;
         int column = (i - row) / 3;
 
-        int newX = (ROWS_PER_BCELL + 1) * row;
-        int newY = (COLS_PER_BCELL + 1) * column;
+        int newY = 1 + (ROWS_PER_BCELL * row);
+        int newX = 1 + (COLS_PER_BCELL * column);
 
         ncplane_options child_nopts =
             create_nopts(newY, newX, ROWS_PER_BCELL, COLS_PER_BCELL);
@@ -80,6 +80,7 @@ int GraphicalBoard::draw_board_yx(const int Y, const int X,
     // define cells
     nccell HORI_CELL, VERT_CELL, JUNC_CELL;
     HORI_CELL = VERT_CELL = JUNC_CELL = NCCELL_TRIVIAL_INITIALIZER;
+
     nccell_load(_primaryPlane, &HORI_CELL, _symbols[0]);
     nccell_load(_primaryPlane, &VERT_CELL, _symbols[1]);
     nccell_load(_primaryPlane, &JUNC_CELL, _symbols[2]);

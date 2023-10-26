@@ -13,5 +13,7 @@ int main() {
 
     PrimaryBoard pBoard(ncHandler);
 
+    while (1);
+
     return EXIT_SUCCESS;
 }
