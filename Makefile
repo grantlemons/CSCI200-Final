@@ -1,5 +1,5 @@
 TARGET = FINAL
-SRC_FILES = src/main.cpp lib/Shared.cpp lib/board/Board.cpp lib/board/LeafBoard.cpp lib/board/PrimaryBoard.cpp lib/board/GraphicalBoard.cpp lib/NcHandler.cpp
+SRC_FILES = main.cpp lib/Shared.cpp lib/board/Board.cpp lib/board/LeafBoard.cpp lib/board/PrimaryBoard.cpp lib/board/GraphicalBoard.cpp lib/NcHandler.cpp
 
 # I like this linker
 ifneq ("$(wildcard /usr/bin/mold)","")
