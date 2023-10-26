@@ -52,8 +52,14 @@ PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandler> ncHandler)
         GraphicalBoard *gboard = this->get_gboard();
         ncplane *plane = gboard->get_child_planes().at(i);
 
-        LeafBoard newBoard(ncHandler, plane);
-        this->_cells.at(i) = &newBoard;
+        LeafBoard *newBoard = new LeafBoard(ncHandler, plane);
+        this->_cells.at(i) = newBoard;
+    }
+}
+
+PrimaryBoard::~PrimaryBoard() {
+    for (LeafBoard *const cell : this->_cells) {
+        delete cell;
     }
 }
 

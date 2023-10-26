@@ -18,9 +18,7 @@ private:
     const char **_symbols;
     uint64_t _cell_channels;
 
-    int draw_board_yx(const int Y, const int X,
-                      const unsigned int ROWS_PER_BCELL,
-                      const unsigned int COLS_PER_BCELL);
+    int draw_board_yx(const int Y, const int X);
     int draw_x_yx(const int Y, const int X);
     int draw_o_yx(const int Y, const int X);
 
@@ -31,9 +29,8 @@ public:
                    const char **const SYMBOLS);
     GraphicalBoard(std::shared_ptr<NcHandler> ncHandler, ncplane_options nopts,
                    const uint64_t CELL_CHANNELS, const char **const SYMBOLS);
-    GraphicalBoard(std::shared_ptr<NcHandler> ncHandler, ncplane_options nopts,
-                   ncplane *const PLANE, const uint64_t CELL_CHANNELS,
-                   const char **const SYMBOLS);
+    GraphicalBoard(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE,
+                   const uint64_t CELL_CHANNELS, const char **const SYMBOLS);
     ~GraphicalBoard() = default;
     void draw_board();
     void draw_x(const unsigned int INDEX);

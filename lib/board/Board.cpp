@@ -10,9 +10,8 @@
 #include <ostream>
 
 Board::Board(std::shared_ptr<NcHandler> ncHandler, ncplane *PLANE,
-             const ncplane_options NOPTS, const uint64_t CELL_CHANNELS,
-             const char **const SYMBOLS)
-    : _gboard(ncHandler, NOPTS, PLANE, CELL_CHANNELS, SYMBOLS) {
+             const uint64_t CELL_CHANNELS, const char **const SYMBOLS)
+    : _gboard(ncHandler, PLANE, CELL_CHANNELS, SYMBOLS) {
     this->draw();
 }
 

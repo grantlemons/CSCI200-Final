@@ -16,8 +16,7 @@ private:
 
 public:
     Board(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE,
-          const ncplane_options NOPTS, const uint64_t CELL_CHANNELS,
-          const char **const SYMBOLS);
+          const uint64_t CELL_CHANNELS, const char **const SYMBOLS);
     Board(std::shared_ptr<NcHandler> ncHandler, const ncplane_options NOPTS,
           const uint64_t CELL_CHANNELS, const char **const SYMBOLS);
     virtual ~Board() = default;

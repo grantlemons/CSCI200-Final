@@ -16,6 +16,20 @@ ncplane_options create_nopts(const int Y, const int X, const unsigned int ROWS,
     return nopts;
 }
 
+ncplane_options extract_nopts(ncplane *PLANE) {
+    unsigned int rows, cols;
+    ncplane_dim_yx(PLANE, &rows, &cols);
+
+    int y, x;
+    ncplane_yx(PLANE, &y, &x);
+
+    ncplane_options nopts = {
+        y, x, rows, cols, NULL, NULL, NULL, 0, 0, 0,
+    };
+
+    return nopts;
+}
+
 GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
                                const int Y, const int X,
                                const unsigned int ROWS, const unsigned int COLS,
@@ -29,13 +43,14 @@ GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
                                const uint64_t CELL_CHANNELS,
                                const char **const SYMBOLS)
     : GraphicalBoard::GraphicalBoard(
-          ncHandler, nopts, ncplane_create(ncHandler->get_stdplane(), &nopts),
+          ncHandler, ncplane_create(ncHandler->get_stdplane(), &nopts),
           CELL_CHANNELS, SYMBOLS) {}
 
 GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
-                               ncplane_options nopts, ncplane *const PLANE,
+                               ncplane *const PLANE,
                                const uint64_t CELL_CHANNELS,
                                const char **const SYMBOLS) {
+    ncplane_options nopts = extract_nopts(PLANE);
     this->_rows = nopts.rows;
     this->_cols = nopts.cols;
 
@@ -48,8 +63,8 @@ GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
     const unsigned int COLS_PER_BCELL = (_cols - 2) / 3;
 
     for (int i = 0; i < 9; i++) {
-        int row = i % 3;
-        int column = (i - row) / 3;
+        int column = i % 3;
+        int row = (i - column) / 3;
 
         int newY = 1 + (ROWS_PER_BCELL * row);
         int newX = 1 + (COLS_PER_BCELL * column);
@@ -62,10 +77,11 @@ GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
     }
 }
 
-int GraphicalBoard::draw_board_yx(const int Y, const int X,
-                                  const unsigned int ROWS_PER_BCELL,
-                                  const unsigned int COLS_PER_BCELL) {
+int GraphicalBoard::draw_board_yx(const int Y, const int X) {
     int res = EXIT_SUCCESS;
+
+    const unsigned int ROWS_PER_BCELL = (_rows - 2) / 3;
+    const unsigned int COLS_PER_BCELL = (_cols - 2) / 3;
 
     // calculate lines positions and lengths
     const unsigned int H_IDX_1 = Y + ROWS_PER_BCELL;
@@ -115,10 +131,7 @@ int GraphicalBoard::draw_board_yx(const int Y, const int X,
 // int GraphicalBoard::draw_o_yx(const int Y, const int X) {}
 
 void GraphicalBoard::draw_board() {
-    const unsigned int ROWS_PER_BCELL = (_rows - 2) / 3;
-    const unsigned int COLS_PER_BCELL = (_cols - 2) / 3;
-
-    draw_board_yx(0, 0, ROWS_PER_BCELL, COLS_PER_BCELL);
+    draw_board_yx(0, 0);
     _ncHandler->render();
 }
 

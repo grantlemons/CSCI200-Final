@@ -22,23 +22,9 @@ uint64_t def_thin_channels(std::shared_ptr<NcHandler> ncHandler) {
     return THIN_CHANNELS;
 }
 
-ncplane_options extract_nopts(ncplane *PLANE) {
-    unsigned int rows, cols;
-    ncplane_dim_yx(PLANE, &rows, &cols);
-
-    int y, x;
-    ncplane_yx(PLANE, &y, &x);
-
-    ncplane_options nopts = {
-        y, x, rows, cols, NULL, NULL, NULL, 0, 0, 0,
-    };
-
-    return nopts;
-}
-
 LeafBoard::LeafBoard(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE)
-    : Board::Board(ncHandler, PLANE, extract_nopts(PLANE),
-                   def_thin_channels(ncHandler), THIN_SYMBOLS) {
+    : Board::Board(ncHandler, PLANE, def_thin_channels(ncHandler),
+                   THIN_SYMBOLS) {
     this->_cells = std::array<LLCell, 9>();
     this->winner = None;
 }

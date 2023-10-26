@@ -16,7 +16,7 @@ private:
 
 public:
     PrimaryBoard(std::shared_ptr<NcHandler> ncHandler);
-    ~PrimaryBoard() = default;
+    ~PrimaryBoard();
     CellOwner get_cell_owner(const int INDEX) const;
     std::optional<LeafBoard *> select_board(const int INDEX) const;
 };
