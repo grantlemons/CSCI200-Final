@@ -20,12 +20,12 @@ public:
     NcHandler(NcHandler &other) = delete;
     void operator=(const NcHandler &) = delete;
 
-    uint32_t get_default_bg_channel();
-    uint32_t get_default_fg_channel();
+    uint32_t get_default_bg_channel() const;
+    uint32_t get_default_fg_channel() const;
     static uint64_t combine_channels(const uint32_t BG_CHANNEL,
                                      const uint32_t FG_CHANNEL);
-    notcurses *get_nc();
-    ncplane *get_stdplane();
+    notcurses *get_nc() const;
+    ncplane *get_stdplane() const;
     void render();
 };
 

@@ -20,7 +20,7 @@ LeafBoard::LeafBoard(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE)
                                       NcHandler::GREY_CHANNEL),
           LeafBoard::_symbols) {
     this->_cells = std::array<LLCell, 9>();
-    this->winner = None;
+    this->_winner = None;
 }
 
 CellOwner LeafBoard::get_cell_owner(const int INDEX) const {
@@ -33,17 +33,21 @@ bool LeafBoard::set_cell_owner(const int INDEX, const CellOwner OWNER) {
         this->_cells.at(INDEX) = OWNER;
 
         if (this->check_win(INDEX, OWNER)) {
-            this->winner = OWNER;
+            this->_winner = OWNER;
         }
         return true;
     }
     return false;
 }
 
+CellOwner LeafBoard::get_winner() const {
+    return this->_winner;
+}
+
 void LeafBoard::fill_x() {
-    this->_gboard.fill_x();
+    this->mGBoard.fill_x();
 }
 
 void LeafBoard::fill_o() {
-    this->_gboard.fill_o();
+    this->mGBoard.fill_o();
 }

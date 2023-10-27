@@ -31,10 +31,10 @@ NcHandler::~NcHandler() {
     this->nc = nullptr;
 }
 
-uint32_t NcHandler::get_default_bg_channel() {
+uint32_t NcHandler::get_default_bg_channel() const {
     return ncplane_bchannel(this->get_stdplane());
 }
-uint32_t NcHandler::get_default_fg_channel() {
+uint32_t NcHandler::get_default_fg_channel() const {
     return ncplane_fchannel(this->get_stdplane());
 }
 
@@ -44,11 +44,11 @@ uint64_t NcHandler::combine_channels(const uint32_t BG_CHANNEL,
     return ((uint64_t)FG_CHANNEL << 32ull) + BG_CHANNEL;
 }
 
-notcurses *NcHandler::get_nc() {
+notcurses *NcHandler::get_nc() const {
     return this->nc;
 }
 
-ncplane *NcHandler::get_stdplane() {
+ncplane *NcHandler::get_stdplane() const {
     return notcurses_stdplane(this->nc);
 }
 

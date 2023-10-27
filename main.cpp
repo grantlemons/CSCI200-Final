@@ -25,7 +25,7 @@ int main() {
     pBoard.draw_x(3);
     ncHandler->render();
 
-    while (1);
+    // while (1);
 
     return EXIT_SUCCESS;
 }

@@ -18,11 +18,14 @@ private:
 public:
     PrimaryBoard(std::shared_ptr<NcHandler> ncHandler);
     ~PrimaryBoard();
-    CellOwner get_cell_owner(const int INDEX) const;
+    CellOwner get_cell_owner(const int INDEX) const override final;
     std::optional<LeafBoard *> select_board(const int INDEX) const;
 
-    void draw_x(const unsigned int INDEX);
-    void draw_o(const unsigned int INDEX);
+    void draw_x(const unsigned int INDEX) override final;
+    void draw_o(const unsigned int INDEX) override final;
 };
+
+// Helper functions
+ncplane_options def_primary_nopts(std::shared_ptr<NcHandler> ncHandler);
 
 #endif // !PRIMARYBOARD

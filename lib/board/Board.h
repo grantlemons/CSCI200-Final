@@ -13,7 +13,7 @@
 
 class Board {
 protected:
-    GraphicalBoard _gboard;
+    GraphicalBoard mGBoard;
 
     Board(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE,
           const uint64_t CELL_CHANNELS, std::array<const char *, 3> SYMBOLS);
@@ -25,9 +25,9 @@ public:
     virtual bool check_win(const int INDEX, const CellOwner OWNER) const;
     virtual CellOwner get_cell_owner(const int INDEX) const = 0;
 
-    void draw();
-    void draw_x(const unsigned int INDEX);
-    void draw_o(const unsigned int INDEX);
+    virtual void draw();
+    virtual void draw_x(const unsigned int INDEX);
+    virtual void draw_o(const unsigned int INDEX);
 
     friend std::ostream &operator<<(std::ostream &out, const Board &BRD);
 };

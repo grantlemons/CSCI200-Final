@@ -12,13 +12,13 @@
 
 Board::Board(std::shared_ptr<NcHandler> ncHandler, ncplane *PLANE,
              const uint64_t CELL_CHANNELS, std::array<const char *, 3> SYMBOLS)
-    : _gboard(ncHandler, PLANE, CELL_CHANNELS, SYMBOLS) {
+    : mGBoard(ncHandler, PLANE, CELL_CHANNELS, SYMBOLS) {
     this->draw();
 }
 
 Board::Board(std::shared_ptr<NcHandler> ncHandler, const ncplane_options NOPTS,
              const uint64_t CELL_CHANNELS, std::array<const char *, 3> SYMBOLS)
-    : _gboard(ncHandler, NOPTS, CELL_CHANNELS, SYMBOLS) {
+    : mGBoard(ncHandler, NOPTS, CELL_CHANNELS, SYMBOLS) {
     this->draw();
 }
 
@@ -83,13 +83,13 @@ bool Board::check_win(const int INDEX, const CellOwner OWNER) const {
 }
 
 void Board::draw() {
-    this->_gboard.draw_board();
+    this->mGBoard.draw_board();
 }
 void Board::draw_x(const unsigned int INDEX) {
-    this->_gboard.draw_x(INDEX);
+    this->mGBoard.draw_x(INDEX);
 }
 void Board::draw_o(const unsigned int INDEX) {
-    this->_gboard.draw_o(INDEX);
+    this->mGBoard.draw_o(INDEX);
 }
 
 std::ostream &operator<<(std::ostream &out, const Board &BRD) {

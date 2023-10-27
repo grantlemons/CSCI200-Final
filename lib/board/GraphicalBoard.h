@@ -19,8 +19,8 @@ private:
     uint64_t _cell_channels;
 
     int draw_board_yx(const int Y, const int X);
-    int draw_x_yx(const int Y, const int X);
-    int draw_o_yx(const int Y, const int X);
+    // int draw_x_yx(const int Y, const int X);
+    // int draw_o_yx(const int Y, const int X);
 
 public:
     GraphicalBoard(std::shared_ptr<NcHandler> ncHandler, const int Y,
