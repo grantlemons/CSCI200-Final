@@ -92,10 +92,6 @@ void Board::draw_o(const unsigned int INDEX) {
     this->_gboard.draw_o(INDEX);
 }
 
-GraphicalBoard *Board::get_gboard() {
-    return &(this->_gboard);
-}
-
 std::ostream &operator<<(std::ostream &out, const Board &BRD) {
     out << "[";
     for (int i = 0; i < 9 - 1; i++) {

@@ -47,8 +47,7 @@ PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandler> ncHandler)
     this->_cells = std::array<LeafBoard *, 9>();
 
     for (int i = 0; i < 9; i++) {
-        GraphicalBoard *gboard = this->get_gboard();
-        ncplane *plane = gboard->get_child_planes().at(i);
+        ncplane *plane = this->_gboard.get_child_planes().at(i);
 
         LeafBoard *newBoard = new LeafBoard(ncHandler, plane);
         this->_cells.at(i) = newBoard;

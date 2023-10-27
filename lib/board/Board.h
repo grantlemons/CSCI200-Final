@@ -12,19 +12,18 @@
 #include <ostream>
 
 class Board {
-private:
+protected:
     GraphicalBoard _gboard;
 
-public:
     Board(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE,
           const uint64_t CELL_CHANNELS, std::array<const char *, 3> SYMBOLS);
     Board(std::shared_ptr<NcHandler> ncHandler, const ncplane_options NOPTS,
           const uint64_t CELL_CHANNELS, std::array<const char *, 3> SYMBOLS);
     virtual ~Board() = default;
+
+public:
     virtual bool check_win(const int INDEX, const CellOwner OWNER) const;
     virtual CellOwner get_cell_owner(const int INDEX) const = 0;
-
-    GraphicalBoard *get_gboard();
 
     void draw();
     void draw_x(const unsigned int INDEX);

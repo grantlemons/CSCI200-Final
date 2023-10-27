@@ -41,9 +41,9 @@ bool LeafBoard::set_cell_owner(const int INDEX, const CellOwner OWNER) {
 }
 
 void LeafBoard::fill_x() {
-    this->get_gboard()->fill_x();
+    this->_gboard.fill_x();
 }
 
 void LeafBoard::fill_o() {
-    this->get_gboard()->fill_o();
+    this->_gboard.fill_o();
 }
