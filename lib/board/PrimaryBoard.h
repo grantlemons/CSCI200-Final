@@ -12,6 +12,7 @@
 
 class PrimaryBoard : virtual public Board {
 private:
+    static std::array<const char *, 3> _symbols;
     std::array<LeafBoard *, 9> _cells;
 
 public:
@@ -19,6 +20,9 @@ public:
     ~PrimaryBoard();
     CellOwner get_cell_owner(const int INDEX) const;
     std::optional<LeafBoard *> select_board(const int INDEX) const;
+
+    void draw_x(const unsigned int INDEX);
+    void draw_o(const unsigned int INDEX);
 };
 
 #endif // !PRIMARYBOARD

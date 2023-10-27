@@ -34,14 +34,14 @@ GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
                                const int Y, const int X,
                                const unsigned int ROWS, const unsigned int COLS,
                                const uint64_t CELL_CHANNELS,
-                               const char **const SYMBOLS)
+                               std::array<const char *, 3> SYMBOLS)
     : GraphicalBoard::GraphicalBoard(ncHandler, create_nopts(Y, X, ROWS, COLS),
                                      CELL_CHANNELS, SYMBOLS) {}
 
 GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
                                ncplane_options nopts,
                                const uint64_t CELL_CHANNELS,
-                               const char **const SYMBOLS)
+                               std::array<const char *, 3> SYMBOLS)
     : GraphicalBoard::GraphicalBoard(
           ncHandler, ncplane_create(ncHandler->get_stdplane(), &nopts),
           CELL_CHANNELS, SYMBOLS) {}
@@ -49,10 +49,10 @@ GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
 GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
                                ncplane *const PLANE,
                                const uint64_t CELL_CHANNELS,
-                               const char **const SYMBOLS) {
+                               std::array<const char *, 3> SYMBOLS) {
     ncplane_options nopts = extract_nopts(PLANE);
-    this->_rows = nopts.rows;
-    this->_cols = nopts.cols;
+    this->_rows = nopts.rows + 1;
+    this->_cols = nopts.cols + 1;
 
     this->_symbols = SYMBOLS;
     this->_cell_channels = CELL_CHANNELS;
@@ -70,7 +70,7 @@ GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
         int newX = 1 + (COLS_PER_BCELL * column);
 
         ncplane_options child_nopts =
-            create_nopts(newY, newX, ROWS_PER_BCELL, COLS_PER_BCELL);
+            create_nopts(newY, newX, ROWS_PER_BCELL - 1, COLS_PER_BCELL - 1);
         ncplane *tmp = ncplane_create(this->_primaryPlane, &child_nopts);
 
         this->_childPlanes.at(i) = tmp;
@@ -97,9 +97,9 @@ int GraphicalBoard::draw_board_yx(const int Y, const int X) {
     nccell HORI_CELL, VERT_CELL, JUNC_CELL;
     HORI_CELL = VERT_CELL = JUNC_CELL = NCCELL_TRIVIAL_INITIALIZER;
 
-    nccell_load(_primaryPlane, &HORI_CELL, _symbols[0]);
-    nccell_load(_primaryPlane, &VERT_CELL, _symbols[1]);
-    nccell_load(_primaryPlane, &JUNC_CELL, _symbols[2]);
+    nccell_load(_primaryPlane, &HORI_CELL, _symbols.at(0));
+    nccell_load(_primaryPlane, &VERT_CELL, _symbols.at(1));
+    nccell_load(_primaryPlane, &JUNC_CELL, _symbols.at(2));
     nccell_set_channels(&HORI_CELL, _cell_channels);
     nccell_set_channels(&VERT_CELL, _cell_channels);
     nccell_set_channels(&JUNC_CELL, _cell_channels);
@@ -135,9 +135,54 @@ void GraphicalBoard::draw_board() {
     _ncHandler->render();
 }
 
-// void GraphicalBoard::draw_x(const unsigned int INDEX) {}
-// void GraphicalBoard::draw_o(const unsigned int INDEX) {}
+void GraphicalBoard::draw_x(const unsigned int INDEX) {
+    ncplane *plane = this->_childPlanes.at(INDEX);
+    const nccell red = NCCELL_INITIALIZER(
+        'X', 0,
+        NcHandler::combine_channels(NcHandler::RED_CHANNEL,
+                                    _ncHandler->get_default_fg_channel()));
 
-std::array<ncplane *, 9> GraphicalBoard::get_child_planes() {
+    ncplane_erase(plane);
+    ncplane_set_base_cell(plane, &red);
+    _ncHandler->render();
+}
+
+void GraphicalBoard::draw_o(const unsigned int INDEX) {
+    ncplane *plane = this->_childPlanes.at(INDEX);
+    const nccell blue = NCCELL_INITIALIZER(
+        'O', 0,
+        NcHandler::combine_channels(NcHandler::BLUE_CHANNEL,
+                                    _ncHandler->get_default_fg_channel()));
+
+    ncplane_erase(plane);
+    ncplane_set_base_cell(plane, &blue);
+    _ncHandler->render();
+}
+
+void GraphicalBoard::fill_x() {
+    for (ncplane *const child : this->_childPlanes) {
+        const nccell red = NCCELL_INITIALIZER(
+            'X', 0,
+            NcHandler::combine_channels(NcHandler::RED_CHANNEL,
+                                        _ncHandler->get_default_fg_channel()));
+
+        ncplane_erase(child);
+        ncplane_set_base_cell(child, &red);
+    }
+}
+
+void GraphicalBoard::fill_o() {
+    for (ncplane *const child : this->_childPlanes) {
+        const nccell blue = NCCELL_INITIALIZER(
+            'O', 0,
+            NcHandler::combine_channels(NcHandler::BLUE_CHANNEL,
+                                        _ncHandler->get_default_fg_channel()));
+
+        ncplane_erase(child);
+        ncplane_set_base_cell(child, &blue);
+    }
+}
+
+std::array<ncplane *, 9> GraphicalBoard::get_child_planes() const {
     return this->_childPlanes;
 }

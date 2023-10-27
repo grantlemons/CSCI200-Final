@@ -15,7 +15,7 @@ private:
     std::array<ncplane *, 9> _childPlanes;
 
     unsigned int _rows, _cols;
-    const char **_symbols;
+    std::array<const char *, 3> _symbols;
     uint64_t _cell_channels;
 
     int draw_board_yx(const int Y, const int X);
@@ -26,16 +26,22 @@ public:
     GraphicalBoard(std::shared_ptr<NcHandler> ncHandler, const int Y,
                    const int X, const unsigned int ROWS,
                    const unsigned int COLS, const uint64_t CELL_CHANNELS,
-                   const char **const SYMBOLS);
+                   std::array<const char *, 3> SYMBOLS);
     GraphicalBoard(std::shared_ptr<NcHandler> ncHandler, ncplane_options nopts,
-                   const uint64_t CELL_CHANNELS, const char **const SYMBOLS);
+                   const uint64_t CELL_CHANNELS,
+                   std::array<const char *, 3> SYMBOLS);
     GraphicalBoard(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE,
-                   const uint64_t CELL_CHANNELS, const char **const SYMBOLS);
+                   const uint64_t CELL_CHANNELS,
+                   std::array<const char *, 3> SYMBOLS);
     ~GraphicalBoard() = default;
     void draw_board();
+
     void draw_x(const unsigned int INDEX);
     void draw_o(const unsigned int INDEX);
-    std::array<ncplane *, 9> get_child_planes();
+    void fill_x();
+    void fill_o();
+
+    std::array<ncplane *, 9> get_child_planes() const;
 };
 
 #endif // !G_BOARD

@@ -11,14 +11,6 @@
 #include <notcurses/notcurses.h>
 #include <optional>
 
-const char *THICK_SYMBOLS[3] = {"\u2501", "\u2503", "\u254B"};
-
-uint64_t def_thick_channels(std::shared_ptr<NcHandler> ncHandler) {
-    const uint64_t THICK_CHANNELS = ncplane_channels(ncHandler->get_stdplane());
-
-    return THICK_CHANNELS;
-}
-
 ncplane_options def_primary_nopts(std::shared_ptr<NcHandler> ncHandler) {
     ncplane *std = ncHandler->get_stdplane();
 
@@ -43,9 +35,15 @@ ncplane_options def_primary_nopts(std::shared_ptr<NcHandler> ncHandler) {
     return nopts;
 }
 
+std::array<const char *, 3> PrimaryBoard::_symbols =
+    std::array<const char *, 3>({"\u2501", "\u2503", "\u254B"});
+
 PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandler> ncHandler)
-    : Board::Board(ncHandler, def_primary_nopts(ncHandler),
-                   def_thick_channels(ncHandler), THICK_SYMBOLS) {
+    : Board::Board(
+          ncHandler, def_primary_nopts(ncHandler),
+          NcHandler::combine_channels(ncHandler->get_default_bg_channel(),
+                                      ncHandler->get_default_fg_channel()),
+          PrimaryBoard::_symbols) {
     this->_cells = std::array<LeafBoard *, 9>();
 
     for (int i = 0; i < 9; i++) {
@@ -65,6 +63,16 @@ PrimaryBoard::~PrimaryBoard() {
 
 CellOwner PrimaryBoard::get_cell_owner(const int INDEX) const {
     return this->_cells.at(INDEX)->winner;
+}
+
+void PrimaryBoard::draw_x(const unsigned int INDEX) {
+    this->_cells.at(INDEX)->fill_x();
+    this->Board::draw_x(INDEX);
+}
+
+void PrimaryBoard::draw_o(const unsigned int INDEX) {
+    this->_cells.at(INDEX)->fill_o();
+    this->Board::draw_o(INDEX);
 }
 
 std::optional<LeafBoard *> PrimaryBoard::select_board(const int INDEX) const {

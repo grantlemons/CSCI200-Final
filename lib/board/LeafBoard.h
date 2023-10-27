@@ -11,6 +11,7 @@
 
 class LeafBoard : virtual public Board {
 private:
+    static std::array<const char *, 3> _symbols;
     std::array<LLCell, 9> _cells;
 
 public:
@@ -21,6 +22,9 @@ public:
     ~LeafBoard() = default;
     CellOwner get_cell_owner(const int INDEX) const;
     bool set_cell_owner(const int INDEX, const CellOwner OWNER);
+
+    void fill_x();
+    void fill_o();
 };
 
 #endif // !LEAFBOARD
