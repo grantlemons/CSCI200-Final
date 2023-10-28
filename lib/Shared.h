@@ -9,7 +9,7 @@ enum CellOwner {
     Player2,
 };
 
-typedef char LLCell;
+typedef CellOwner LLCell;
 
 std::ostream &operator<<(std::ostream &out, const CellOwner OWNER);
 
