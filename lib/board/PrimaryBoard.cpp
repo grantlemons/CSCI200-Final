@@ -20,38 +20,38 @@ PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandler> ncHandler)
           NcHandler::combine_channels(ncHandler->get_default_bg_channel(),
                                       ncHandler->get_default_fg_channel()),
           PrimaryBoard::_symbols) {
-    this->_cells = std::array<LeafBoard *, 9>();
+    _cells = std::array<LeafBoard *, 9>();
 
     for (int i = 0; i < 9; i++) {
-        ncplane *plane = this->mGBoard.get_child_planes().at(i);
+        ncplane *plane = mGBoard.get_child_planes().at(i);
 
         LeafBoard *newBoard = new LeafBoard(ncHandler, plane);
-        this->_cells.at(i) = newBoard;
+        _cells.at(i) = newBoard;
     }
 }
 
 PrimaryBoard::~PrimaryBoard() {
-    for (LeafBoard *const cell : this->_cells) {
+    for (LeafBoard *const cell : _cells) {
         delete cell;
     }
 }
 
 CellOwner PrimaryBoard::get_cell_owner(const int INDEX) const {
-    return this->_cells.at(INDEX)->get_winner();
+    return _cells.at(INDEX)->get_winner();
 }
 
 void PrimaryBoard::draw_x(const unsigned int INDEX) {
-    this->_cells.at(INDEX)->fill_x();
-    this->Board::draw_x(INDEX);
+    _cells.at(INDEX)->fill_x();
+    Board::draw_x(INDEX);
 }
 
 void PrimaryBoard::draw_o(const unsigned int INDEX) {
-    this->_cells.at(INDEX)->fill_o();
+    _cells.at(INDEX)->fill_o();
     this->Board::draw_o(INDEX);
 }
 
 std::optional<LeafBoard *> PrimaryBoard::select_board(const int INDEX) const {
-    LeafBoard *cell = this->_cells.at(INDEX);
+    LeafBoard *cell = _cells.at(INDEX);
     std::optional<LeafBoard *> opt = std::optional(cell);
 
     return cell->get_winner() == None ? opt : std::nullopt;

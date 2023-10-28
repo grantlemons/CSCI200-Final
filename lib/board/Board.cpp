@@ -13,13 +13,13 @@
 Board::Board(std::shared_ptr<NcHandler> ncHandler, ncplane *PLANE,
              const uint64_t CELL_CHANNELS, std::array<const char *, 3> SYMBOLS)
     : mGBoard(ncHandler, PLANE, CELL_CHANNELS, SYMBOLS) {
-    this->draw();
+    draw();
 }
 
 Board::Board(std::shared_ptr<NcHandler> ncHandler, const ncplane_options NOPTS,
              const uint64_t CELL_CHANNELS, std::array<const char *, 3> SYMBOLS)
     : mGBoard(ncHandler, NOPTS, CELL_CHANNELS, SYMBOLS) {
-    this->draw();
+    draw();
 }
 
 unsigned int negative_mod(int a, int b) {
@@ -83,13 +83,13 @@ bool Board::check_win(const int INDEX, const CellOwner OWNER) const {
 }
 
 void Board::draw() {
-    this->mGBoard.draw_board();
+    mGBoard.draw_board();
 }
 void Board::draw_x(const unsigned int INDEX) {
-    this->mGBoard.draw_x(INDEX);
+    mGBoard.draw_x(INDEX);
 }
 void Board::draw_o(const unsigned int INDEX) {
-    this->mGBoard.draw_o(INDEX);
+    mGBoard.draw_o(INDEX);
 }
 
 std::ostream &operator<<(std::ostream &out, const Board &BRD) {

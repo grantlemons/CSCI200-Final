@@ -23,19 +23,19 @@ const notcurses_options opts = {NULL,
 
 NcHandler::NcHandler() {
     setlocale(LC_ALL, "");
-    this->nc = notcurses_init(&opts, NULL);
+    nc = notcurses_init(&opts, NULL);
 }
 
 NcHandler::~NcHandler() {
-    notcurses_stop(this->nc);
-    this->nc = nullptr;
+    notcurses_stop(nc);
+    nc = nullptr;
 }
 
 uint32_t NcHandler::get_default_bg_channel() const {
-    return ncplane_bchannel(this->get_stdplane());
+    return ncplane_bchannel(get_stdplane());
 }
 uint32_t NcHandler::get_default_fg_channel() const {
-    return ncplane_fchannel(this->get_stdplane());
+    return ncplane_fchannel(get_stdplane());
 }
 
 uint64_t NcHandler::combine_channels(const uint32_t BG_CHANNEL,
@@ -45,13 +45,13 @@ uint64_t NcHandler::combine_channels(const uint32_t BG_CHANNEL,
 }
 
 notcurses *NcHandler::get_nc() const {
-    return this->nc;
+    return nc;
 }
 
 ncplane *NcHandler::get_stdplane() const {
-    return notcurses_stdplane(this->nc);
+    return notcurses_stdplane(nc);
 }
 
 void NcHandler::render() {
-    notcurses_render(this->nc);
+    notcurses_render(nc);
 }

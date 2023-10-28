@@ -22,6 +22,9 @@ protected:
     virtual ~Board() = default;
 
 public:
+    Board(Board &) = delete;
+    void operator=(const Board &) = delete;
+
     virtual bool check_win(const int INDEX, const CellOwner OWNER) const;
     virtual CellOwner get_cell_owner(const int INDEX) const = 0;
 

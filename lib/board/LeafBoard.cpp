@@ -19,21 +19,21 @@ LeafBoard::LeafBoard(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE)
           NcHandler::combine_channels(ncHandler->get_default_bg_channel(),
                                       NcHandler::GREY_CHANNEL),
           LeafBoard::_symbols) {
-    this->_cells = std::array<LLCell, 9>();
-    this->_winner = None;
+    _cells = std::array<LLCell, 9>();
+    _winner = None;
 }
 
 CellOwner LeafBoard::get_cell_owner(const int INDEX) const {
-    return (CellOwner)this->_cells.at(INDEX);
+    return _cells.at(INDEX);
 }
 
 // navigation
 bool LeafBoard::set_cell_owner(const int INDEX, const CellOwner OWNER) {
-    if (this->_cells.at(INDEX) == None) {
-        this->_cells.at(INDEX) = OWNER;
+    if (_cells.at(INDEX) == None) {
+        _cells.at(INDEX) = OWNER;
 
-        if (this->check_win(INDEX, OWNER)) {
-            this->_winner = OWNER;
+        if (check_win(INDEX, OWNER)) {
+            _winner = OWNER;
         }
         return true;
     }
@@ -41,13 +41,13 @@ bool LeafBoard::set_cell_owner(const int INDEX, const CellOwner OWNER) {
 }
 
 CellOwner LeafBoard::get_winner() const {
-    return this->_winner;
+    return _winner;
 }
 
 void LeafBoard::fill_x() {
-    this->mGBoard.fill_x();
+    mGBoard.fill_x();
 }
 
 void LeafBoard::fill_o() {
-    this->mGBoard.fill_o();
+    mGBoard.fill_o();
 }

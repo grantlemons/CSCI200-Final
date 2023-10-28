@@ -33,9 +33,12 @@ public:
     GraphicalBoard(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE,
                    const uint64_t CELL_CHANNELS,
                    std::array<const char *, 3> SYMBOLS);
-    ~GraphicalBoard() = default;
-    void draw_board();
 
+    GraphicalBoard(GraphicalBoard &) = delete;
+    void operator=(const GraphicalBoard &) = delete;
+    ~GraphicalBoard() = default;
+
+    void draw_board();
     void draw_x(const unsigned int INDEX);
     void draw_o(const unsigned int INDEX);
     void fill_x();

@@ -18,6 +18,9 @@ private:
 public:
     LeafBoard(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE);
     ~LeafBoard() = default;
+    LeafBoard(LeafBoard &) = delete;
+    void operator=(const LeafBoard &) = delete;
+
     CellOwner get_cell_owner(const int INDEX) const override final;
     bool set_cell_owner(const int INDEX, const CellOwner OWNER);
     CellOwner get_winner() const;

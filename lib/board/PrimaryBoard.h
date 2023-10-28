@@ -18,6 +18,9 @@ private:
 public:
     PrimaryBoard(std::shared_ptr<NcHandler> ncHandler);
     ~PrimaryBoard();
+    PrimaryBoard(PrimaryBoard &) = delete;
+    void operator=(const PrimaryBoard &) = delete;
+
     CellOwner get_cell_owner(const int INDEX) const override final;
     std::optional<LeafBoard *> select_board(const int INDEX) const;
 
