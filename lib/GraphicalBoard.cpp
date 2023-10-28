@@ -1,4 +1,4 @@
-#include "lib/board/GraphicalBoard.h"
+#include "lib/GraphicalBoard.h"
 
 #include "lib/NcHandler.h"
 

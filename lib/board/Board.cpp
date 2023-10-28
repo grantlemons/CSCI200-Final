@@ -1,8 +1,8 @@
 #include "lib/board/Board.h"
 
+#include "lib/GraphicalBoard.h"
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
-#include "lib/board/GraphicalBoard.h"
 
 #include <array>
 #include <cmath>

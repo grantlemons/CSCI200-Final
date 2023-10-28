@@ -5,8 +5,8 @@
 
 enum CellOwner {
     None,
-    Player1,
-    Player2,
+    X,
+    O,
 };
 
 typedef CellOwner LLCell;

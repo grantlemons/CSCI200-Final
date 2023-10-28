@@ -1,7 +1,6 @@
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
 #include "lib/board/Board.h"
-#include "lib/board/GraphicalBoard.h"
 #include "lib/board/LeafBoard.h"
 #include "lib/board/PrimaryBoard.h"
 

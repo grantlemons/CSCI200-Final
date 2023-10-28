@@ -1,9 +1,9 @@
 #ifndef BOARD
 #define BOARD
 
+#include "lib/GraphicalBoard.h"
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
-#include "lib/board/GraphicalBoard.h"
 
 #include <array>
 #include <cstdint>
