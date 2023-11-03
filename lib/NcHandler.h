@@ -22,6 +22,7 @@ public:
 
     uint32_t get_default_bg_channel() const;
     uint32_t get_default_fg_channel() const;
+    uint64_t get_default_channels() const;
     static uint64_t combine_channels(const uint32_t BG_CHANNEL,
                                      const uint32_t FG_CHANNEL);
     notcurses *get_nc() const;

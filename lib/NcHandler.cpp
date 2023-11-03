@@ -37,6 +37,9 @@ uint32_t NcHandler::get_default_bg_channel() const {
 uint32_t NcHandler::get_default_fg_channel() const {
     return ncplane_fchannel(get_stdplane());
 }
+uint64_t NcHandler::get_default_channels() const {
+    return ncplane_channels(get_stdplane());
+}
 
 uint64_t NcHandler::combine_channels(const uint32_t BG_CHANNEL,
                                      const uint32_t FG_CHANNEL) {

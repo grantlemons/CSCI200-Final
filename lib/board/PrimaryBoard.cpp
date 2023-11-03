@@ -15,11 +15,8 @@ std::array<const char *, 3> PrimaryBoard::_symbols =
     std::array<const char *, 3>({"\u2501", "\u2503", "\u254B"});
 
 PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandler> ncHandler)
-    : Board::Board(
-          ncHandler, def_primary_nopts(ncHandler),
-          NcHandler::combine_channels(ncHandler->get_default_bg_channel(),
-                                      ncHandler->get_default_fg_channel()),
-          PrimaryBoard::_symbols) {
+    : Board::Board(ncHandler, def_primary_nopts(ncHandler),
+                   ncHandler->get_default_channels(), PrimaryBoard::_symbols) {
     _cells = std::array<LeafBoard *, 9>();
 
     for (int i = 0; i < 9; i++) {
