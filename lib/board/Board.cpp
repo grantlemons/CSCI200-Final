@@ -22,8 +22,8 @@ Board::Board(std::shared_ptr<NcHandler> ncHandler, const ncplane_options NOPTS,
     draw();
 }
 
-unsigned int negative_mod(int a, int b) {
-    return a - (b * floor((double)a / b));
+unsigned int negative_mod(const int A, const int B) {
+    return A - (B * floor((double)A / B));
 }
 
 void horizontal_others(const int INDEX, int &other1, int &other2) {
@@ -43,7 +43,6 @@ void diagonal_twos_others(const int INDEX, int &other1, int &other2) {
     other2 = (INDEX + 2) % 10;
 }
 
-// check victory
 bool Board::check_win(const int INDEX, const CellOwner OWNER) const {
     int horizontal_other1, horizontal_other2;
     int vertical_other1, vertical_other2;
@@ -71,15 +70,18 @@ bool Board::check_win(const int INDEX, const CellOwner OWNER) const {
         diagonal_twos_others(INDEX, diagonal_other1, diagonal_other2);
     }
 
-    return get_cell_owner(INDEX) == OWNER &&
-           ((get_cell_owner(horizontal_other1) == OWNER &&
-             get_cell_owner(horizontal_other2) == OWNER) ||
-            (get_cell_owner(vertical_other1) == OWNER &&
-             get_cell_owner(vertical_other2) == OWNER) ||
-            (include_diagonals2 && get_cell_owner(diagonal_other1) == OWNER &&
-             get_cell_owner(diagonal_other2) == OWNER) ||
-            (include_diagonals4 && get_cell_owner(diagonal_other3) == OWNER &&
-             get_cell_owner(diagonal_other4) == OWNER));
+    const bool WON_HORI = get_cell_owner(horizontal_other1) == OWNER &&
+                          get_cell_owner(horizontal_other2) == OWNER;
+    const bool WON_VERT = get_cell_owner(vertical_other1) == OWNER &&
+                          get_cell_owner(vertical_other2) == OWNER;
+    const bool WON_DIAGONAL_TWOS = include_diagonals2 &&
+                                   get_cell_owner(diagonal_other1) == OWNER &&
+                                   get_cell_owner(diagonal_other2) == OWNER;
+    const bool WON_DIAGONALS_FOURS = include_diagonals4 &&
+                                     get_cell_owner(diagonal_other3) == OWNER &&
+                                     get_cell_owner(diagonal_other4) == OWNER;
+
+    return WON_HORI || WON_VERT || WON_DIAGONAL_TWOS || WON_DIAGONALS_FOURS;
 }
 
 void Board::draw() {
