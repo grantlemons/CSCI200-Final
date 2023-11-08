@@ -77,18 +77,16 @@ GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
     }
 }
 
-int GraphicalBoard::draw_board_yx(const int Y, const int X) {
-    int res = EXIT_SUCCESS;
-
+void GraphicalBoard::draw_board() {
     const unsigned int ROWS_PER_BCELL = (_rows - 2) / 3;
     const unsigned int COLS_PER_BCELL = (_cols - 2) / 3;
 
     // calculate lines positions and lengths
-    const unsigned int H_IDX_1 = Y + ROWS_PER_BCELL;
-    const unsigned int H_IDX_2 = Y + (2 * ROWS_PER_BCELL);
+    const unsigned int H_IDX_1 = ROWS_PER_BCELL;
+    const unsigned int H_IDX_2 = 2 * ROWS_PER_BCELL;
 
-    const unsigned int V_IDX_1 = X + COLS_PER_BCELL;
-    const unsigned int V_IDX_2 = X + (2 * COLS_PER_BCELL);
+    const unsigned int V_IDX_1 = COLS_PER_BCELL;
+    const unsigned int V_IDX_2 = 2 * COLS_PER_BCELL;
 
     const unsigned int H_LINE_LEN = (3 * COLS_PER_BCELL) + 1;
     const unsigned int V_LINE_LEN = (3 * ROWS_PER_BCELL) + 1;
@@ -105,33 +103,27 @@ int GraphicalBoard::draw_board_yx(const int Y, const int X) {
     nccell_set_channels(&JUNC_CELL, _cell_channels);
 
     // draw horizontal lines
-    res |= ncplane_cursor_move_yx(_primaryPlane, H_IDX_1, X);
-    res |= ncplane_hline(_primaryPlane, &HORI_CELL, H_LINE_LEN);
+    ncplane_cursor_move_yx(_primaryPlane, H_IDX_1, 0);
+    ncplane_hline(_primaryPlane, &HORI_CELL, H_LINE_LEN);
 
-    res |= ncplane_cursor_move_yx(_primaryPlane, H_IDX_2, X);
-    res |= ncplane_hline(_primaryPlane, &HORI_CELL, H_LINE_LEN);
+    ncplane_cursor_move_yx(_primaryPlane, H_IDX_2, 0);
+    ncplane_hline(_primaryPlane, &HORI_CELL, H_LINE_LEN);
 
     // draw vertical lines
-    res |= ncplane_cursor_move_yx(_primaryPlane, Y, V_IDX_1);
-    res |= ncplane_vline(_primaryPlane, &VERT_CELL, V_LINE_LEN);
+    ncplane_cursor_move_yx(_primaryPlane, 0, V_IDX_1);
+    ncplane_vline(_primaryPlane, &VERT_CELL, V_LINE_LEN);
 
-    res |= ncplane_cursor_move_yx(_primaryPlane, Y, V_IDX_2);
-    res |= ncplane_vline(_primaryPlane, &VERT_CELL, V_LINE_LEN);
+    ncplane_cursor_move_yx(_primaryPlane, 0, V_IDX_2);
+    ncplane_vline(_primaryPlane, &VERT_CELL, V_LINE_LEN);
 
     // draw junction points
-    res |= ncplane_putc_yx(_primaryPlane, H_IDX_1, V_IDX_1, &JUNC_CELL);
-    res |= ncplane_putc_yx(_primaryPlane, H_IDX_1, V_IDX_2, &JUNC_CELL);
+    ncplane_putc_yx(_primaryPlane, H_IDX_1, V_IDX_1, &JUNC_CELL);
+    ncplane_putc_yx(_primaryPlane, H_IDX_1, V_IDX_2, &JUNC_CELL);
 
-    res |= ncplane_putc_yx(_primaryPlane, H_IDX_2, V_IDX_1, &JUNC_CELL);
-    res |= ncplane_putc_yx(_primaryPlane, H_IDX_2, V_IDX_2, &JUNC_CELL);
+    ncplane_putc_yx(_primaryPlane, H_IDX_2, V_IDX_1, &JUNC_CELL);
+    ncplane_putc_yx(_primaryPlane, H_IDX_2, V_IDX_2, &JUNC_CELL);
 
-    return res;
-}
-// int GraphicalBoard::draw_x_yx(const int Y, const int X) {}
-// int GraphicalBoard::draw_o_yx(const int Y, const int X) {}
-
-void GraphicalBoard::draw_board() {
-    draw_board_yx(0, 0);
+    // draw the board to the screen
     _ncHandler->render();
 }
 
@@ -144,6 +136,8 @@ void GraphicalBoard::draw_x(const unsigned int INDEX) {
 
     ncplane_erase(plane);
     ncplane_set_base_cell(plane, &red);
+
+    // update the screen with the new changes
     _ncHandler->render();
 }
 
@@ -156,6 +150,8 @@ void GraphicalBoard::draw_o(const unsigned int INDEX) {
 
     ncplane_erase(plane);
     ncplane_set_base_cell(plane, &blue);
+
+    // update the screen with the new changes
     _ncHandler->render();
 }
 
@@ -169,6 +165,9 @@ void GraphicalBoard::fill_x() {
         ncplane_erase(child);
         ncplane_set_base_cell(child, &red);
     }
+
+    // update the screen with the new changes
+    _ncHandler->render();
 }
 
 void GraphicalBoard::fill_o() {
@@ -181,6 +180,9 @@ void GraphicalBoard::fill_o() {
         ncplane_erase(child);
         ncplane_set_base_cell(child, &blue);
     }
+
+    // update the screen with the new changes
+    _ncHandler->render();
 }
 
 std::array<ncplane *, 9> GraphicalBoard::get_child_planes() const {
