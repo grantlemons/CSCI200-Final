@@ -9,6 +9,20 @@
 #include <memory>
 #include <notcurses/notcurses.h>
 
+/**
+ * @class LeafBoard
+ * A representation of the subboards/leaf boards of the primary board in the
+ * Tic-Tac-Toe game.
+ *
+ * i.e. Each instance of class LeafBoard represents one of the cells of the
+ * PrimaryBoard
+ *
+ * Used to represent the logical state of the board.
+ * Constituant cells are of the type LLCell (a typedef).
+ *
+ * @see PrimaryBoard
+ * @see Board
+ */
 class LeafBoard : virtual public Board {
 private:
     /**
