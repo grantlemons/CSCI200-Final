@@ -39,11 +39,11 @@ GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
                                      CELL_CHANNELS, SYMBOLS) {}
 
 GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
-                               ncplane_options nopts,
+                               const ncplane_options NOPTS,
                                const uint64_t CELL_CHANNELS,
                                std::array<const char *, 3> SYMBOLS)
     : GraphicalBoard::GraphicalBoard(
-          ncHandler, ncplane_create(ncHandler->get_stdplane(), &nopts),
+          ncHandler, ncplane_create(ncHandler->get_stdplane(), &NOPTS),
           CELL_CHANNELS, SYMBOLS) {}
 
 GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,

@@ -31,9 +31,9 @@ private:
      * right, top to bottom.
      *
      * Layout:
-     * 0, 1, 2,
-     * 3, 4, 5,
-     * 6, 7, 8
+     * 0|1|2
+     * 3|4|5
+     * 6|7|8
      */
     std::array<ncplane *, 9> _childPlanes;
 
@@ -66,8 +66,12 @@ public:
      * vertical lines, and junctions between lines.
      *
      * @see create_nopts()
-     * @see GraphicalBoard(std::shared_ptr<NcHandler>, ncplane_options, const
-     * uint64_t, std::array<const char *, 3>)
+     * @see GraphicalBoard(std::shared_ptr<NcHandler>, const ncplane_options,
+     * const uint64_t, std::array<const char *, 3>)
+     * @see _primaryPlane
+     * @see _childPlanes
+     * @see _symbols
+     * @see _cell_channels
      */
     GraphicalBoard(std::shared_ptr<NcHandler> ncHandler, const int Y,
                    const int X, const unsigned int ROWS,
@@ -82,7 +86,7 @@ public:
      *
      * @param ncHandler The handler object used to access the underlying
      * notcurses instance.
-     * @param nopts The configuration used to form the primary plane.
+     * @param NOPTS The configuration used to form the primary plane.
      * @param CELL_CHANNELS The default forground and background channels for
      * the board.
      * @param SYMBOLS The unicode characters used to draw the lines of the
@@ -92,9 +96,13 @@ public:
      * @see ncplane_create()
      * @see GraphicalBoard(std::shared_ptr<NcHandler>, ncplane *const, const
      * uint64_t, std::array<const char *, 3>)
+     * @see _primaryPlane
+     * @see _childPlanes
+     * @see _symbols
+     * @see _cell_channels
      */
-    GraphicalBoard(std::shared_ptr<NcHandler> ncHandler, ncplane_options nopts,
-                   const uint64_t CELL_CHANNELS,
+    GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
+                   const ncplane_options NOPTS, const uint64_t CELL_CHANNELS,
                    std::array<const char *, 3> SYMBOLS);
 
     /**
@@ -111,6 +119,11 @@ public:
      * @param SYMBOLS The unicode characters used to draw the lines of the
      * board. The indexes (in order) are the character for horizontal lines,
      * vertical lines, and junctions between lines.
+     *
+     * @see _primaryPlane
+     * @see _childPlanes
+     * @see _symbols
+     * @see _cell_channels
      */
     GraphicalBoard(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE,
                    const uint64_t CELL_CHANNELS,
@@ -159,9 +172,9 @@ public:
      * right, top to bottom.
      *
      * Layout:
-     * 0, 1, 2,
-     * 3, 4, 5,
-     * 6, 7, 8
+     * 0|1|2
+     * 3|4|5
+     * 6|7|8
      */
     std::array<ncplane *, 9> get_child_planes() const;
 };
