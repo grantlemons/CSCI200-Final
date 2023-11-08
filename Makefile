@@ -39,7 +39,7 @@ $(TARGET): $(OBJECTS) docs
 	$(CXX) $(CXXFLAGS) $(CXXVERSION) $(CXXFLAGS_DEBUG) -o $@ -c $<
 
 clean:
-	$(DEL) $(TARGET) $(OBJECTS) $(DOCS_DIR) Makefile.bak
+	$(DEL) -r $(TARGET) $(OBJECTS) $(DOCS_DIR) Makefile.bak
 
 depend:
 	@sed -i.bak '/^# DEPENDENCIES/,$$d' Makefile
