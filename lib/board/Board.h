@@ -48,7 +48,8 @@ protected:
      *
      * @param ncHandler The handler object used to access the underlying
      * notcurses instance.
-     * @param PLANE The plane used as the primary plane.
+     * @param PLANE The plane used as the primary plane of the new
+     * mGBoard.
      * @param CELL_CHANNELS The default forground and background channels for
      * the board.
      * @param SYMBOLS The unicode characters used to draw the lines of the
@@ -76,8 +77,9 @@ public:
      *
      * @param INDEX The index of a cell known to be owned by the given player.
      * @param OWNER The player to check the victory of.
-     *
      * @return If the given player won or not.
+     *
+     * @see get_cell_owner()
      */
     virtual bool check_win(const int INDEX, const CellOwner OWNER) const;
 
@@ -85,7 +87,6 @@ public:
      * Gets the owner of a given index.
      *
      * @param INDEX the index of the cell to check ownership.
-     *
      * @return The owner of the cell (Can be NONE variant).
      */
     virtual CellOwner get_cell_owner(const int INDEX) const = 0;
