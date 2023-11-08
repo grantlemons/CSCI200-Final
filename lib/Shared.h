@@ -3,6 +3,10 @@
 
 #include <ostream>
 
+/**
+ * @enum CellOwner
+ * Options for cell ownership.
+ */
 enum CellOwner {
     None,
     X,
