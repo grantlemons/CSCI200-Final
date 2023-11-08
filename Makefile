@@ -1,5 +1,6 @@
 TARGET = FINAL
 SRC_FILES = main.cpp lib/Shared.cpp lib/board/Board.cpp lib/board/LeafBoard.cpp lib/board/PrimaryBoard.cpp lib/GraphicalBoard.cpp lib/NcHandler.cpp
+DOCS_DIR = docs
 
 # I like this linker
 ifneq ("$(wildcard /usr/bin/mold)","")
@@ -29,20 +30,25 @@ endif
 
 all: $(TARGET)
 
-$(TARGET): $(OBJECTS)
+$(TARGET): $(OBJECTS) docs
+	@echo Building $@
 	$(CXX) $(CXXFLAGS) $(CXXVERSION) $(CXXFLAGS_DEBUG) -o $@ $^
+	@echo Updating Docs $@
 
 .cpp.o:
 	$(CXX) $(CXXFLAGS) $(CXXVERSION) $(CXXFLAGS_DEBUG) -o $@ -c $<
 
 clean:
-	$(DEL) $(TARGET) $(OBJECTS) Makefile.bak
+	$(DEL) $(TARGET) $(OBJECTS) $(DOCS_DIR) Makefile.bak
 
 depend:
 	@sed -i.bak '/^# DEPENDENCIES/,$$d' Makefile
 	@$(DEL) sed*
 	@echo $(Q)# DEPENDENCIES$(Q) >> Makefile
 	@$(CXX) -MM $(SRC_FILES) >> Makefile
+
+docs:
+	@doxygen
 
 zip:
 	@tar czf $(TARGET).tar.gz --exclude-ignore=.gitignore --exclude=".git" --exclude=".gitignore" .
