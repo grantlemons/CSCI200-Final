@@ -138,7 +138,7 @@ void GraphicalBoard::draw_board() {
 void GraphicalBoard::draw_x(const unsigned int INDEX) {
     ncplane *plane = _childPlanes.at(INDEX);
     const nccell red = NCCELL_INITIALIZER(
-        'X', 0,
+        '\0', 0,
         NcHandler::combine_channels(NcHandler::RED_CHANNEL,
                                     _ncHandler->get_default_fg_channel()));
 
@@ -150,7 +150,7 @@ void GraphicalBoard::draw_x(const unsigned int INDEX) {
 void GraphicalBoard::draw_o(const unsigned int INDEX) {
     ncplane *plane = _childPlanes.at(INDEX);
     const nccell blue = NCCELL_INITIALIZER(
-        'O', 0,
+        '\0', 0,
         NcHandler::combine_channels(NcHandler::BLUE_CHANNEL,
                                     _ncHandler->get_default_fg_channel()));
 
@@ -162,7 +162,7 @@ void GraphicalBoard::draw_o(const unsigned int INDEX) {
 void GraphicalBoard::fill_x() {
     for (ncplane *const child : _childPlanes) {
         const nccell red = NCCELL_INITIALIZER(
-            'X', 0,
+            '\0', 0,
             NcHandler::combine_channels(NcHandler::RED_CHANNEL,
                                         _ncHandler->get_default_fg_channel()));
 
@@ -174,7 +174,7 @@ void GraphicalBoard::fill_x() {
 void GraphicalBoard::fill_o() {
     for (ncplane *const child : _childPlanes) {
         const nccell blue = NCCELL_INITIALIZER(
-            'O', 0,
+            '\0', 0,
             NcHandler::combine_channels(NcHandler::BLUE_CHANNEL,
                                         _ncHandler->get_default_fg_channel()));
 
