@@ -45,7 +45,7 @@ public:
      * notcurses instance.
      *
      * @see _cells
-     * @def_primary_nopts()
+     * @see def_primary_nopts()
      * @see Board(std::shared_ptr<NcHandler>, const ncplane_options, const
      * uint64_t, std::array<const char *, 3>)
      */

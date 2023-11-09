@@ -115,6 +115,9 @@ public:
      */
     virtual void draw_o(const unsigned int INDEX);
 
+    /**
+     * Defines the way Board types are outputted to streams.
+     */
     friend std::ostream &operator<<(std::ostream &out, const Board &BRD);
 };
 
@@ -134,6 +137,8 @@ public:
  * @param A The dividend of the modulus operation.
  * @param B The divisor of the modulus operation.
  * @return The result of the modulus operation.
+ *
+ * @relates Board
  */
 unsigned int negative_mod(const int A, const int B);
 
@@ -148,6 +153,10 @@ unsigned int negative_mod(const int A, const int B);
  * @param [in] INDEX The known index on a row.
  * @param [out] other1 The first other index in the same row.
  * @param [out] other2 The second other index in the same row.
+ *
+ * @see vertical_others()
+ *
+ * @relates Board
  */
 void horizontal_others(const int INDEX, int &other1, int &other2);
 
@@ -162,6 +171,10 @@ void horizontal_others(const int INDEX, int &other1, int &other2);
  * @param [in] INDEX The known index on a column.
  * @param [out] other1 The first other index in the same column.
  * @param [out] other2 The second other index in the same column.
+ *
+ * @see horizontal_others()
+ *
+ * @relates Board
  */
 void vertical_others(const int INDEX, int &other1, int &other2);
 
@@ -179,7 +192,9 @@ void vertical_others(const int INDEX, int &other1, int &other2);
  * @param [out] other1 The first other index in the diagonal.
  * @param [out] other2 The second other index in the diagonal.
  *
- * @see diagonal_twos_others
+ * @see diagonal_twos_others()
+ *
+ * @relates Board
  */
 void diagonal_fours_others(const int INDEX, int &other1, int &other2);
 
@@ -198,7 +213,9 @@ void diagonal_fours_others(const int INDEX, int &other1, int &other2);
  * @param [out] other1 The first other index in the diagonal.
  * @param [out] other2 The second other index in the diagonal.
  *
- * @see diagonal_twos_others
+ * @see diagonal_twos_others()
+ *
+ * @relates Board
  */
 void diagonal_twos_others(const int INDEX, int &other1, int &other2);
 
