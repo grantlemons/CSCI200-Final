@@ -46,8 +46,8 @@ depend:
 	@echo $(Q)# DEPENDENCIES$(Q) >> Makefile
 	@$(CXX) -MM $(SRC_FILES) >> Makefile
 
-docs:
-	@echo Updating Docs $@
+docs: Doxyfile
+	@echo Generating documentation
 	@doxygen
 
 zip:
