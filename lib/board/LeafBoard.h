@@ -66,7 +66,7 @@ public:
     LeafBoard(LeafBoard &) = delete;
     void operator=(const LeafBoard &) = delete;
 
-    CellOwner get_cell_owner(const int INDEX) const override final;
+    CellOwner get_cell_owner(const unsigned int INDEX) const override final;
 
     /**
      * Attempts to set the owner of the given index.
@@ -81,7 +81,7 @@ public:
      * @see _cells
      * @see _winner
      */
-    bool set_cell_owner(const int INDEX, const CellOwner OWNER);
+    bool set_cell_owner(const unsigned int INDEX, const CellOwner OWNER);
 
     /**
      * Gets the winner of the entire board.

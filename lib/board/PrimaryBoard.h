@@ -55,7 +55,7 @@ public:
     PrimaryBoard(PrimaryBoard &) = delete;
     void operator=(const PrimaryBoard &) = delete;
 
-    CellOwner get_cell_owner(const int INDEX) const override final;
+    CellOwner get_cell_owner(const unsigned int INDEX) const override final;
 
     /**
      * Gets a pointer to one of the constituant LeafBoards.
@@ -67,7 +67,7 @@ public:
      *
      * If the selected LeafBoard is already owned, the function returns nullopt.
      */
-    std::optional<LeafBoard *> select_board(const int INDEX) const;
+    std::optional<LeafBoard *> select_board(const unsigned int INDEX) const;
 
     void draw_x(const unsigned int INDEX) override final;
     void draw_o(const unsigned int INDEX) override final;

@@ -62,12 +62,12 @@ GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
     const unsigned int ROWS_PER_BCELL = (_rows - 2) / 3;
     const unsigned int COLS_PER_BCELL = (_cols - 2) / 3;
 
-    for (int i = 0; i < 9; i++) {
-        int column = i % 3;
-        int row = (i - column) / 3;
+    for (unsigned int i = 0; i < 9; i++) {
+        unsigned int column = i % 3u;
+        unsigned int row = (i - column) / 3u;
 
-        int newY = 1 + (ROWS_PER_BCELL * row);
-        int newX = 1 + (COLS_PER_BCELL * column);
+        int newY = static_cast<int>(1u + (ROWS_PER_BCELL * row));
+        int newX = static_cast<int>(1u + (COLS_PER_BCELL * column));
 
         ncplane_options child_nopts =
             create_nopts(newY, newX, ROWS_PER_BCELL - 1, COLS_PER_BCELL - 1);
@@ -78,18 +78,18 @@ GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
 }
 
 void GraphicalBoard::draw_board() {
-    const unsigned int ROWS_PER_BCELL = (_rows - 2) / 3;
-    const unsigned int COLS_PER_BCELL = (_cols - 2) / 3;
+    const unsigned int ROWS_PER_BCELL = (_rows - 2) / 3u;
+    const unsigned int COLS_PER_BCELL = (_cols - 2) / 3u;
 
     // calculate lines positions and lengths
-    const unsigned int H_IDX_1 = ROWS_PER_BCELL;
-    const unsigned int H_IDX_2 = 2 * ROWS_PER_BCELL;
+    const int H_IDX_1 = static_cast<int>(ROWS_PER_BCELL);
+    const int H_IDX_2 = static_cast<int>(2u * ROWS_PER_BCELL);
 
-    const unsigned int V_IDX_1 = COLS_PER_BCELL;
-    const unsigned int V_IDX_2 = 2 * COLS_PER_BCELL;
+    const int V_IDX_1 = static_cast<int>(COLS_PER_BCELL);
+    const int V_IDX_2 = static_cast<int>(2u * COLS_PER_BCELL);
 
-    const unsigned int H_LINE_LEN = (3 * COLS_PER_BCELL) + 1;
-    const unsigned int V_LINE_LEN = (3 * ROWS_PER_BCELL) + 1;
+    const unsigned int H_LINE_LEN = (3u * COLS_PER_BCELL) + 1u;
+    const unsigned int V_LINE_LEN = (3u * ROWS_PER_BCELL) + 1u;
 
     // define cells
     nccell HORI_CELL, VERT_CELL, JUNC_CELL;

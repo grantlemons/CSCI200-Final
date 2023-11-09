@@ -44,7 +44,7 @@ uint64_t NcHandler::get_default_channels() const {
 uint64_t NcHandler::combine_channels(const uint32_t BG_CHANNEL,
                                      const uint32_t FG_CHANNEL) {
 
-    return ((uint64_t)FG_CHANNEL << 32ull) + BG_CHANNEL;
+    return (static_cast<uint64_t>(FG_CHANNEL) << 32ull) + BG_CHANNEL;
 }
 
 notcurses *NcHandler::get_nc() const {

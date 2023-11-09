@@ -22,11 +22,12 @@ LeafBoard::LeafBoard(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE)
     _winner = None;
 }
 
-CellOwner LeafBoard::get_cell_owner(const int INDEX) const {
+CellOwner LeafBoard::get_cell_owner(const unsigned int INDEX) const {
     return _cells.at(INDEX);
 }
 
-bool LeafBoard::set_cell_owner(const int INDEX, const CellOwner OWNER) {
+bool LeafBoard::set_cell_owner(const unsigned int INDEX,
+                               const CellOwner OWNER) {
     if (_cells.at(INDEX) == None) {
         _cells.at(INDEX) = OWNER;
 

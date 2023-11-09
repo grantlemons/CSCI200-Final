@@ -81,7 +81,8 @@ public:
      *
      * @see get_cell_owner()
      */
-    virtual bool check_win(const int INDEX, const CellOwner OWNER) const;
+    virtual bool check_win(const unsigned int INDEX,
+                           const CellOwner OWNER) const;
 
     /**
      * Gets the owner of a given index.
@@ -89,7 +90,7 @@ public:
      * @param INDEX the index of the cell to check ownership.
      * @return The owner of the cell (Can be NONE variant).
      */
-    virtual CellOwner get_cell_owner(const int INDEX) const = 0;
+    virtual CellOwner get_cell_owner(const unsigned int INDEX) const = 0;
 
     /**
      * Uses the component GraphicalBoard to draw a Tic-Tac-Toe board.
@@ -158,7 +159,8 @@ unsigned int negative_mod(const int A, const int B);
  *
  * @relates Board
  */
-void horizontal_others(const int INDEX, int &other1, int &other2);
+void horizontal_others(const unsigned int INDEX, unsigned int &other1,
+                       unsigned int &other2);
 
 /**
  * Gets the other indicies on a certain column of a 3x3 grid.
@@ -176,7 +178,8 @@ void horizontal_others(const int INDEX, int &other1, int &other2);
  *
  * @relates Board
  */
-void vertical_others(const int INDEX, int &other1, int &other2);
+void vertical_others(const unsigned int INDEX, unsigned int &other1,
+                     unsigned int &other2);
 
 /**
  * Gets the other indicies of a diagonal line on a 3x3 grid.
@@ -196,7 +199,8 @@ void vertical_others(const int INDEX, int &other1, int &other2);
  *
  * @relates Board
  */
-void diagonal_fours_others(const int INDEX, int &other1, int &other2);
+void diagonal_fours_others(const unsigned int INDEX, unsigned int &other1,
+                           unsigned int &other2);
 
 /**
  * Gets the other indicies of a diagonal line on a 3x3 grid.
@@ -217,6 +221,7 @@ void diagonal_fours_others(const int INDEX, int &other1, int &other2);
  *
  * @relates Board
  */
-void diagonal_twos_others(const int INDEX, int &other1, int &other2);
+void diagonal_twos_others(const unsigned int INDEX, unsigned int &other1,
+                          unsigned int &other2);
 
 #endif // !BOARD

@@ -23,29 +23,34 @@ Board::Board(std::shared_ptr<NcHandler> ncHandler, const ncplane_options NOPTS,
 }
 
 unsigned int negative_mod(const int A, const int B) {
-    return A - (B * floor((double)A / B));
+    return static_cast<unsigned int>(
+        A - (B * static_cast<int>(floor(static_cast<double>(A) / B))));
 }
 
-void horizontal_others(const int INDEX, int &other1, int &other2) {
-    other1 = negative_mod(INDEX - 1, 3);
-    other2 = (INDEX + 1) % 3;
+void horizontal_others(const unsigned int INDEX, unsigned int &other1,
+                       unsigned int &other2) {
+    other1 = negative_mod(static_cast<int>(INDEX - 1u), 3u);
+    other2 = (INDEX + 1u) % 3u;
 }
-void vertical_others(const int INDEX, int &other1, int &other2) {
-    other1 = negative_mod(INDEX - 3, 9);
-    other2 = (INDEX + 3) % 9;
+void vertical_others(const unsigned int INDEX, unsigned int &other1,
+                     unsigned int &other2) {
+    other1 = negative_mod(static_cast<int>(INDEX - 3u), 9u);
+    other2 = (INDEX + 3u) % 9u;
 }
-void diagonal_fours_others(const int INDEX, int &other1, int &other2) {
-    other1 = negative_mod(INDEX - 4, 12);
-    other2 = (INDEX + 4) % 12;
+void diagonal_fours_others(const unsigned int INDEX, unsigned int &other1,
+                           unsigned int &other2) {
+    other1 = negative_mod(static_cast<int>(INDEX - 4u), 12u);
+    other2 = (INDEX + 4u) % 12u;
 }
-void diagonal_twos_others(const int INDEX, int &other1, int &other2) {
-    other1 = negative_mod(INDEX - 2, 10);
-    other2 = (INDEX + 2) % 10;
+void diagonal_twos_others(const unsigned int INDEX, unsigned int &other1,
+                          unsigned int &other2) {
+    other1 = negative_mod(static_cast<int>(INDEX - 2u), 10u);
+    other2 = (INDEX + 2u) % 10u;
 }
 
-bool Board::check_win(const int INDEX, const CellOwner OWNER) const {
-    int horizontal_other1, horizontal_other2;
-    int vertical_other1, vertical_other2;
+bool Board::check_win(const unsigned int INDEX, const CellOwner OWNER) const {
+    unsigned int horizontal_other1, horizontal_other2, vertical_other1,
+        vertical_other2;
 
     horizontal_others(INDEX, horizontal_other1, horizontal_other2);
     vertical_others(INDEX, vertical_other1, vertical_other2);
@@ -57,8 +62,8 @@ bool Board::check_win(const int INDEX, const CellOwner OWNER) const {
     // |6| |8|
     bool include_diagonals2 = false;
     bool include_diagonals4 = false;
-    int diagonal_other1 = 0, diagonal_other2 = 0;
-    int diagonal_other3 = 0, diagonal_other4 = 0;
+    unsigned int diagonal_other1 = 0, diagonal_other2 = 0;
+    unsigned int diagonal_other3 = 0, diagonal_other4 = 0;
     if (INDEX == 4) {
         diagonal_twos_others(INDEX, diagonal_other1, diagonal_other2);
         diagonal_fours_others(INDEX, diagonal_other3, diagonal_other4);
@@ -96,7 +101,7 @@ void Board::draw_o(const unsigned int INDEX) {
 
 std::ostream &operator<<(std::ostream &out, const Board &BRD) {
     out << "[";
-    for (int i = 0; i < 9 - 1; i++) {
+    for (unsigned int i = 0; i < 9 - 1; i++) {
         out << BRD.get_cell_owner(i) << ", ";
 
         if ((i + 1) % 3 == 0) {
