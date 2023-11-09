@@ -26,7 +26,6 @@ CellOwner LeafBoard::get_cell_owner(const int INDEX) const {
     return _cells.at(INDEX);
 }
 
-// navigation
 bool LeafBoard::set_cell_owner(const int INDEX, const CellOwner OWNER) {
     if (_cells.at(INDEX) == None) {
         _cells.at(INDEX) = OWNER;
