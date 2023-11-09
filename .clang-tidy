@@ -1,0 +1,15 @@
+---
+Checks: "
+        -modernize-*,
+        -cppcoreguidelines-*,
+        -modernize-use-trailing-return-type,
+        -zircon-*,
+        -readability-else-after-return,
+        -readability-static-accessed-through-instance,
+        -cppcoreguidelines-non-private-member-variables-in-classes,
+        -misc-non-private-member-variables-in-classes,
+        -misc-const-correctness,
+"
+WarningsAsErrors: ''
+HeaderFilterRegex: ''
+FormatStyle:     none
