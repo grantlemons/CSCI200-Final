@@ -9,10 +9,11 @@
  * RAII Handler for a notcurses instance.
  */
 class NcHandler {
-public:
+private:
     /** The underlying notcurses instance. */
     notcurses *nc;
 
+public:
     /** Default red color channel value */
     static const uint32_t RED_CHANNEL;
 

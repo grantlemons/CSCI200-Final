@@ -3,8 +3,12 @@ SRC_FILES = main.cpp lib/Shared.cpp lib/board/Board.cpp lib/board/LeafBoard.cpp 
 DOCS_DIR = docs
 
 # I like this linker
-ifneq ("$(wildcard /usr/bin/mold)","")
+ifneq ("$(shell which mold)","")
 	LINKERFLAG = -fuse-ld=mold
+endif
+
+ifneq ("$(shell which doxygen)","")
+	DOXYGEN = doxygen
 endif
 
 # For including external libraries
@@ -47,8 +51,7 @@ depend:
 	@$(CXX) -MM $(SRC_FILES) >> Makefile
 
 docs: Doxyfile
-	@echo Generating documentation
-	@doxygen
+	@$(DOXYGEN)
 
 zip:
 	@tar czf $(TARGET).tar.gz --exclude-ignore=.gitignore --exclude=".git" --exclude=".gitignore" .
