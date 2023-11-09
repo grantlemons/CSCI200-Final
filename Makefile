@@ -28,12 +28,11 @@ else
 	Q="
 endif
 
-all: $(TARGET)
+all: $(TARGET) docs
 
-$(TARGET): $(OBJECTS) docs
+$(TARGET): $(OBJECTS)
 	@echo Building $@
 	$(CXX) $(CXXFLAGS) $(CXXVERSION) $(CXXFLAGS_DEBUG) -o $@ $^
-	@echo Updating Docs $@
 
 .cpp.o:
 	$(CXX) $(CXXFLAGS) $(CXXVERSION) $(CXXFLAGS_DEBUG) -o $@ -c $<
@@ -48,6 +47,7 @@ depend:
 	@$(CXX) -MM $(SRC_FILES) >> Makefile
 
 docs:
+	@echo Updating Docs $@
 	@doxygen
 
 zip:
