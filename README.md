@@ -35,12 +35,23 @@ which case the current player can select any unclaimed Leaf Board to activate.
 
 Gameplay Example:
 
+**Turn 1:**
+
 ```
 Primary Board     Active Leaf Board (0)     Description
-   |A| | |              | | | |             X Selects the Leaf Board 0 and Leaf Cell 4.
+   |A| | |              | | | |             X Selects the Leaf Board 0.
+   | | | |              | | | |
+   | | | |              | | | |
+```
+
+```
+Primary Board     Active Leaf Board (0)     Description
+   |A| | |              | | | |             X Selects Leaf Cell 4.
    | | | |              | |X| |
    | | | |              | | | |
 ```
+
+**Turn 2:**
 
 ```
 Primary Board     Active Leaf Board (4)     Description
@@ -56,11 +67,13 @@ Primary Board     Active Leaf Board (4)     Description
    | | | |              | | | |
 ```
 
+**Turn 3:**
+
 ```
 Primary Board     Active Leaf Board (0)     Description
    |A| | |              | | | |             Leaf Board 0 is now active.
    | | | |              | |X| |             X must make a move in the newly active Leaf Board.
-   | | | |              | | | |             State for Leaf Board 0 persists from their turn one.
+   | | | |              | | | |             State for Leaf Board 0 persists from turn one.
 ```
 
 ## Dependencies

@@ -50,7 +50,7 @@ depend:
 	@echo $(Q)# DEPENDENCIES$(Q) >> Makefile
 	@$(CXX) -MM $(SRC_FILES) >> Makefile
 
-docs: Doxyfile
+docs: Doxyfile README.md
 	@$(DOXYGEN)
 
 zip:
