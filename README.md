@@ -6,7 +6,7 @@ Ultimate Tic-Tac-Toe is a project that takes Tic-Tac-Toe too far.
 
 ### Overview
 
-Ultimate Tic-Tac-Toe is extremely similar to regular Tic-Tac-Toe, players
+Ultimate Tic-Tac-Toe is extremely similar to regular Tic-Tac-Toe; players
 familiar with the original can expect to pick up the expanded ruleset quickly.
 
 Fundamentally, Ultimate Tic-Tac-Toe is game of Tic-Tac-Toe where each cell of
@@ -19,7 +19,7 @@ a Leaf Board.
 Once a Leaf Board is won, the corresponding cell of the Primary Board is claimed
 for the winner. Once three consecutive Leaf Boards have been won by the same
 player (corresponding to cells of the Primary Board), that player wins the
-Primary Board, and the game.
+Primary Board and thereby the game.
 
 ### Selecting Leaf Boards
 
@@ -31,7 +31,7 @@ in, as well as the cell of said Leaf Board they would like to claim.
 In most other cases, however, the currently active Leaf Board is determined by
 the cell of the Leaf Board previously claimed.
 An exception applies when the Leaf Board that would be active is already won, in
-which case the current player can select any unclaimed Leaf Board to activate.
+which case the current player can select any unclaimed Leaf Board.
 
 Gameplay Example:
 
