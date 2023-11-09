@@ -1,4 +1,4 @@
-# Ultimate Tic-Tac-Toe {#mainpage}
+# Ultimate Tic-Tac-Toe
 
 Ultimate Tic-Tac-Toe is a project that takes Tic-Tac-Toe too far.
 
