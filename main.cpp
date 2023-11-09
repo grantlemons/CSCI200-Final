@@ -14,7 +14,7 @@ int main() {
     PrimaryBoard pBoard(ncHandler);
 
     LeafBoard *selected = nullptr;
-    std::optional<LeafBoard *> opt = pBoard.select_board(2);
+    std::optional<LeafBoard *> opt = pBoard.select_board(2u);
     if (opt != std::nullopt) {
         selected = opt.value();
         selected->draw_x(1);
@@ -24,7 +24,8 @@ int main() {
     pBoard.draw_x(3);
     ncHandler->render();
 
-    while (1);
+    while (1)
+        ;
 
     return EXIT_SUCCESS;
 }

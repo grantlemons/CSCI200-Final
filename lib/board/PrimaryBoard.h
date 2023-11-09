@@ -67,7 +67,7 @@ public:
      *
      * If the selected LeafBoard is already owned, the function returns nullopt.
      */
-    std::optional<LeafBoard *> select_board(const unsigned int INDEX) const;
+    std::optional<LeafBoard *> select_board(const unsigned int INDEX);
 
     void draw_x(const unsigned int INDEX) override final;
     void draw_o(const unsigned int INDEX) override final;

@@ -48,7 +48,7 @@ void PrimaryBoard::draw_o(const unsigned int INDEX) {
 }
 
 std::optional<LeafBoard *>
-PrimaryBoard::select_board(const unsigned int INDEX) const {
+PrimaryBoard::select_board(const unsigned int INDEX) {
     LeafBoard *cell = _cells.at(INDEX);
     std::optional<LeafBoard *> opt = std::optional(cell);
 
