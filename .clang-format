@@ -4,6 +4,7 @@ SortIncludes: true
 BreakBeforeBraces: Attach
 AllowShortFunctionsOnASingleLine: Empty
 IncludeBlocks: Regroup
+QualifierAlignment: Right
 IncludeCategories:
   - Regex: '^\"'
     Priority: 1
