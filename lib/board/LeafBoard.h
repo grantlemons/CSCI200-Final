@@ -107,8 +107,6 @@ public:
      * owned by X.
      *
      * Used when the leaf board is won.
-     *
-     * @see Board::mGBoard
      */
     void fill_x();
 
@@ -117,8 +115,6 @@ public:
      * owned by O.
      *
      * Used when the leaf board is won.
-     *
-     * @see Board::mGBoard
      */
     void fill_o();
 };
