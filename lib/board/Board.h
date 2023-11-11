@@ -17,18 +17,28 @@
  */
 class Board {
 private:
+    /** The handler object used to access the underlying
+     * notcurses instance.
+     */
+    std::shared_ptr<NcHandler> _ncHandler;
+
     /**
      * Component graphical board used to represent actions on the logical board
      * graphically.
      */
     std::unique_ptr<GraphicalBoard> _GBoard;
 
-    /** The handler object used to access the underlying
-     * notcurses instance.
-     */
-    std::shared_ptr<NcHandler> _ncHandler;
-
 protected:
+    /**
+     * A constructor that uses dependency injection.
+     *
+     * @param ncHandler The handler object used to access the underlying
+     * notcurses instance.
+     * @param GBoard The associated graphical board to construct with.
+     */
+    Board(std::shared_ptr<NcHandler> ncHandler,
+          std::unique_ptr<GraphicalBoard> GBoard);
+
     /**
      * A constructor that takes a plane to use for the underlying graphical
      * board.
@@ -68,7 +78,7 @@ protected:
      *
      * @return A pointer to the private NcHandler.
      */
-    NcHandler *getNcHandler() const;
+    std::shared_ptr<NcHandler> getNcHandler() const;
 
     virtual ~Board() = default;
 

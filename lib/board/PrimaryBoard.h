@@ -35,7 +35,23 @@ private:
      */
     std::array<LeafBoard *, 9> _cells;
 
+    void create_cells();
+
 public:
+    /**
+     * A constructor for PrimaryBoard using dependency injection.
+     *
+     * @param ncHandler The handler object used to access the underlying
+     * notcurses instance.
+     * @param GBoard The graphical board object of the parent Board class.
+     *
+     * @see Board::Board(std::shared_ptr<NcHandler>,
+     * std::unique_ptr<GraphicalBoard>)
+     * @see NcHandler::combine_channels()
+     */
+    PrimaryBoard(std::shared_ptr<NcHandler> ncHandler,
+                 std::unique_ptr<GraphicalBoard> GBoard);
+
     /**
      * The constructor for PrimaryBoard.
      *

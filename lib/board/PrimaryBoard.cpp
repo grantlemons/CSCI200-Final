@@ -14,14 +14,26 @@
 std::array<const char *, 3> PrimaryBoard::_symbols =
     std::array<const char *, 3>({"\u2501", "\u2503", "\u254B"});
 
+PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandler> ncHandler,
+                           std::unique_ptr<GraphicalBoard> GBoard)
+    : Board::Board(ncHandler, std::move(GBoard)) {
+    create_cells();
+}
+
 PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandler> ncHandler)
     : Board::Board(ncHandler, def_primary_nopts(ncHandler)) {
+    create_cells();
+}
+
+void PrimaryBoard::create_cells() {
     _cells = std::array<LeafBoard *, 9>();
 
-    for (unsigned int i = 0; i < 9; i++) {
-        ncplane *plane = getGraphicalBoard()->get_child_planes().at(i);
+    std::array<std::unique_ptr<GraphicalBoard>, 9> gBoards =
+        getGraphicalBoard()->create_child_boards();
 
-        LeafBoard *newBoard = new LeafBoard(ncHandler, plane);
+    for (unsigned int i = 0; i < 9; i++) {
+        LeafBoard *newBoard =
+            new LeafBoard(getNcHandler(), std::move(gBoards.at(i)));
         _cells.at(i) = newBoard;
     }
 }
@@ -39,6 +51,10 @@ CellOwner PrimaryBoard::get_cell_owner(const unsigned int INDEX) const {
 void PrimaryBoard::draw() {
     getGraphicalBoard()->draw_board(_symbols,
                                     getNcHandler()->get_default_channels());
+
+    for (LeafBoard *cell : _cells) {
+        cell->draw();
+    }
 }
 
 void PrimaryBoard::draw_x(const unsigned int INDEX) {

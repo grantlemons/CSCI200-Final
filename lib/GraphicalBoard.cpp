@@ -180,3 +180,16 @@ void GraphicalBoard::fill_o() {
 std::array<ncplane *, 9> GraphicalBoard::get_child_planes() const {
     return _childPlanes;
 }
+
+std::array<std::unique_ptr<GraphicalBoard>, 9>
+GraphicalBoard::create_child_boards() const {
+    std::array<std::unique_ptr<GraphicalBoard>, 9> boards;
+
+    for (unsigned int i = 0; i < 9; i++) {
+        ncplane *const PLANE = _childPlanes.at(i);
+        boards.at(i) = std::unique_ptr<GraphicalBoard>(
+            new GraphicalBoard(_ncHandler, PLANE));
+    }
+
+    return boards;
+}

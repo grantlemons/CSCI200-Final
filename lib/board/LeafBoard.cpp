@@ -12,6 +12,10 @@
 std::array<const char *, 3> LeafBoard::_symbols =
     std::array<const char *, 3>({"\u2500", "\u2502", "\u253C"});
 
+LeafBoard::LeafBoard(std::shared_ptr<NcHandler> ncHandler,
+                     std::unique_ptr<GraphicalBoard> GBoard)
+    : Board::Board(ncHandler, std::move(GBoard)) {}
+
 LeafBoard::LeafBoard(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE)
     : Board::Board(ncHandler, PLANE) {
     _cells = std::array<LLCell, 9>();

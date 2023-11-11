@@ -153,6 +153,8 @@ public:
      * 6|7|8
      */
     std::array<ncplane *, 9> get_child_planes() const;
+
+    std::array<std::unique_ptr<GraphicalBoard>, 9> create_child_boards() const;
 };
 
 // Helper functions

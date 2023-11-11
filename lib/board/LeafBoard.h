@@ -49,7 +49,20 @@ private:
 
 public:
     /**
-     * The constructor for LeafBoard.
+     * A constructor for LeafBoard using dependency injection.
+     *
+     * @param ncHandler The handler object used to access the underlying
+     * notcurses instance.
+     * @param GBoard The graphical board object of the parent Board class.
+     * @see Board::Board(std::shared_ptr<NcHandler>, ncplane *const, const
+     * uint64_t, std::array<const char *, 3>)
+     * @see NcHandler::combine_channels()
+     */
+    LeafBoard(std::shared_ptr<NcHandler> ncHandler,
+              std::unique_ptr<GraphicalBoard> GBoard);
+
+    /**
+     * A constructor for LeafBoard.
      *
      * @param ncHandler The handler object used to access the underlying
      * notcurses instance.
