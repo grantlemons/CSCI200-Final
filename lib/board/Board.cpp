@@ -10,42 +10,14 @@
 #include <notcurses/notcurses.h>
 #include <ostream>
 
-Board::Board(std::shared_ptr<NcHandler> ncHandler, ncplane *PLANE,
-             const uint64_t CELL_CHANNELS, std::array<const char *, 3> SYMBOLS)
-    : mGBoard(ncHandler, PLANE, CELL_CHANNELS, SYMBOLS) {
-    draw();
-}
+Board::Board(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE)
+    : _GBoard(new GraphicalBoard(ncHandler, PLANE)) {}
 
-Board::Board(std::shared_ptr<NcHandler> ncHandler, const ncplane_options NOPTS,
-             const uint64_t CELL_CHANNELS, std::array<const char *, 3> SYMBOLS)
-    : mGBoard(ncHandler, NOPTS, CELL_CHANNELS, SYMBOLS) {
-    draw();
-}
+Board::Board(std::shared_ptr<NcHandler> ncHandler, const ncplane_options NOPTS)
+    : _GBoard(new GraphicalBoard(ncHandler, NOPTS)) {}
 
-unsigned int negative_mod(const int A, const int B) {
-    return static_cast<unsigned int>(
-        A - (B * static_cast<int>(floor(static_cast<double>(A) / B))));
-}
-
-void horizontal_others(const unsigned int INDEX, unsigned int &other1,
-                       unsigned int &other2) {
-    other1 = negative_mod(static_cast<int>(INDEX - 1u), 3u);
-    other2 = (INDEX + 1u) % 3u;
-}
-void vertical_others(const unsigned int INDEX, unsigned int &other1,
-                     unsigned int &other2) {
-    other1 = negative_mod(static_cast<int>(INDEX - 3u), 9u);
-    other2 = (INDEX + 3u) % 9u;
-}
-void diagonal_fours_others(const unsigned int INDEX, unsigned int &other1,
-                           unsigned int &other2) {
-    other1 = negative_mod(static_cast<int>(INDEX - 4u), 12u);
-    other2 = (INDEX + 4u) % 12u;
-}
-void diagonal_twos_others(const unsigned int INDEX, unsigned int &other1,
-                          unsigned int &other2) {
-    other1 = negative_mod(static_cast<int>(INDEX - 2u), 10u);
-    other2 = (INDEX + 2u) % 10u;
+GraphicalBoard *Board::getGraphicalBoard() {
+    return _GBoard.get();
 }
 
 bool Board::check_win(const unsigned int INDEX, const CellOwner OWNER) const {
@@ -89,14 +61,39 @@ bool Board::check_win(const unsigned int INDEX, const CellOwner OWNER) const {
     return WON_HORI || WON_VERT || WON_DIAGONAL_TWOS || WON_DIAGONALS_FOURS;
 }
 
-void Board::draw() {
-    mGBoard.draw_board();
-}
 void Board::draw_x(const unsigned int INDEX) {
-    mGBoard.draw_x(INDEX);
+    _GBoard->draw_x(INDEX);
 }
 void Board::draw_o(const unsigned int INDEX) {
-    mGBoard.draw_o(INDEX);
+    _GBoard->draw_o(INDEX);
+}
+
+constexpr unsigned int negative_mod(const int A, const int B) {
+    return static_cast<unsigned int>(
+        A - (B * static_cast<int>(floor(static_cast<double>(A) / B))));
+}
+
+constexpr void horizontal_others(const unsigned int INDEX, unsigned int &other1,
+                                 unsigned int &other2) {
+    other1 = negative_mod(static_cast<int>(INDEX - 1u), 3u);
+    other2 = (INDEX + 1u) % 3u;
+}
+constexpr void vertical_others(const unsigned int INDEX, unsigned int &other1,
+                               unsigned int &other2) {
+    other1 = negative_mod(static_cast<int>(INDEX - 3u), 9u);
+    other2 = (INDEX + 3u) % 9u;
+}
+constexpr void diagonal_fours_others(const unsigned int INDEX,
+                                     unsigned int &other1,
+                                     unsigned int &other2) {
+    other1 = negative_mod(static_cast<int>(INDEX - 4u), 12u);
+    other2 = (INDEX + 4u) % 12u;
+}
+constexpr void diagonal_twos_others(const unsigned int INDEX,
+                                    unsigned int &other1,
+                                    unsigned int &other2) {
+    other1 = negative_mod(static_cast<int>(INDEX - 2u), 10u);
+    other2 = (INDEX + 2u) % 10u;
 }
 
 std::ostream &operator<<(std::ostream &out, const Board &BRD) {
