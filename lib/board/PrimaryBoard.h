@@ -45,8 +45,6 @@ public:
      * notcurses instance.
      * @param GBoard The graphical board object of the parent Board class.
      *
-     * @see Board::Board(std::shared_ptr<NcHandler>,
-     * std::unique_ptr<GraphicalBoard>)
      * @see NcHandler::combine_channels()
      */
     PrimaryBoard(std::shared_ptr<NcHandler> ncHandler,
@@ -62,8 +60,6 @@ public:
      *
      * @see _cells
      * @see def_primary_nopts()
-     * @see Board(std::shared_ptr<NcHandler>, const ncplane_options, const
-     * uint64_t, std::array<const char *, 3>)
      */
     PrimaryBoard(std::shared_ptr<NcHandler> ncHandler);
 

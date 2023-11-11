@@ -47,9 +47,6 @@ protected:
      * notcurses instance.
      * @param PLANE The plane used as the primary plane of the new
      * _GBoard.
-     *
-     * @see GraphicalBoard(std::shared_ptr<NcHandler>, ncplane *const,
-     * const uint64_t, std::array<const char *, 3>)
      */
     Board(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE);
 
@@ -61,8 +58,6 @@ protected:
      * @param NOPTS The configuration used to form the primary plane.
      *
      * @see ncplane_create()
-     * @see GraphicalBoard(std::shared_ptr<NcHandler>, const ncplane_options,
-     * const uint64_t, std::array<const char *, 3>)
      */
     Board(std::shared_ptr<NcHandler> ncHandler, const ncplane_options NOPTS);
 

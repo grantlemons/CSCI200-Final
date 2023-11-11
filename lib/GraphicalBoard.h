@@ -55,8 +55,6 @@ public:
      * @param COLS The number of columns composing the new plane. (Width)
      *
      * @see create_nopts()
-     * @see GraphicalBoard(std::shared_ptr<NcHandler>, const ncplane_options,
-     * const uint64_t, std::array<const char *, 3>)
      * @see _primaryPlane
      * @see _childPlanes
      */
@@ -75,8 +73,6 @@ public:
      * @param NOPTS The configuration used to form the primary plane.
      *
      * @see ncplane_create()
-     * @see GraphicalBoard(std::shared_ptr<NcHandler>, ncplane *const, const
-     * uint64_t, std::array<const char *, 3>)
      * @see _primaryPlane
      * @see _childPlanes
      */
