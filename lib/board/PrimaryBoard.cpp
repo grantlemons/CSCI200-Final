@@ -17,17 +17,15 @@ std::array<const char *, SYMBOL_COUNT> PrimaryBoard::_symbols =
 PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandler> ncHandler,
                            std::unique_ptr<GraphicalBoard> gBoard)
     : Board::Board(ncHandler, std::move(gBoard)) {
-    create_cells();
+    init_cells();
 }
 
 PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandler> ncHandler)
     : Board::Board(ncHandler, def_primary_nopts(ncHandler)) {
-    create_cells();
+    init_cells();
 }
 
-void PrimaryBoard::create_cells() {
-    _cells = std::array<LeafBoard *, CELL_COUNT>();
-
+void PrimaryBoard::init_cells() {
     std::array<std::unique_ptr<GraphicalBoard>, CELL_COUNT> gBoards =
         getGraphicalBoard()->create_child_boards();
 
@@ -57,14 +55,19 @@ void PrimaryBoard::draw() {
     }
 }
 
-void PrimaryBoard::draw_x(const unsigned int INDEX) {
-    _cells.at(INDEX)->fill_x();
-    Board::draw_x(INDEX);
-}
-
-void PrimaryBoard::draw_o(const unsigned int INDEX) {
-    _cells.at(INDEX)->fill_o();
-    this->Board::draw_o(INDEX);
+void PrimaryBoard::mark_cell(const unsigned int INDEX, const CellOwner OWNER) {
+    switch (OWNER) {
+    case X:
+        getGraphicalBoard()->draw_x(INDEX);
+        _cells.at(INDEX)->mark_fill(OWNER);
+        break;
+    case O:
+        getGraphicalBoard()->draw_o(INDEX);
+        _cells.at(INDEX)->mark_fill(OWNER);
+        break;
+    default:
+        break;
+    }
 }
 
 std::optional<LeafBoard *>

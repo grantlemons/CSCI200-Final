@@ -103,20 +103,16 @@ public:
     void draw() override final;
 
     /**
-     * Marks primary plane and all child planes of component GraphicalBoard as
-     * owned by X.
+     * Uses the component GraphicalBoard to mark the owner of the board
+     * appropriately.
      *
-     * Used when the leaf board is won.
-     */
-    void fill_x();
-
-    /**
-     * Marks primary plane and all child planes of component GraphicalBoard as
-     * owned by O.
+     * @param OWNER The user for whom to mark the board.
      *
-     * Used when the leaf board is won.
+     * @see Board::getGraphicalBoard()
+     * @see GraphicalBoard::fill_x()
+     * @see GraphicalBoard::fill_o()
      */
-    void fill_o();
+    void mark_fill(const CellOwner OWNER);
 };
 
 #endif // !LEAFBOARD

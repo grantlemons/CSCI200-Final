@@ -5,6 +5,7 @@
 #include "lib/board/PrimaryBoard.h"
 
 #include <cstdint>
+#include <iostream>
 #include <memory>
 #include <optional>
 
@@ -15,18 +16,38 @@ int main() {
     pBoard.draw();
 
     LeafBoard *selected = nullptr;
-    std::optional<LeafBoard *> opt = pBoard.select_board(2u);
+    std::optional<LeafBoard *> opt = nullptr;
+
+    opt = pBoard.select_board(2u);
     if (opt != std::nullopt) {
         selected = opt.value();
-        selected->draw_x(1);
-        selected->draw_o(4);
+        selected->set_cell_owner(0u, X);
     }
-    pBoard.draw_o(0);
-    pBoard.draw_x(3);
+    opt = pBoard.select_board(0u);
+    if (opt != std::nullopt) {
+        selected = opt.value();
+        selected->set_cell_owner(2u, O);
+    }
+    opt = pBoard.select_board(2u);
+    if (opt != std::nullopt) {
+        selected = opt.value();
+        selected->set_cell_owner(1u, X);
+    }
+    opt = pBoard.select_board(1u);
+    if (opt != std::nullopt) {
+        selected = opt.value();
+        selected->set_cell_owner(2u, O);
+    }
+    opt = pBoard.select_board(2u);
+    if (opt != std::nullopt) {
+        selected = opt.value();
+        selected->set_cell_owner(2u, X);
+    }
     ncHandler->render();
 
     while (1)
         ;
 
+    delete selected;
     return EXIT_SUCCESS;
 }

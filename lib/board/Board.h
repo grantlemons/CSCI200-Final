@@ -80,6 +80,7 @@ protected:
     Board(Board &) = delete;
     void operator=(const Board &) = delete;
 
+public:
     /**
      * Checks if the given player has won the current board.
      *
@@ -113,20 +114,17 @@ protected:
     virtual void draw() = 0;
 
     /**
-     * Uses the component GraphicalBoard to mark the owner of a cell as X.
+     * Uses the component GraphicalBoard to mark the owner of a cell
+     * appropriately.
+     *
+     * @param INDEX The index of the cell to mark.
+     * @param OWNER The user for whom to mark the cell.
      *
      * @see _gBoard
      * @see GraphicalBoard::draw_x()
-     */
-    virtual void draw_x(const unsigned int INDEX);
-
-    /**
-     * Uses the component GraphicalBoard to mark the owner of a cell as O.
-     *
-     * @see _gBoard
      * @see GraphicalBoard::draw_o()
      */
-    virtual void draw_o(const unsigned int INDEX);
+    virtual void mark_cell(const unsigned int INDEX, const CellOwner OWNER);
 
     /**
      * Defines the way Board types are outputted to streams.

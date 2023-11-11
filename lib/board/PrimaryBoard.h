@@ -35,7 +35,16 @@ private:
      */
     std::array<LeafBoard *, CELL_COUNT> _cells;
 
-    void create_cells();
+    CellOwner get_cell_owner(const unsigned int INDEX) const override final;
+
+    /**
+     * Helper function to abstract out of the two different constructors.
+     *
+     * Creates LeafBoards for each cell and places them in the _cells array.
+     *
+     * @see _cells
+     */
+    void init_cells();
 
 public:
     /**
@@ -67,8 +76,6 @@ public:
     PrimaryBoard(PrimaryBoard &) = delete;
     void operator=(const PrimaryBoard &) = delete;
 
-    CellOwner get_cell_owner(const unsigned int INDEX) const override final;
-
     /**
      * Gets a pointer to one of the constituant LeafBoards.
      *
@@ -82,8 +89,8 @@ public:
     std::optional<LeafBoard *> select_board(const unsigned int INDEX);
 
     void draw() override final;
-    void draw_x(const unsigned int INDEX) override final;
-    void draw_o(const unsigned int INDEX) override final;
+    void mark_cell(const unsigned int INDEX,
+                   const CellOwner OWNER) override final;
 };
 
 // Helper functions

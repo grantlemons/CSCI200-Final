@@ -6,6 +6,7 @@
 
 #include <array>
 #include <cstdint>
+#include <iostream>
 #include <memory>
 #include <notcurses/notcurses.h>
 
@@ -30,9 +31,11 @@ bool LeafBoard::set_cell_owner(const unsigned int INDEX,
                                const CellOwner OWNER) {
     if (_cells.at(INDEX) == None) {
         _cells.at(INDEX) = OWNER;
+        mark_cell(INDEX, OWNER);
 
         if (check_win(INDEX, OWNER)) {
             _winner = OWNER;
+            std::cout << OWNER << " WON " << INDEX << std::endl;
         }
         return true;
     }
@@ -43,12 +46,17 @@ CellOwner LeafBoard::get_winner() const {
     return _winner;
 }
 
-void LeafBoard::fill_x() {
-    getGraphicalBoard()->fill_x();
-}
-
-void LeafBoard::fill_o() {
-    getGraphicalBoard()->fill_o();
+void LeafBoard::mark_fill(const CellOwner OWNER) {
+    switch (OWNER) {
+    case X:
+        getGraphicalBoard()->fill_x();
+        break;
+    case O:
+        getGraphicalBoard()->fill_o();
+        break;
+    default:
+        break;
+    }
 }
 
 void LeafBoard::draw() {

@@ -40,18 +40,18 @@ bool Board::check_win(const unsigned int INDEX, const CellOwner OWNER) const {
     // |0| |2|
     // | |4| |
     // |6| |8|
-    bool include_diagonals2 = false;
-    bool include_diagonals4 = false;
+    bool include_diagonals2 = true;
+    bool include_diagonals4 = true;
     unsigned int diagonal_other1 = 0, diagonal_other2 = 0;
     unsigned int diagonal_other3 = 0, diagonal_other4 = 0;
     if (INDEX == 4) {
         diagonal_twos_others(INDEX, diagonal_other1, diagonal_other2);
         diagonal_fours_others(INDEX, diagonal_other3, diagonal_other4);
-    } else if (INDEX % 4) {
-        include_diagonals4 = true;
+    } else if (INDEX % 4 == 0) {
+        include_diagonals2 = false;
         diagonal_fours_others(INDEX, diagonal_other3, diagonal_other4);
     } else if (INDEX % 2 == 0) {
-        include_diagonals2 = true;
+        include_diagonals4 = false;
         diagonal_twos_others(INDEX, diagonal_other1, diagonal_other2);
     }
 
@@ -69,11 +69,17 @@ bool Board::check_win(const unsigned int INDEX, const CellOwner OWNER) const {
     return WON_HORI || WON_VERT || WON_DIAGONAL_TWOS || WON_DIAGONALS_FOURS;
 }
 
-void Board::draw_x(const unsigned int INDEX) {
-    _gBoard->draw_x(INDEX);
-}
-void Board::draw_o(const unsigned int INDEX) {
-    _gBoard->draw_o(INDEX);
+void Board::mark_cell(const unsigned int INDEX, const CellOwner OWNER) {
+    switch (OWNER) {
+    case X:
+        _gBoard->draw_x(INDEX);
+        break;
+    case O:
+        _gBoard->draw_o(INDEX);
+        break;
+    default:
+        break;
+    }
 }
 
 constexpr unsigned int negative_mod(const int A, const int B) {
