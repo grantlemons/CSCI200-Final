@@ -13,11 +13,12 @@
 std::array<const char *, SYMBOL_COUNT> LeafBoard::_symbols =
     std::array<const char *, SYMBOL_COUNT>({"\u2500", "\u2502", "\u253C"});
 
-LeafBoard::LeafBoard(std::shared_ptr<NcHandler> ncHandler,
-                     std::unique_ptr<GraphicalBoard> gBoard)
+LeafBoard::LeafBoard(std::shared_ptr<NcHandlerI> ncHandler,
+                     std::unique_ptr<GraphicalBoardI> gBoard)
     : Board::Board(ncHandler, std::move(gBoard)) {}
 
-LeafBoard::LeafBoard(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE)
+LeafBoard::LeafBoard(std::shared_ptr<NcHandlerI> ncHandler,
+                     ncplane *const PLANE)
     : Board::Board(ncHandler, PLANE) {
     _cells = std::array<LLCell, CELL_COUNT>();
     _winner = None;

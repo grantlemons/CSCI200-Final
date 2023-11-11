@@ -30,18 +30,18 @@ ncplane_options extract_nopts(ncplane *PLANE) {
     return nopts;
 }
 
-GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
+GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandlerI> ncHandler,
                                const int Y, const int X,
                                const unsigned int ROWS, const unsigned int COLS)
     : GraphicalBoard::GraphicalBoard(ncHandler,
                                      create_nopts(Y, X, ROWS, COLS)) {}
 
-GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
+GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandlerI> ncHandler,
                                const ncplane_options NOPTS)
     : GraphicalBoard::GraphicalBoard(
           ncHandler, ncplane_create(ncHandler->get_stdplane(), &NOPTS)) {}
 
-GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
+GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandlerI> ncHandler,
                                ncplane *const PLANE) {
     ncplane_options nopts = extract_nopts(PLANE);
     _rows = nopts.rows + 1;
@@ -182,13 +182,13 @@ std::array<ncplane *, CELL_COUNT> GraphicalBoard::get_child_planes() const {
     return _childPlanes;
 }
 
-std::array<std::unique_ptr<GraphicalBoard>, CELL_COUNT>
+std::array<std::unique_ptr<GraphicalBoardI>, CELL_COUNT>
 GraphicalBoard::create_child_boards() const {
-    std::array<std::unique_ptr<GraphicalBoard>, CELL_COUNT> boards;
+    std::array<std::unique_ptr<GraphicalBoardI>, CELL_COUNT> boards;
 
     for (unsigned int i = 0; i < 9; i++) {
         ncplane *const PLANE = _childPlanes.at(i);
-        boards.at(i) = std::unique_ptr<GraphicalBoard>(
+        boards.at(i) = std::unique_ptr<GraphicalBoardI>(
             new GraphicalBoard(_ncHandler, PLANE));
     }
 

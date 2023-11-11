@@ -14,19 +14,19 @@
 std::array<const char *, SYMBOL_COUNT> PrimaryBoard::_symbols =
     std::array<const char *, SYMBOL_COUNT>({"\u2501", "\u2503", "\u254B"});
 
-PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandler> ncHandler,
-                           std::unique_ptr<GraphicalBoard> gBoard)
+PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandlerI> ncHandler,
+                           std::unique_ptr<GraphicalBoardI> gBoard)
     : Board::Board(ncHandler, std::move(gBoard)) {
     init_cells();
 }
 
-PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandler> ncHandler)
+PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandlerI> ncHandler)
     : Board::Board(ncHandler, def_primary_nopts(ncHandler)) {
     init_cells();
 }
 
 void PrimaryBoard::init_cells() {
-    std::array<std::unique_ptr<GraphicalBoard>, CELL_COUNT> gBoards =
+    std::array<std::unique_ptr<GraphicalBoardI>, CELL_COUNT> gBoards =
         getGraphicalBoard()->create_child_boards();
 
     for (unsigned int i = 0; i < 9; i++) {

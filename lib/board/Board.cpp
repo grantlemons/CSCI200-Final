@@ -10,21 +10,21 @@
 #include <notcurses/notcurses.h>
 #include <ostream>
 
-Board::Board(std::shared_ptr<NcHandler> ncHandler,
-             std::unique_ptr<GraphicalBoard> gBoard)
+Board::Board(std::shared_ptr<NcHandlerI> ncHandler,
+             std::unique_ptr<GraphicalBoardI> gBoard)
     : _ncHandler(ncHandler), _gBoard(std::move(gBoard)) {}
 
-Board::Board(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE)
+Board::Board(std::shared_ptr<NcHandlerI> ncHandler, ncplane *const PLANE)
     : _ncHandler(ncHandler), _gBoard(new GraphicalBoard(ncHandler, PLANE)) {}
 
-Board::Board(std::shared_ptr<NcHandler> ncHandler, const ncplane_options NOPTS)
+Board::Board(std::shared_ptr<NcHandlerI> ncHandler, const ncplane_options NOPTS)
     : _ncHandler(ncHandler), _gBoard(new GraphicalBoard(ncHandler, NOPTS)) {}
 
-GraphicalBoard *Board::getGraphicalBoard() const {
+GraphicalBoardI *Board::getGraphicalBoard() const {
     return _gBoard.get();
 }
 
-std::shared_ptr<NcHandler> Board::getNcHandler() const {
+std::shared_ptr<NcHandlerI> Board::getNcHandler() const {
     return _ncHandler;
 }
 

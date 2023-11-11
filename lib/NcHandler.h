@@ -1,6 +1,8 @@
 #ifndef NC_HANDLER
 #define NC_HANDLER
 
+#include "lib/interfaces/NcHandlerI.h"
+
 #include <cstdint>
 #include <notcurses/notcurses.h>
 
@@ -8,7 +10,7 @@
  * @class NcHandler
  * RAII Handler for a notcurses instance.
  */
-class NcHandler {
+class NcHandler : public NcHandlerI {
 private:
     /** The underlying notcurses instance. */
     notcurses *nc;
@@ -45,25 +47,8 @@ public:
     NcHandler(NcHandler &other) = delete;
     void operator=(const NcHandler &) = delete;
 
-    /**
-     * Gets default background color channel from the stdplane.
-     *
-     * @return The default background color channel.
-     */
     uint32_t get_default_bg_channel() const;
-
-    /**
-     * Gets default frontground color channel from the stdplane.
-     *
-     * @return The default foreground color channel.
-     */
     uint32_t get_default_fg_channel() const;
-
-    /**
-     * Gets default color channels from the stdplane.
-     *
-     * @return The combined default foreground and background channels.
-     */
     uint64_t get_default_channels() const;
 
     /**
@@ -73,24 +58,8 @@ public:
      */
     static uint64_t combine_channels(const uint32_t BG_CHANNEL,
                                      const uint32_t FG_CHANNEL);
-
-    /**
-     * Getter for notcurses instance.
-     *
-     * @return The underlying notcurses instance.
-     */
     notcurses *get_nc() const;
-
-    /**
-     * Getter for notcurses stdplane.
-     *
-     * @return The stdplane for the notcurses instance.
-     */
     ncplane *get_stdplane() const;
-
-    /**
-     * Draws all actions on the screen.
-     */
     void render();
 };
 

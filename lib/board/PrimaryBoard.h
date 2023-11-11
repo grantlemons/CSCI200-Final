@@ -56,8 +56,8 @@ public:
      *
      * @see NcHandler::combine_channels()
      */
-    PrimaryBoard(std::shared_ptr<NcHandler> ncHandler,
-                 std::unique_ptr<GraphicalBoard> gBoard);
+    PrimaryBoard(std::shared_ptr<NcHandlerI> ncHandler,
+                 std::unique_ptr<GraphicalBoardI> gBoard);
 
     /**
      * The constructor for PrimaryBoard.
@@ -70,7 +70,7 @@ public:
      * @see _cells
      * @see def_primary_nopts()
      */
-    PrimaryBoard(std::shared_ptr<NcHandler> ncHandler);
+    PrimaryBoard(std::shared_ptr<NcHandlerI> ncHandler);
 
     ~PrimaryBoard();
     PrimaryBoard(PrimaryBoard &) = delete;
@@ -105,6 +105,6 @@ public:
  * underlying notcurses instance.
  * @return An ncplane_options struct describing the configuration options.
  */
-ncplane_options def_primary_nopts(std::shared_ptr<NcHandler> ncHandler);
+ncplane_options def_primary_nopts(std::shared_ptr<NcHandlerI> ncHandler);
 
 #endif // !PRIMARYBOARD

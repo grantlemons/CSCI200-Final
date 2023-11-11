@@ -57,8 +57,8 @@ public:
      *
      * @see NcHandler::combine_channels()
      */
-    LeafBoard(std::shared_ptr<NcHandler> ncHandler,
-              std::unique_ptr<GraphicalBoard> gBoard);
+    LeafBoard(std::shared_ptr<NcHandlerI> ncHandler,
+              std::unique_ptr<GraphicalBoardI> gBoard);
 
     /**
      * A constructor for LeafBoard.
@@ -70,7 +70,7 @@ public:
      *
      * @see NcHandler::combine_channels()
      */
-    LeafBoard(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE);
+    LeafBoard(std::shared_ptr<NcHandlerI> ncHandler, ncplane *const PLANE);
 
     ~LeafBoard() = default;
     LeafBoard(LeafBoard &) = delete;

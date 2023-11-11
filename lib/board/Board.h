@@ -20,13 +20,13 @@ private:
     /** The handler object used to access the underlying
      * notcurses instance.
      */
-    std::shared_ptr<NcHandler> _ncHandler;
+    std::shared_ptr<NcHandlerI> _ncHandler;
 
     /**
      * Component graphical board used to represent actions on the logical board
      * graphically.
      */
-    std::unique_ptr<GraphicalBoard> _gBoard;
+    std::unique_ptr<GraphicalBoardI> _gBoard;
 
 protected:
     /**
@@ -36,8 +36,8 @@ protected:
      * notcurses instance.
      * @param gBoard The associated graphical board to construct with.
      */
-    Board(std::shared_ptr<NcHandler> ncHandler,
-          std::unique_ptr<GraphicalBoard> gBoard);
+    Board(std::shared_ptr<NcHandlerI> ncHandler,
+          std::unique_ptr<GraphicalBoardI> gBoard);
 
     /**
      * A constructor that takes a plane to use for the underlying graphical
@@ -48,7 +48,7 @@ protected:
      * @param PLANE The plane used as the primary plane of the new
      * _gBoard.
      */
-    Board(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE);
+    Board(std::shared_ptr<NcHandlerI> ncHandler, ncplane *const PLANE);
 
     /**
      * A constructor that takes raw info for the underlying graphical board.
@@ -59,21 +59,21 @@ protected:
      *
      * @see ncplane_create()
      */
-    Board(std::shared_ptr<NcHandler> ncHandler, const ncplane_options NOPTS);
+    Board(std::shared_ptr<NcHandlerI> ncHandler, const ncplane_options NOPTS);
 
     /**
      * Getter for the associated GraphicalBoard instance.
      *
      * @return A pointer to the private GraphicalBoard.
      */
-    GraphicalBoard *getGraphicalBoard() const;
+    GraphicalBoardI *getGraphicalBoard() const;
 
     /**
      * Getter for the associated NcHandler instance.
      *
      * @return A pointer to the private NcHandler.
      */
-    std::shared_ptr<NcHandler> getNcHandler() const;
+    std::shared_ptr<NcHandlerI> getNcHandler() const;
 
     virtual ~Board() = default;
 

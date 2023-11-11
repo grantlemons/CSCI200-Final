@@ -3,6 +3,7 @@
 
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
+#include "lib/interfaces/GraphicalBoardI.h"
 
 #include <array>
 #include <cstdint>
@@ -16,12 +17,12 @@
  * Contains functionality for drawing Tic-Tac-Toe boards as well as marking
  * their cells.
  */
-class GraphicalBoard {
+class GraphicalBoard : public GraphicalBoardI {
 private:
     /** The handler object used to access the underlying
      * notcurses instance.
      */
-    std::shared_ptr<NcHandler> _ncHandler;
+    std::shared_ptr<NcHandlerI> _ncHandler;
 
     /** The primary plane used as a canvas for drawing the board. */
     ncplane *_primaryPlane;
@@ -59,7 +60,7 @@ public:
      * @see _primaryPlane
      * @see _childPlanes
      */
-    GraphicalBoard(std::shared_ptr<NcHandler> ncHandler, const int Y,
+    GraphicalBoard(std::shared_ptr<NcHandlerI> ncHandler, const int Y,
                    const int X, const unsigned int ROWS,
                    const unsigned int COLS);
 
@@ -77,7 +78,7 @@ public:
      * @see _primaryPlane
      * @see _childPlanes
      */
-    GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
+    GraphicalBoard(std::shared_ptr<NcHandlerI> ncHandler,
                    const ncplane_options NOPTS);
 
     /**
@@ -93,71 +94,21 @@ public:
      * @see _primaryPlane
      * @see _childPlanes
      */
-    GraphicalBoard(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE);
+    GraphicalBoard(std::shared_ptr<NcHandlerI> ncHandler, ncplane *const PLANE);
 
     GraphicalBoard(GraphicalBoard &) = delete;
     void operator=(const GraphicalBoard &) = delete;
     ~GraphicalBoard() = default;
 
-    /**
-     * Draws a Tic-Tac-Toe board on the primary plane.
-     *
-     * @param SYMBOLS The unicode characters used to draw the lines of the
-     * board. The indexes (in order) are the character for horizontal lines,
-     * vertical lines, and junctions between lines.
-     * @param CELL_CHANNELS The default forground and background channels for
-     * the board.
-     *
-     * @see ncplane_hline()
-     * @see ncplane_vline()
-     */
     void draw_board(const std::array<const char *, SYMBOL_COUNT> SYMBOLS,
-                    const uint64_t CELL_CHANNELS);
-
-    /**
-     * Marks a cell at an index as belonging to the X player.
-     *
-     * @param INDEX The index of the cell to mark.
-     */
-    void draw_x(const unsigned int INDEX);
-
-    /**
-     * Marks a cell at an index as belonging to the O player.
-     *
-     * @param INDEX The index of the cell to mark.
-     */
-    void draw_o(const unsigned int INDEX);
-
-    /**
-     * Marks all cells as belonging to the X player.
-     */
-    void fill_x();
-
-    /**
-     * Marks all cells as belonging to the O player.
-     */
-    void fill_o();
-
-    /**
-     * Getter for the board's child planes.
-     *
-     * Child planes contain the planes for the cells in order from left to
-     * right, top to bottom.
-     *
-     * Layout:
-     * 0|1|2
-     * 3|4|5
-     * 6|7|8
-     */
-    std::array<ncplane *, CELL_COUNT> get_child_planes() const;
-
-    /**
-     * Initializes a new GraphicalBoard for each child plane.
-     *
-     * @return An array of unique pointers to GraphicalBoards.
-     */
-    std::array<std::unique_ptr<GraphicalBoard>, CELL_COUNT>
-    create_child_boards() const;
+                    const uint64_t CELL_CHANNELS) override final;
+    void draw_x(const unsigned int INDEX) override final;
+    void draw_o(const unsigned int INDEX) override final;
+    void fill_x() override final;
+    void fill_o() override final;
+    std::array<ncplane *, CELL_COUNT> get_child_planes() const override final;
+    std::array<std::unique_ptr<GraphicalBoardI>, CELL_COUNT>
+    create_child_boards() const override final;
 };
 
 // Helper functions
