@@ -2,6 +2,7 @@
 #define G_BOARD
 
 #include "lib/NcHandler.h"
+#include "lib/Shared.h"
 
 #include <array>
 #include <cstdint>
@@ -35,7 +36,7 @@ private:
      * 3|4|5
      * 6|7|8
      */
-    std::array<ncplane *, 9> _childPlanes;
+    std::array<ncplane *, CELL_COUNT> _childPlanes;
 
     /** The height and width of the primary plane */
     unsigned int _rows, _cols;
@@ -110,7 +111,7 @@ public:
      * @see ncplane_hline()
      * @see ncplane_vline()
      */
-    void draw_board(const std::array<const char *, 3> SYMBOLS,
+    void draw_board(const std::array<const char *, SYMBOL_COUNT> SYMBOLS,
                     const uint64_t CELL_CHANNELS);
 
     /**
@@ -148,14 +149,15 @@ public:
      * 3|4|5
      * 6|7|8
      */
-    std::array<ncplane *, 9> get_child_planes() const;
+    std::array<ncplane *, CELL_COUNT> get_child_planes() const;
 
     /**
      * Initializes a new GraphicalBoard for each child plane.
      *
      * @return An array of unique pointers to GraphicalBoards.
      */
-    std::array<std::unique_ptr<GraphicalBoard>, 9> create_child_boards() const;
+    std::array<std::unique_ptr<GraphicalBoard>, CELL_COUNT>
+    create_child_boards() const;
 };
 
 // Helper functions

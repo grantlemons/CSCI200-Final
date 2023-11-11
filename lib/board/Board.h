@@ -77,7 +77,6 @@ protected:
 
     virtual ~Board() = default;
 
-public:
     Board(Board &) = delete;
     void operator=(const Board &) = delete;
 

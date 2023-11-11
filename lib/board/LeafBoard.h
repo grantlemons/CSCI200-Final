@@ -31,12 +31,12 @@ private:
      *
      * Shared between all instances.
      */
-    static std::array<const char *, 3> _symbols;
+    static std::array<const char *, SYMBOL_COUNT> _symbols;
 
     /**
      * Array storing ownership of its component cells.
      */
-    std::array<LLCell, 9> _cells;
+    std::array<LLCell, CELL_COUNT> _cells;
 
     /**
      * Variable storing the winner of the instance.

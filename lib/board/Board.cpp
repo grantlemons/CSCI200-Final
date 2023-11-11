@@ -83,30 +83,34 @@ constexpr unsigned int negative_mod(const int A, const int B) {
 
 constexpr void horizontal_others(const unsigned int INDEX, unsigned int &other1,
                                  unsigned int &other2) {
-    other1 = negative_mod(static_cast<int>(INDEX - 1u), 3u);
-    other2 = (INDEX + 1u) % 3u;
+    const unsigned int ROW_LEN = 3;
+
+    other1 = negative_mod(static_cast<int>(INDEX - 1u), ROW_LEN);
+    other2 = (INDEX + 1u) % ROW_LEN;
 }
 constexpr void vertical_others(const unsigned int INDEX, unsigned int &other1,
                                unsigned int &other2) {
-    other1 = negative_mod(static_cast<int>(INDEX - 3u), 9u);
-    other2 = (INDEX + 3u) % 9u;
+    const unsigned int ROW_LEN = 3;
+
+    other1 = negative_mod(static_cast<int>(INDEX - ROW_LEN), CELL_COUNT);
+    other2 = (INDEX + ROW_LEN) % CELL_COUNT;
 }
 constexpr void diagonal_fours_others(const unsigned int INDEX,
                                      unsigned int &other1,
                                      unsigned int &other2) {
-    other1 = negative_mod(static_cast<int>(INDEX - 4u), 12u);
-    other2 = (INDEX + 4u) % 12u;
+    other1 = negative_mod(static_cast<int>(INDEX - 4u), CELL_COUNT + 3u);
+    other2 = (INDEX + 4u) % CELL_COUNT + 3u;
 }
 constexpr void diagonal_twos_others(const unsigned int INDEX,
                                     unsigned int &other1,
                                     unsigned int &other2) {
-    other1 = negative_mod(static_cast<int>(INDEX - 2u), 10u);
-    other2 = (INDEX + 2u) % 10u;
+    other1 = negative_mod(static_cast<int>(INDEX - 2u), CELL_COUNT + 1u);
+    other2 = (INDEX + 2u) % CELL_COUNT + 1u;
 }
 
 std::ostream &operator<<(std::ostream &out, const Board &BRD) {
     out << "[";
-    for (unsigned int i = 0; i < 9 - 1; i++) {
+    for (unsigned int i = 0; i < CELL_COUNT - 1; i++) {
         out << BRD.get_cell_owner(i) << ", ";
 
         if ((i + 1) % 3 == 0) {

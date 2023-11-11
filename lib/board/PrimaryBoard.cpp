@@ -11,8 +11,8 @@
 #include <notcurses/notcurses.h>
 #include <optional>
 
-std::array<const char *, 3> PrimaryBoard::_symbols =
-    std::array<const char *, 3>({"\u2501", "\u2503", "\u254B"});
+std::array<const char *, SYMBOL_COUNT> PrimaryBoard::_symbols =
+    std::array<const char *, SYMBOL_COUNT>({"\u2501", "\u2503", "\u254B"});
 
 PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandler> ncHandler,
                            std::unique_ptr<GraphicalBoard> gBoard)
@@ -26,9 +26,9 @@ PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandler> ncHandler)
 }
 
 void PrimaryBoard::create_cells() {
-    _cells = std::array<LeafBoard *, 9>();
+    _cells = std::array<LeafBoard *, CELL_COUNT>();
 
-    std::array<std::unique_ptr<GraphicalBoard>, 9> gBoards =
+    std::array<std::unique_ptr<GraphicalBoard>, CELL_COUNT> gBoards =
         getGraphicalBoard()->create_child_boards();
 
     for (unsigned int i = 0; i < 9; i++) {

@@ -68,8 +68,9 @@ GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
     }
 }
 
-void GraphicalBoard::draw_board(const std::array<const char *, 3> SYMBOLS,
-                                const uint64_t CELL_CHANNELS) {
+void GraphicalBoard::draw_board(
+    const std::array<const char *, SYMBOL_COUNT> SYMBOLS,
+    const uint64_t CELL_CHANNELS) {
     const unsigned int ROWS_PER_BCELL = (_rows - 2) / 3u;
     const unsigned int COLS_PER_BCELL = (_cols - 2) / 3u;
 
@@ -177,13 +178,13 @@ void GraphicalBoard::fill_o() {
     _ncHandler->render();
 }
 
-std::array<ncplane *, 9> GraphicalBoard::get_child_planes() const {
+std::array<ncplane *, CELL_COUNT> GraphicalBoard::get_child_planes() const {
     return _childPlanes;
 }
 
-std::array<std::unique_ptr<GraphicalBoard>, 9>
+std::array<std::unique_ptr<GraphicalBoard>, CELL_COUNT>
 GraphicalBoard::create_child_boards() const {
-    std::array<std::unique_ptr<GraphicalBoard>, 9> boards;
+    std::array<std::unique_ptr<GraphicalBoard>, CELL_COUNT> boards;
 
     for (unsigned int i = 0; i < 9; i++) {
         ncplane *const PLANE = _childPlanes.at(i);

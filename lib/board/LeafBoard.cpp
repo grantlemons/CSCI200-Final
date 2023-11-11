@@ -9,8 +9,8 @@
 #include <memory>
 #include <notcurses/notcurses.h>
 
-std::array<const char *, 3> LeafBoard::_symbols =
-    std::array<const char *, 3>({"\u2500", "\u2502", "\u253C"});
+std::array<const char *, SYMBOL_COUNT> LeafBoard::_symbols =
+    std::array<const char *, SYMBOL_COUNT>({"\u2500", "\u2502", "\u253C"});
 
 LeafBoard::LeafBoard(std::shared_ptr<NcHandler> ncHandler,
                      std::unique_ptr<GraphicalBoard> gBoard)
@@ -18,7 +18,7 @@ LeafBoard::LeafBoard(std::shared_ptr<NcHandler> ncHandler,
 
 LeafBoard::LeafBoard(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE)
     : Board::Board(ncHandler, PLANE) {
-    _cells = std::array<LLCell, 9>();
+    _cells = std::array<LLCell, CELL_COUNT>();
     _winner = None;
 }
 

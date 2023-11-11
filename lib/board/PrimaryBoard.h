@@ -28,12 +28,12 @@ private:
      *
      * Shared between all instances.
      */
-    static std::array<const char *, 3> _symbols;
+    static std::array<const char *, SYMBOL_COUNT> _symbols;
 
     /**
      * Array storing ownership of its component LeafBoards.
      */
-    std::array<LeafBoard *, 9> _cells;
+    std::array<LeafBoard *, CELL_COUNT> _cells;
 
     void create_cells();
 
