@@ -28,6 +28,41 @@ NcPlaneWrapper::~NcPlaneWrapper() {
     free(_pPlane);
 }
 
+unsigned int NcPlaneWrapper::get_rows() const {
+    return extract_nopts(_pPlane).rows;
+}
+unsigned int NcPlaneWrapper::get_cols() const {
+    return extract_nopts(_pPlane).cols;
+}
+
+NcPlaneWrapperI *NcPlaneWrapper::create_child(const ncplane_options *nopts) {
+    return new NcPlaneWrapper(_ncHandler, ncplane_create(_pPlane, nopts));
+}
+
+int NcPlaneWrapper::load_nccell(nccell *c, const char *gcluster) {
+    return nccell_load(_pPlane, c, gcluster);
+}
+int NcPlaneWrapper::set_base_cell(const nccell *c) {
+    return ncplane_set_base_cell(_pPlane, c);
+}
+
+int NcPlaneWrapper::cursor_move_yx(const int X, const int Y) {
+    return ncplane_cursor_move_yx(_pPlane, X, Y);
+}
+int NcPlaneWrapper::hline(const nccell *c, const unsigned LEN) {
+    return ncplane_hline(_pPlane, c, LEN);
+}
+int NcPlaneWrapper::vline(const nccell *c, const unsigned LEN) {
+    return ncplane_vline(_pPlane, c, LEN);
+}
+int NcPlaneWrapper::putc_yx(const int Y, const int X, const nccell *c) {
+    return ncplane_putc_yx(_pPlane, Y, X, c);
+}
+void NcPlaneWrapper::erase() {
+    return ncplane_erase(_pPlane);
+}
+
+// Helper functions
 ncplane_options create_nopts(const int Y, const int X, const unsigned int ROWS,
                              const unsigned int COLS) {
     ncplane_options nopts = {

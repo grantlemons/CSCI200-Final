@@ -13,7 +13,7 @@ GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandlerI> ncHandler,
                                const int Y, const int X,
                                const unsigned int ROWS, const unsigned int COLS)
     : _primaryPlane(new NcPlaneWrapper(ncHandler, Y, X, ROWS, COLS)),
-      _rows(ROWS), _cols(COLS) {
+      _rows(ROWS + 1), _cols(COLS + 1) {
     init_child_planes();
 }
 
@@ -73,9 +73,9 @@ void GraphicalBoard::draw_board(
     nccell HORI_CELL, VERT_CELL, JUNC_CELL;
     HORI_CELL = VERT_CELL = JUNC_CELL = NCCELL_TRIVIAL_INITIALIZER;
 
-    _primaryPlane->nccell_load(&HORI_CELL, SYMBOLS.at(0));
-    _primaryPlane->nccell_load(&VERT_CELL, SYMBOLS.at(1));
-    _primaryPlane->nccell_load(&JUNC_CELL, SYMBOLS.at(2));
+    _primaryPlane->load_nccell(&HORI_CELL, SYMBOLS.at(0));
+    _primaryPlane->load_nccell(&VERT_CELL, SYMBOLS.at(1));
+    _primaryPlane->load_nccell(&JUNC_CELL, SYMBOLS.at(2));
     nccell_set_channels(&HORI_CELL, CELL_CHANNELS);
     nccell_set_channels(&VERT_CELL, CELL_CHANNELS);
     nccell_set_channels(&JUNC_CELL, CELL_CHANNELS);
