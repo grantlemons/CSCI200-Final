@@ -32,30 +32,21 @@ ncplane_options extract_nopts(ncplane *PLANE) {
 
 GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
                                const int Y, const int X,
-                               const unsigned int ROWS, const unsigned int COLS,
-                               const uint64_t CELL_CHANNELS,
-                               std::array<const char *, 3> SYMBOLS)
-    : GraphicalBoard::GraphicalBoard(ncHandler, create_nopts(Y, X, ROWS, COLS),
-                                     CELL_CHANNELS, SYMBOLS) {}
+                               const unsigned int ROWS, const unsigned int COLS)
+    : GraphicalBoard::GraphicalBoard(ncHandler,
+                                     create_nopts(Y, X, ROWS, COLS)) {}
 
 GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
-                               const ncplane_options NOPTS,
-                               const uint64_t CELL_CHANNELS,
-                               std::array<const char *, 3> SYMBOLS)
+                               const ncplane_options NOPTS)
     : GraphicalBoard::GraphicalBoard(
-          ncHandler, ncplane_create(ncHandler->get_stdplane(), &NOPTS),
-          CELL_CHANNELS, SYMBOLS) {}
+          ncHandler, ncplane_create(ncHandler->get_stdplane(), &NOPTS)) {}
 
 GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
-                               ncplane *const PLANE,
-                               const uint64_t CELL_CHANNELS,
-                               std::array<const char *, 3> SYMBOLS) {
+                               ncplane *const PLANE) {
     ncplane_options nopts = extract_nopts(PLANE);
     _rows = nopts.rows + 1;
     _cols = nopts.cols + 1;
 
-    _symbols = SYMBOLS;
-    _cell_channels = CELL_CHANNELS;
     _ncHandler = ncHandler;
     _primaryPlane = PLANE;
 
@@ -77,7 +68,8 @@ GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
     }
 }
 
-void GraphicalBoard::draw_board() {
+void GraphicalBoard::draw_board(const std::array<const char *, 3> SYMBOLS,
+                                const uint64_t CELL_CHANNELS) {
     const unsigned int ROWS_PER_BCELL = (_rows - 2) / 3u;
     const unsigned int COLS_PER_BCELL = (_cols - 2) / 3u;
 
@@ -95,12 +87,12 @@ void GraphicalBoard::draw_board() {
     nccell HORI_CELL, VERT_CELL, JUNC_CELL;
     HORI_CELL = VERT_CELL = JUNC_CELL = NCCELL_TRIVIAL_INITIALIZER;
 
-    nccell_load(_primaryPlane, &HORI_CELL, _symbols.at(0));
-    nccell_load(_primaryPlane, &VERT_CELL, _symbols.at(1));
-    nccell_load(_primaryPlane, &JUNC_CELL, _symbols.at(2));
-    nccell_set_channels(&HORI_CELL, _cell_channels);
-    nccell_set_channels(&VERT_CELL, _cell_channels);
-    nccell_set_channels(&JUNC_CELL, _cell_channels);
+    nccell_load(_primaryPlane, &HORI_CELL, SYMBOLS.at(0));
+    nccell_load(_primaryPlane, &VERT_CELL, SYMBOLS.at(1));
+    nccell_load(_primaryPlane, &JUNC_CELL, SYMBOLS.at(2));
+    nccell_set_channels(&HORI_CELL, CELL_CHANNELS);
+    nccell_set_channels(&VERT_CELL, CELL_CHANNELS);
+    nccell_set_channels(&JUNC_CELL, CELL_CHANNELS);
 
     // draw horizontal lines
     ncplane_cursor_move_yx(_primaryPlane, H_IDX_1, 0);
