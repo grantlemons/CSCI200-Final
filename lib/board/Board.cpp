@@ -11,13 +11,17 @@
 #include <ostream>
 
 Board::Board(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE)
-    : _GBoard(new GraphicalBoard(ncHandler, PLANE)) {}
+    : _GBoard(new GraphicalBoard(ncHandler, PLANE)), _ncHandler(ncHandler) {}
 
 Board::Board(std::shared_ptr<NcHandler> ncHandler, const ncplane_options NOPTS)
-    : _GBoard(new GraphicalBoard(ncHandler, NOPTS)) {}
+    : _GBoard(new GraphicalBoard(ncHandler, NOPTS)), _ncHandler(ncHandler) {}
 
-GraphicalBoard *Board::getGraphicalBoard() {
+GraphicalBoard *Board::getGraphicalBoard() const {
     return _GBoard.get();
+}
+
+NcHandler *Board::getNcHandler() const {
+    return _ncHandler.get();
 }
 
 bool Board::check_win(const unsigned int INDEX, const CellOwner OWNER) const {

@@ -90,6 +90,8 @@ public:
      */
     CellOwner get_winner() const;
 
+    void draw() override final;
+
     /**
      * Marks primary plane and all child planes of component GraphicalBoard as
      * owned by X.

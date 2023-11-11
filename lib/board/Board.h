@@ -23,6 +23,11 @@ private:
      */
     std::unique_ptr<GraphicalBoard> _GBoard;
 
+    /** The handler object used to access the underlying
+     * notcurses instance.
+     */
+    std::shared_ptr<NcHandler> _ncHandler;
+
 protected:
     /**
      * A constructor that takes a plane to use for the underlying graphical
@@ -51,7 +56,19 @@ protected:
      */
     Board(std::shared_ptr<NcHandler> ncHandler, const ncplane_options NOPTS);
 
-    GraphicalBoard *getGraphicalBoard();
+    /**
+     * Getter for the associated GraphicalBoard instance.
+     *
+     * @return A pointer to the private GraphicalBoard.
+     */
+    GraphicalBoard *getGraphicalBoard() const;
+
+    /**
+     * Getter for the associated NcHandler instance.
+     *
+     * @return A pointer to the private NcHandler.
+     */
+    NcHandler *getNcHandler() const;
 
     virtual ~Board() = default;
 

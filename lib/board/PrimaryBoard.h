@@ -69,6 +69,7 @@ public:
      */
     std::optional<LeafBoard *> select_board(const unsigned int INDEX);
 
+    void draw() override final;
     void draw_x(const unsigned int INDEX) override final;
     void draw_o(const unsigned int INDEX) override final;
 };

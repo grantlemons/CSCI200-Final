@@ -13,11 +13,7 @@ std::array<const char *, 3> LeafBoard::_symbols =
     std::array<const char *, 3>({"\u2500", "\u2502", "\u253C"});
 
 LeafBoard::LeafBoard(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE)
-    : Board::Board(
-          ncHandler, PLANE,
-          NcHandler::combine_channels(ncHandler->get_default_bg_channel(),
-                                      NcHandler::GREY_CHANNEL),
-          LeafBoard::_symbols) {
+    : Board::Board(ncHandler, PLANE) {
     _cells = std::array<LLCell, 9>();
     _winner = None;
 }
@@ -44,9 +40,16 @@ CellOwner LeafBoard::get_winner() const {
 }
 
 void LeafBoard::fill_x() {
-    mGBoard.fill_x();
+    getGraphicalBoard()->fill_x();
 }
 
 void LeafBoard::fill_o() {
-    mGBoard.fill_o();
+    getGraphicalBoard()->fill_o();
+}
+
+void LeafBoard::draw() {
+    getGraphicalBoard()->draw_board(
+        _symbols,
+        NcHandler::combine_channels(getNcHandler()->get_default_bg_channel(),
+                                    NcHandler::GREY_CHANNEL));
 }
