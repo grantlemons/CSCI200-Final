@@ -150,6 +150,11 @@ public:
      */
     std::array<ncplane *, 9> get_child_planes() const;
 
+    /**
+     * Initializes a new GraphicalBoard for each child plane.
+     *
+     * @return An array of unique pointers to GraphicalBoards.
+     */
     std::array<std::unique_ptr<GraphicalBoard>, 9> create_child_boards() const;
 };
 
