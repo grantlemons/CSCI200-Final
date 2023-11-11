@@ -28,14 +28,28 @@ private:
      *
      * Shared between all instances.
      */
-    static std::array<const char *, 3> _symbols;
+    static std::array<const char *, SYMBOL_COUNT> _symbols;
 
     /**
      * Array storing ownership of its component LeafBoards.
      */
-    std::array<LeafBoard *, 9> _cells;
+    std::array<LeafBoard *, CELL_COUNT> _cells;
+
+    void create_cells();
 
 public:
+    /**
+     * A constructor for PrimaryBoard using dependency injection.
+     *
+     * @param ncHandler The handler object used to access the underlying
+     * notcurses instance.
+     * @param gBoard The graphical board object of the parent Board class.
+     *
+     * @see NcHandler::combine_channels()
+     */
+    PrimaryBoard(std::shared_ptr<NcHandler> ncHandler,
+                 std::unique_ptr<GraphicalBoard> gBoard);
+
     /**
      * The constructor for PrimaryBoard.
      *
@@ -46,8 +60,6 @@ public:
      *
      * @see _cells
      * @see def_primary_nopts()
-     * @see Board(std::shared_ptr<NcHandler>, const ncplane_options, const
-     * uint64_t, std::array<const char *, 3>)
      */
     PrimaryBoard(std::shared_ptr<NcHandler> ncHandler);
 
@@ -69,6 +81,7 @@ public:
      */
     std::optional<LeafBoard *> select_board(const unsigned int INDEX);
 
+    void draw() override final;
     void draw_x(const unsigned int INDEX) override final;
     void draw_o(const unsigned int INDEX) override final;
 };

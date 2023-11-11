@@ -16,31 +16,28 @@
  * Abstract class representation of a logical board.
  */
 class Board {
-protected:
+private:
+    /** The handler object used to access the underlying
+     * notcurses instance.
+     */
+    std::shared_ptr<NcHandler> _ncHandler;
+
     /**
      * Component graphical board used to represent actions on the logical board
      * graphically.
      */
-    GraphicalBoard mGBoard;
+    std::unique_ptr<GraphicalBoard> _gBoard;
 
+protected:
     /**
-     * A constructor that takes raw info for the underlying graphical board.
+     * A constructor that uses dependency injection.
      *
      * @param ncHandler The handler object used to access the underlying
      * notcurses instance.
-     * @param NOPTS The configuration used to form the primary plane.
-     * @param CELL_CHANNELS The default forground and background channels for
-     * the board.
-     * @param SYMBOLS The unicode characters used to draw the lines of the
-     * board. The indexes (in order) are the character for horizontal lines,
-     * vertical lines, and junctions between lines.
-     *
-     * @see ncplane_create()
-     * @see GraphicalBoard(std::shared_ptr<NcHandler>, const ncplane_options,
-     * const uint64_t, std::array<const char *, 3>)
+     * @param gBoard The associated graphical board to construct with.
      */
-    Board(std::shared_ptr<NcHandler> ncHandler, const ncplane_options NOPTS,
-          const uint64_t CELL_CHANNELS, std::array<const char *, 3> SYMBOLS);
+    Board(std::shared_ptr<NcHandler> ncHandler,
+          std::unique_ptr<GraphicalBoard> gBoard);
 
     /**
      * A constructor that takes a plane to use for the underlying graphical
@@ -49,22 +46,37 @@ protected:
      * @param ncHandler The handler object used to access the underlying
      * notcurses instance.
      * @param PLANE The plane used as the primary plane of the new
-     * mGBoard.
-     * @param CELL_CHANNELS The default forground and background channels for
-     * the board.
-     * @param SYMBOLS The unicode characters used to draw the lines of the
-     * board. The indexes (in order) are the character for horizontal lines,
-     * vertical lines, and junctions between lines.
-     *
-     * @see GraphicalBoard(std::shared_ptr<NcHandler>, ncplane *const,
-     * const uint64_t, std::array<const char *, 3>)
+     * _gBoard.
      */
-    Board(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE,
-          const uint64_t CELL_CHANNELS, std::array<const char *, 3> SYMBOLS);
+    Board(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE);
+
+    /**
+     * A constructor that takes raw info for the underlying graphical board.
+     *
+     * @param ncHandler The handler object used to access the underlying
+     * notcurses instance.
+     * @param NOPTS The configuration used to form the primary plane.
+     *
+     * @see ncplane_create()
+     */
+    Board(std::shared_ptr<NcHandler> ncHandler, const ncplane_options NOPTS);
+
+    /**
+     * Getter for the associated GraphicalBoard instance.
+     *
+     * @return A pointer to the private GraphicalBoard.
+     */
+    GraphicalBoard *getGraphicalBoard() const;
+
+    /**
+     * Getter for the associated NcHandler instance.
+     *
+     * @return A pointer to the private NcHandler.
+     */
+    std::shared_ptr<NcHandler> getNcHandler() const;
 
     virtual ~Board() = default;
 
-public:
     Board(Board &) = delete;
     void operator=(const Board &) = delete;
 
@@ -95,15 +107,15 @@ public:
     /**
      * Uses the component GraphicalBoard to draw a Tic-Tac-Toe board.
      *
-     * @see mGBoard
+     * @see _gBoard
      * @see GraphicalBoard::draw_board()
      */
-    virtual void draw();
+    virtual void draw() = 0;
 
     /**
      * Uses the component GraphicalBoard to mark the owner of a cell as X.
      *
-     * @see mGBoard
+     * @see _gBoard
      * @see GraphicalBoard::draw_x()
      */
     virtual void draw_x(const unsigned int INDEX);
@@ -111,7 +123,7 @@ public:
     /**
      * Uses the component GraphicalBoard to mark the owner of a cell as O.
      *
-     * @see mGBoard
+     * @see _gBoard
      * @see GraphicalBoard::draw_o()
      */
     virtual void draw_o(const unsigned int INDEX);
@@ -141,7 +153,7 @@ public:
  *
  * @relates Board
  */
-unsigned int negative_mod(const int A, const int B);
+constexpr unsigned int negative_mod(const int A, const int B);
 
 /**
  * Gets the other indicies on a certain row of a 3x3 grid.
@@ -159,8 +171,8 @@ unsigned int negative_mod(const int A, const int B);
  *
  * @relates Board
  */
-void horizontal_others(const unsigned int INDEX, unsigned int &other1,
-                       unsigned int &other2);
+constexpr void horizontal_others(const unsigned int INDEX, unsigned int &other1,
+                                 unsigned int &other2);
 
 /**
  * Gets the other indicies on a certain column of a 3x3 grid.
@@ -178,8 +190,8 @@ void horizontal_others(const unsigned int INDEX, unsigned int &other1,
  *
  * @relates Board
  */
-void vertical_others(const unsigned int INDEX, unsigned int &other1,
-                     unsigned int &other2);
+constexpr void vertical_others(const unsigned int INDEX, unsigned int &other1,
+                               unsigned int &other2);
 
 /**
  * Gets the other indicies of a diagonal line on a 3x3 grid.
@@ -199,8 +211,9 @@ void vertical_others(const unsigned int INDEX, unsigned int &other1,
  *
  * @relates Board
  */
-void diagonal_fours_others(const unsigned int INDEX, unsigned int &other1,
-                           unsigned int &other2);
+constexpr void diagonal_fours_others(const unsigned int INDEX,
+                                     unsigned int &other1,
+                                     unsigned int &other2);
 
 /**
  * Gets the other indicies of a diagonal line on a 3x3 grid.
@@ -221,7 +234,7 @@ void diagonal_fours_others(const unsigned int INDEX, unsigned int &other1,
  *
  * @relates Board
  */
-void diagonal_twos_others(const unsigned int INDEX, unsigned int &other1,
-                          unsigned int &other2);
+constexpr void diagonal_twos_others(const unsigned int INDEX,
+                                    unsigned int &other1, unsigned int &other2);
 
 #endif // !BOARD

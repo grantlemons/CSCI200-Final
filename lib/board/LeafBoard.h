@@ -31,12 +31,12 @@ private:
      *
      * Shared between all instances.
      */
-    static std::array<const char *, 3> _symbols;
+    static std::array<const char *, SYMBOL_COUNT> _symbols;
 
     /**
      * Array storing ownership of its component cells.
      */
-    std::array<LLCell, 9> _cells;
+    std::array<LLCell, CELL_COUNT> _cells;
 
     /**
      * Variable storing the winner of the instance.
@@ -49,15 +49,25 @@ private:
 
 public:
     /**
-     * The constructor for LeafBoard.
+     * A constructor for LeafBoard using dependency injection.
+     *
+     * @param ncHandler The handler object used to access the underlying
+     * notcurses instance.
+     * @param gBoard The graphical board object of the parent Board class.
+     *
+     * @see NcHandler::combine_channels()
+     */
+    LeafBoard(std::shared_ptr<NcHandler> ncHandler,
+              std::unique_ptr<GraphicalBoard> gBoard);
+
+    /**
+     * A constructor for LeafBoard.
      *
      * @param ncHandler The handler object used to access the underlying
      * notcurses instance.
      * @param PLANE The plane used as the primary plane of the board's new
      * GraphicalBoard.
      *
-     * @see Board::Board(std::shared_ptr<NcHandler>, ncplane *const, const
-     * uint64_t, std::array<const char *, 3>)
      * @see NcHandler::combine_channels()
      */
     LeafBoard(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE);
@@ -90,13 +100,13 @@ public:
      */
     CellOwner get_winner() const;
 
+    void draw() override final;
+
     /**
      * Marks primary plane and all child planes of component GraphicalBoard as
      * owned by X.
      *
      * Used when the leaf board is won.
-     *
-     * @see Board::mGBoard
      */
     void fill_x();
 
@@ -105,8 +115,6 @@ public:
      * owned by O.
      *
      * Used when the leaf board is won.
-     *
-     * @see Board::mGBoard
      */
     void fill_o();
 };

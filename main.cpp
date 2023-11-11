@@ -12,6 +12,7 @@ int main() {
     std::shared_ptr<NcHandler> ncHandler(new NcHandler());
 
     PrimaryBoard pBoard(ncHandler);
+    pBoard.draw();
 
     LeafBoard *selected = nullptr;
     std::optional<LeafBoard *> opt = pBoard.select_board(2u);

@@ -2,6 +2,7 @@
 #define G_BOARD
 
 #include "lib/NcHandler.h"
+#include "lib/Shared.h"
 
 #include <array>
 #include <cstdint>
@@ -35,16 +36,10 @@ private:
      * 3|4|5
      * 6|7|8
      */
-    std::array<ncplane *, 9> _childPlanes;
+    std::array<ncplane *, CELL_COUNT> _childPlanes;
 
     /** The height and width of the primary plane */
     unsigned int _rows, _cols;
-
-    /** The unicode characters used to draw the board */
-    std::array<const char *, 3> _symbols;
-
-    /** The default foreground and background color channels */
-    uint64_t _cell_channels;
 
 public:
     /**
@@ -59,24 +54,14 @@ public:
      * @param X The X coordinate of the new plane's top left corner.
      * @param ROWS The number of rows composing the new plane. (Height)
      * @param COLS The number of columns composing the new plane. (Width)
-     * @param CELL_CHANNELS The default forground and background channels for
-     * the board.
-     * @param SYMBOLS The unicode characters used to draw the lines of the
-     * board. The indexes (in order) are the character for horizontal lines,
-     * vertical lines, and junctions between lines.
      *
      * @see create_nopts()
-     * @see GraphicalBoard(std::shared_ptr<NcHandler>, const ncplane_options,
-     * const uint64_t, std::array<const char *, 3>)
      * @see _primaryPlane
      * @see _childPlanes
-     * @see _symbols
-     * @see _cell_channels
      */
     GraphicalBoard(std::shared_ptr<NcHandler> ncHandler, const int Y,
                    const int X, const unsigned int ROWS,
-                   const unsigned int COLS, const uint64_t CELL_CHANNELS,
-                   std::array<const char *, 3> SYMBOLS);
+                   const unsigned int COLS);
 
     /**
      * A constructor that takes in an ncplane_options struct for a plane and
@@ -87,23 +72,13 @@ public:
      * @param ncHandler The handler object used to access the underlying
      * notcurses instance.
      * @param NOPTS The configuration used to form the primary plane.
-     * @param CELL_CHANNELS The default forground and background channels for
-     * the board.
-     * @param SYMBOLS The unicode characters used to draw the lines of the
-     * board. The indexes (in order) are the character for horizontal lines,
-     * vertical lines, and junctions between lines.
      *
      * @see ncplane_create()
-     * @see GraphicalBoard(std::shared_ptr<NcHandler>, ncplane *const, const
-     * uint64_t, std::array<const char *, 3>)
      * @see _primaryPlane
      * @see _childPlanes
-     * @see _symbols
-     * @see _cell_channels
      */
     GraphicalBoard(std::shared_ptr<NcHandler> ncHandler,
-                   const ncplane_options NOPTS, const uint64_t CELL_CHANNELS,
-                   std::array<const char *, 3> SYMBOLS);
+                   const ncplane_options NOPTS);
 
     /**
      * A constructor that takes in an notcurses plane and uses it as its primary
@@ -114,20 +89,11 @@ public:
      * @param ncHandler The handler object used to access the underlying
      * notcurses instance.
      * @param PLANE The plane used as the primary plane.
-     * @param CELL_CHANNELS The default forground and background channels for
-     * the board.
-     * @param SYMBOLS The unicode characters used to draw the lines of the
-     * board. The indexes (in order) are the character for horizontal lines,
-     * vertical lines, and junctions between lines.
      *
      * @see _primaryPlane
      * @see _childPlanes
-     * @see _symbols
-     * @see _cell_channels
      */
-    GraphicalBoard(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE,
-                   const uint64_t CELL_CHANNELS,
-                   std::array<const char *, 3> SYMBOLS);
+    GraphicalBoard(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE);
 
     GraphicalBoard(GraphicalBoard &) = delete;
     void operator=(const GraphicalBoard &) = delete;
@@ -136,10 +102,17 @@ public:
     /**
      * Draws a Tic-Tac-Toe board on the primary plane.
      *
+     * @param SYMBOLS The unicode characters used to draw the lines of the
+     * board. The indexes (in order) are the character for horizontal lines,
+     * vertical lines, and junctions between lines.
+     * @param CELL_CHANNELS The default forground and background channels for
+     * the board.
+     *
      * @see ncplane_hline()
      * @see ncplane_vline()
      */
-    void draw_board();
+    void draw_board(const std::array<const char *, SYMBOL_COUNT> SYMBOLS,
+                    const uint64_t CELL_CHANNELS);
 
     /**
      * Marks a cell at an index as belonging to the X player.
@@ -176,7 +149,15 @@ public:
      * 3|4|5
      * 6|7|8
      */
-    std::array<ncplane *, 9> get_child_planes() const;
+    std::array<ncplane *, CELL_COUNT> get_child_planes() const;
+
+    /**
+     * Initializes a new GraphicalBoard for each child plane.
+     *
+     * @return An array of unique pointers to GraphicalBoards.
+     */
+    std::array<std::unique_ptr<GraphicalBoard>, CELL_COUNT>
+    create_child_boards() const;
 };
 
 // Helper functions
