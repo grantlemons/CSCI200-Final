@@ -26,7 +26,7 @@ private:
      * Component graphical board used to represent actions on the logical board
      * graphically.
      */
-    std::unique_ptr<GraphicalBoard> _GBoard;
+    std::unique_ptr<GraphicalBoard> _gBoard;
 
 protected:
     /**
@@ -34,10 +34,10 @@ protected:
      *
      * @param ncHandler The handler object used to access the underlying
      * notcurses instance.
-     * @param GBoard The associated graphical board to construct with.
+     * @param gBoard The associated graphical board to construct with.
      */
     Board(std::shared_ptr<NcHandler> ncHandler,
-          std::unique_ptr<GraphicalBoard> GBoard);
+          std::unique_ptr<GraphicalBoard> gBoard);
 
     /**
      * A constructor that takes a plane to use for the underlying graphical
@@ -46,7 +46,7 @@ protected:
      * @param ncHandler The handler object used to access the underlying
      * notcurses instance.
      * @param PLANE The plane used as the primary plane of the new
-     * _GBoard.
+     * _gBoard.
      */
     Board(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE);
 
@@ -108,7 +108,7 @@ public:
     /**
      * Uses the component GraphicalBoard to draw a Tic-Tac-Toe board.
      *
-     * @see _GBoard
+     * @see _gBoard
      * @see GraphicalBoard::draw_board()
      */
     virtual void draw() = 0;
@@ -116,7 +116,7 @@ public:
     /**
      * Uses the component GraphicalBoard to mark the owner of a cell as X.
      *
-     * @see _GBoard
+     * @see _gBoard
      * @see GraphicalBoard::draw_x()
      */
     virtual void draw_x(const unsigned int INDEX);
@@ -124,7 +124,7 @@ public:
     /**
      * Uses the component GraphicalBoard to mark the owner of a cell as O.
      *
-     * @see _GBoard
+     * @see _gBoard
      * @see GraphicalBoard::draw_o()
      */
     virtual void draw_o(const unsigned int INDEX);

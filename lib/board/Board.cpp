@@ -11,17 +11,17 @@
 #include <ostream>
 
 Board::Board(std::shared_ptr<NcHandler> ncHandler,
-             std::unique_ptr<GraphicalBoard> GBoard)
-    : _ncHandler(ncHandler), _GBoard(std::move(GBoard)) {}
+             std::unique_ptr<GraphicalBoard> gBoard)
+    : _ncHandler(ncHandler), _gBoard(std::move(gBoard)) {}
 
 Board::Board(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE)
-    : _ncHandler(ncHandler), _GBoard(new GraphicalBoard(ncHandler, PLANE)) {}
+    : _ncHandler(ncHandler), _gBoard(new GraphicalBoard(ncHandler, PLANE)) {}
 
 Board::Board(std::shared_ptr<NcHandler> ncHandler, const ncplane_options NOPTS)
-    : _ncHandler(ncHandler), _GBoard(new GraphicalBoard(ncHandler, NOPTS)) {}
+    : _ncHandler(ncHandler), _gBoard(new GraphicalBoard(ncHandler, NOPTS)) {}
 
 GraphicalBoard *Board::getGraphicalBoard() const {
-    return _GBoard.get();
+    return _gBoard.get();
 }
 
 std::shared_ptr<NcHandler> Board::getNcHandler() const {
@@ -70,10 +70,10 @@ bool Board::check_win(const unsigned int INDEX, const CellOwner OWNER) const {
 }
 
 void Board::draw_x(const unsigned int INDEX) {
-    _GBoard->draw_x(INDEX);
+    _gBoard->draw_x(INDEX);
 }
 void Board::draw_o(const unsigned int INDEX) {
-    _GBoard->draw_o(INDEX);
+    _gBoard->draw_o(INDEX);
 }
 
 constexpr unsigned int negative_mod(const int A, const int B) {

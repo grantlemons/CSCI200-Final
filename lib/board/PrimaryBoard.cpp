@@ -15,8 +15,8 @@ std::array<const char *, 3> PrimaryBoard::_symbols =
     std::array<const char *, 3>({"\u2501", "\u2503", "\u254B"});
 
 PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandler> ncHandler,
-                           std::unique_ptr<GraphicalBoard> GBoard)
-    : Board::Board(ncHandler, std::move(GBoard)) {
+                           std::unique_ptr<GraphicalBoard> gBoard)
+    : Board::Board(ncHandler, std::move(gBoard)) {
     create_cells();
 }
 

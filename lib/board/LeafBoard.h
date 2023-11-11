@@ -53,12 +53,12 @@ public:
      *
      * @param ncHandler The handler object used to access the underlying
      * notcurses instance.
-     * @param GBoard The graphical board object of the parent Board class.
+     * @param gBoard The graphical board object of the parent Board class.
      *
      * @see NcHandler::combine_channels()
      */
     LeafBoard(std::shared_ptr<NcHandler> ncHandler,
-              std::unique_ptr<GraphicalBoard> GBoard);
+              std::unique_ptr<GraphicalBoard> gBoard);
 
     /**
      * A constructor for LeafBoard.
