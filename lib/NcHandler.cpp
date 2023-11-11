@@ -47,10 +47,6 @@ uint64_t NcHandler::combine_channels(const uint32_t BG_CHANNEL,
     return (static_cast<uint64_t>(FG_CHANNEL) << 32ull) + BG_CHANNEL;
 }
 
-notcurses *NcHandler::get_nc() const {
-    return nc;
-}
-
 ncplane *NcHandler::get_stdplane() const {
     return notcurses_stdplane(nc);
 }

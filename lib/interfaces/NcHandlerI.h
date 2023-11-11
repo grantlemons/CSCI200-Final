@@ -28,13 +28,6 @@ public:
     virtual uint64_t get_default_channels() const = 0;
 
     /**
-     * Getter for notcurses instance.
-     *
-     * @return The underlying notcurses instance.
-     */
-    virtual notcurses *get_nc() const = 0;
-
-    /**
      * Getter for notcurses stdplane.
      *
      * @return The stdplane for the notcurses instance.

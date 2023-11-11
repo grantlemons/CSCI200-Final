@@ -58,7 +58,6 @@ public:
      */
     static uint64_t combine_channels(const uint32_t BG_CHANNEL,
                                      const uint32_t FG_CHANNEL);
-    notcurses *get_nc() const;
     ncplane *get_stdplane() const;
     void render();
 };

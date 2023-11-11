@@ -4,6 +4,7 @@
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
 #include "lib/interfaces/GraphicalBoardI.h"
+#include "lib/interfaces/NcPlaneWrapperI.h"
 
 #include <array>
 #include <cstdint>
@@ -25,7 +26,7 @@ private:
     std::shared_ptr<NcHandlerI> _ncHandler;
 
     /** The primary plane used as a canvas for drawing the board. */
-    ncplane *_primaryPlane;
+    std::unique_ptr<NcPlaneWrapperI> _primaryPlane;
 
     /** The child planes used to represent the cells of the board
      *
@@ -37,10 +38,12 @@ private:
      * 3|4|5
      * 6|7|8
      */
-    std::array<ncplane *, CELL_COUNT> _childPlanes;
+    std::array<NcPlaneWrapperI *, CELL_COUNT> _childPlanes;
 
     /** The height and width of the primary plane */
     unsigned int _rows, _cols;
+
+    void init_child_planes();
 
 public:
     /**
@@ -94,7 +97,8 @@ public:
      * @see _primaryPlane
      * @see _childPlanes
      */
-    GraphicalBoard(std::shared_ptr<NcHandlerI> ncHandler, ncplane *const PLANE);
+    GraphicalBoard(std::shared_ptr<NcHandlerI> ncHandler,
+                   std::unique_ptr<NcPlaneWrapperI> plane);
 
     GraphicalBoard(GraphicalBoard &) = delete;
     void operator=(const GraphicalBoard &) = delete;
@@ -106,33 +110,10 @@ public:
     void draw_o(const unsigned int INDEX) override final;
     void fill_x() override final;
     void fill_o() override final;
-    std::array<ncplane *, CELL_COUNT> get_child_planes() const override final;
+    std::array<NcPlaneWrapperI *, CELL_COUNT> *
+    get_child_planes() override final;
     std::array<std::unique_ptr<GraphicalBoardI>, CELL_COUNT>
     create_child_boards() const override final;
 };
-
-// Helper functions
-
-/**
- * Forms an struct describing the configuration of a notcurses plane from the
- * data passed in.
- *
- * @param Y The Y coordinate of the new plane's top left corner.
- * @param X The X coordinate of the new plane's top left corner.
- * @param ROWS The number of rows composing the new plane. (Height)
- * @param COLS The number of columns composing the new plane. (Width)
- * @return An ncplane_options struct describing the configuration options.
- */
-ncplane_options create_nopts(const int Y, const int X, const unsigned int ROWS,
-                             const unsigned int COLS);
-
-/**
- * Extracts the configuration used to form the given plane.
- *
- * @param PLANE The plane to extract the configuration from.
- * @return An ncplane_options struct describing the plane's configuration
- * options.
- */
-ncplane_options extract_nopts(ncplane *PLANE);
 
 #endif // !G_BOARD

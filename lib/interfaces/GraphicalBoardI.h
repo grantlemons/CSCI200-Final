@@ -3,6 +3,7 @@
 
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
+#include "lib/interfaces/NcPlaneWrapperI.h"
 
 #include <array>
 #include <cstdint>
@@ -61,7 +62,7 @@ public:
      * 3|4|5
      * 6|7|8
      */
-    virtual std::array<ncplane *, CELL_COUNT> get_child_planes() const = 0;
+    virtual std::array<NcPlaneWrapperI *, CELL_COUNT> *get_child_planes() = 0;
 
     /**
      * Initializes a new GraphicalBoard for each child plane.

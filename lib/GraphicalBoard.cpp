@@ -1,55 +1,40 @@
 #include "lib/GraphicalBoard.h"
 
 #include "lib/NcHandler.h"
+#include "lib/interfaces/NcPlaneWrapperI.h"
+#include "lib/wrappers/NcPlaneWrapper.h"
 
 #include <array>
 #include <memory>
 #include <notcurses/notcurses.h>
 #include <unistd.h>
 
-ncplane_options create_nopts(const int Y, const int X, const unsigned int ROWS,
-                             const unsigned int COLS) {
-    ncplane_options nopts = {
-        Y, X, ROWS, COLS, NULL, NULL, NULL, 0, 0, 0,
-    };
-
-    return nopts;
-}
-
-ncplane_options extract_nopts(ncplane *PLANE) {
-    unsigned int rows, cols;
-    ncplane_dim_yx(PLANE, &rows, &cols);
-
-    int y, x;
-    ncplane_yx(PLANE, &y, &x);
-
-    ncplane_options nopts = {
-        y, x, rows, cols, NULL, NULL, NULL, 0, 0, 0,
-    };
-
-    return nopts;
-}
-
 GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandlerI> ncHandler,
                                const int Y, const int X,
                                const unsigned int ROWS, const unsigned int COLS)
-    : GraphicalBoard::GraphicalBoard(ncHandler,
-                                     create_nopts(Y, X, ROWS, COLS)) {}
+    : _primaryPlane(new NcPlaneWrapper(ncHandler, Y, X, ROWS, COLS)),
+      _rows(ROWS), _cols(COLS) {
+    init_child_planes();
+}
 
 GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandlerI> ncHandler,
                                const ncplane_options NOPTS)
     : GraphicalBoard::GraphicalBoard(
-          ncHandler, ncplane_create(ncHandler->get_stdplane(), &NOPTS)) {}
+          ncHandler, std::unique_ptr<NcPlaneWrapperI>(
+                         new NcPlaneWrapper(ncHandler, NOPTS))) {}
 
 GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandlerI> ncHandler,
-                               ncplane *const PLANE) {
-    ncplane_options nopts = extract_nopts(PLANE);
-    _rows = nopts.rows + 1;
-    _cols = nopts.cols + 1;
+                               std::unique_ptr<NcPlaneWrapperI> plane) {
+    _rows = plane->get_rows() + 1;
+    _cols = plane->get_cols() + 1;
 
     _ncHandler = ncHandler;
-    _primaryPlane = PLANE;
+    _primaryPlane = std::move(plane);
 
+    init_child_planes();
+}
+
+void GraphicalBoard::init_child_planes() {
     const unsigned int ROWS_PER_BCELL = (_rows - 2) / 3;
     const unsigned int COLS_PER_BCELL = (_cols - 2) / 3;
 
@@ -62,7 +47,7 @@ GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandlerI> ncHandler,
 
         ncplane_options child_nopts =
             create_nopts(newY, newX, ROWS_PER_BCELL - 1, COLS_PER_BCELL - 1);
-        ncplane *tmp = ncplane_create(_primaryPlane, &child_nopts);
+        NcPlaneWrapperI *tmp = _primaryPlane->create_child(&child_nopts);
 
         _childPlanes.at(i) = tmp;
     }
@@ -88,75 +73,76 @@ void GraphicalBoard::draw_board(
     nccell HORI_CELL, VERT_CELL, JUNC_CELL;
     HORI_CELL = VERT_CELL = JUNC_CELL = NCCELL_TRIVIAL_INITIALIZER;
 
-    nccell_load(_primaryPlane, &HORI_CELL, SYMBOLS.at(0));
-    nccell_load(_primaryPlane, &VERT_CELL, SYMBOLS.at(1));
-    nccell_load(_primaryPlane, &JUNC_CELL, SYMBOLS.at(2));
+    _primaryPlane->nccell_load(&HORI_CELL, SYMBOLS.at(0));
+    _primaryPlane->nccell_load(&VERT_CELL, SYMBOLS.at(1));
+    _primaryPlane->nccell_load(&JUNC_CELL, SYMBOLS.at(2));
     nccell_set_channels(&HORI_CELL, CELL_CHANNELS);
     nccell_set_channels(&VERT_CELL, CELL_CHANNELS);
     nccell_set_channels(&JUNC_CELL, CELL_CHANNELS);
 
     // draw horizontal lines
-    ncplane_cursor_move_yx(_primaryPlane, H_IDX_1, 0);
-    ncplane_hline(_primaryPlane, &HORI_CELL, H_LINE_LEN);
+    _primaryPlane->cursor_move_yx(H_IDX_1, 0);
+    _primaryPlane->hline(&HORI_CELL, H_LINE_LEN);
 
-    ncplane_cursor_move_yx(_primaryPlane, H_IDX_2, 0);
-    ncplane_hline(_primaryPlane, &HORI_CELL, H_LINE_LEN);
+    _primaryPlane->cursor_move_yx(H_IDX_2, 0);
+    _primaryPlane->hline(&HORI_CELL, H_LINE_LEN);
 
     // draw vertical lines
-    ncplane_cursor_move_yx(_primaryPlane, 0, V_IDX_1);
-    ncplane_vline(_primaryPlane, &VERT_CELL, V_LINE_LEN);
+    _primaryPlane->cursor_move_yx(0, V_IDX_1);
+    _primaryPlane->vline(&VERT_CELL, V_LINE_LEN);
 
-    ncplane_cursor_move_yx(_primaryPlane, 0, V_IDX_2);
-    ncplane_vline(_primaryPlane, &VERT_CELL, V_LINE_LEN);
+    _primaryPlane->cursor_move_yx(0, V_IDX_2);
+    _primaryPlane->vline(&VERT_CELL, V_LINE_LEN);
 
     // draw junction points
-    ncplane_putc_yx(_primaryPlane, H_IDX_1, V_IDX_1, &JUNC_CELL);
-    ncplane_putc_yx(_primaryPlane, H_IDX_1, V_IDX_2, &JUNC_CELL);
+    _primaryPlane->putc_yx(H_IDX_1, V_IDX_1, &JUNC_CELL);
+    _primaryPlane->putc_yx(H_IDX_1, V_IDX_2, &JUNC_CELL);
 
-    ncplane_putc_yx(_primaryPlane, H_IDX_2, V_IDX_1, &JUNC_CELL);
-    ncplane_putc_yx(_primaryPlane, H_IDX_2, V_IDX_2, &JUNC_CELL);
+    _primaryPlane->putc_yx(H_IDX_2, V_IDX_1, &JUNC_CELL);
+    _primaryPlane->putc_yx(H_IDX_2, V_IDX_2, &JUNC_CELL);
 
     // draw the board to the screen
     _ncHandler->render();
 }
 
 void GraphicalBoard::draw_x(const unsigned int INDEX) {
-    ncplane *plane = _childPlanes.at(INDEX);
+    NcPlaneWrapperI *const PLANE = _childPlanes.at(INDEX);
     const nccell red = NCCELL_INITIALIZER(
         '\0', 0,
         NcHandler::combine_channels(NcHandler::RED_CHANNEL,
                                     _ncHandler->get_default_fg_channel()));
 
-    ncplane_erase(plane);
-    ncplane_set_base_cell(plane, &red);
+    PLANE->erase();
+    PLANE->set_base_cell(&red);
 
     // update the screen with the new changes
     _ncHandler->render();
 }
 
 void GraphicalBoard::draw_o(const unsigned int INDEX) {
-    ncplane *plane = _childPlanes.at(INDEX);
+    NcPlaneWrapperI *const PLANE = _childPlanes.at(INDEX);
     const nccell blue = NCCELL_INITIALIZER(
         '\0', 0,
         NcHandler::combine_channels(NcHandler::BLUE_CHANNEL,
                                     _ncHandler->get_default_fg_channel()));
 
-    ncplane_erase(plane);
-    ncplane_set_base_cell(plane, &blue);
+    PLANE->erase();
+    PLANE->set_base_cell(&blue);
 
     // update the screen with the new changes
     _ncHandler->render();
 }
 
 void GraphicalBoard::fill_x() {
-    for (ncplane *const child : _childPlanes) {
+    for (unsigned int i = 0; i < CELL_COUNT; i++) {
+        NcPlaneWrapperI *const CHILD = _childPlanes.at(i);
         const nccell red = NCCELL_INITIALIZER(
             '\0', 0,
             NcHandler::combine_channels(NcHandler::RED_CHANNEL,
                                         _ncHandler->get_default_fg_channel()));
 
-        ncplane_erase(child);
-        ncplane_set_base_cell(child, &red);
+        CHILD->erase();
+        CHILD->set_base_cell(&red);
     }
 
     // update the screen with the new changes
@@ -164,32 +150,34 @@ void GraphicalBoard::fill_x() {
 }
 
 void GraphicalBoard::fill_o() {
-    for (ncplane *const child : _childPlanes) {
+    for (unsigned int i = 0; i < CELL_COUNT; i++) {
+        NcPlaneWrapperI *const CHILD = _childPlanes.at(i);
         const nccell blue = NCCELL_INITIALIZER(
             '\0', 0,
             NcHandler::combine_channels(NcHandler::BLUE_CHANNEL,
                                         _ncHandler->get_default_fg_channel()));
 
-        ncplane_erase(child);
-        ncplane_set_base_cell(child, &blue);
+        CHILD->erase();
+        CHILD->set_base_cell(&blue);
     }
 
     // update the screen with the new changes
     _ncHandler->render();
 }
 
-std::array<ncplane *, CELL_COUNT> GraphicalBoard::get_child_planes() const {
-    return _childPlanes;
+std::array<NcPlaneWrapperI *, CELL_COUNT> *GraphicalBoard::get_child_planes() {
+    return &_childPlanes;
 }
 
 std::array<std::unique_ptr<GraphicalBoardI>, CELL_COUNT>
 GraphicalBoard::create_child_boards() const {
     std::array<std::unique_ptr<GraphicalBoardI>, CELL_COUNT> boards;
 
-    for (unsigned int i = 0; i < 9; i++) {
-        ncplane *const PLANE = _childPlanes.at(i);
-        boards.at(i) = std::unique_ptr<GraphicalBoardI>(
-            new GraphicalBoard(_ncHandler, PLANE));
+    for (unsigned int i = 0; i < CELL_COUNT; i++) {
+        NcPlaneWrapperI *const PLANE = _childPlanes.at(i);
+
+        boards.at(i) = std::unique_ptr<GraphicalBoardI>(new GraphicalBoard(
+            _ncHandler, std::unique_ptr<NcPlaneWrapperI>(PLANE)));
     }
 
     return boards;
