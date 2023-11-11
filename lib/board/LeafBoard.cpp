@@ -15,14 +15,11 @@ std::array<const char *, SYMBOL_COUNT> LeafBoard::_symbols =
 
 LeafBoard::LeafBoard(std::shared_ptr<NcHandlerI> ncHandler,
                      std::unique_ptr<GraphicalBoardI> gBoard)
-    : Board::Board(ncHandler, std::move(gBoard)) {}
+    : Board::Board(ncHandler, std::move(gBoard)), _cells(), _winner(None) {}
 
 LeafBoard::LeafBoard(std::shared_ptr<NcHandlerI> ncHandler,
-                     ncplane *const PLANE)
-    : Board::Board(ncHandler, PLANE) {
-    _cells = std::array<LLCell, CELL_COUNT>();
-    _winner = None;
-}
+                     std::unique_ptr<NcPlaneWrapperI> plane)
+    : Board::Board(ncHandler, std::move(plane)), _cells(), _winner(None) {}
 
 CellOwner LeafBoard::get_cell_owner(const unsigned int INDEX) const {
     return _cells.at(INDEX);

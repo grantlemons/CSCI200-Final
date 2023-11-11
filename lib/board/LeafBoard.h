@@ -70,7 +70,8 @@ public:
      *
      * @see NcHandler::combine_channels()
      */
-    LeafBoard(std::shared_ptr<NcHandlerI> ncHandler, ncplane *const PLANE);
+    LeafBoard(std::shared_ptr<NcHandlerI> ncHandler,
+              std::unique_ptr<NcPlaneWrapperI> plane);
 
     ~LeafBoard() = default;
     LeafBoard(LeafBoard &) = delete;

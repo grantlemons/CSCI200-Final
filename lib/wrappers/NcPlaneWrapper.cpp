@@ -28,11 +28,33 @@ NcPlaneWrapper::~NcPlaneWrapper() {
     free(_pPlane);
 }
 
+void NcPlaneWrapper::dim_yx(unsigned int *const ROWS,
+                            unsigned int *const COLS) const {
+    ncplane_dim_yx(_pPlane, ROWS, COLS);
+}
 unsigned int NcPlaneWrapper::get_rows() const {
-    return extract_nopts(_pPlane).rows;
+    unsigned int *const ROWS = new unsigned int(0);
+    unsigned int *const COLS = new unsigned int(0);
+
+    dim_yx(ROWS, COLS);
+
+    unsigned int val = *ROWS;
+    delete ROWS;
+    delete COLS;
+
+    return val;
 }
 unsigned int NcPlaneWrapper::get_cols() const {
-    return extract_nopts(_pPlane).cols;
+    unsigned int *const ROWS = new unsigned int(0);
+    unsigned int *const COLS = new unsigned int(0);
+
+    dim_yx(ROWS, COLS);
+
+    unsigned int val = *COLS;
+    delete ROWS;
+    delete COLS;
+
+    return val;
 }
 
 NcPlaneWrapperI *NcPlaneWrapper::create_child(const ncplane_options *nopts) {

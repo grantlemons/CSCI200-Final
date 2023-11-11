@@ -1,5 +1,7 @@
 #include "GraphicalBoardDummy.h"
 
+#include "lib/interfaces/NcPlaneWrapperI.h"
+
 #include <iostream>
 
 void GraphicalBoardDummy::draw_board(
@@ -23,7 +25,7 @@ void GraphicalBoardDummy::fill_x() {
 void GraphicalBoardDummy::fill_o() {
     std::cout << "GB_DUMMY: fill_o called" << std::endl;
 }
-std::array<ncplane *, CELL_COUNT>
-GraphicalBoardDummy::get_child_planes() const {}
+std::array<NcPlaneWrapperI *, CELL_COUNT> *
+GraphicalBoardDummy::get_child_planes() {}
 std::array<std::unique_ptr<GraphicalBoardI>, CELL_COUNT>
 GraphicalBoardDummy::create_child_boards() const {}

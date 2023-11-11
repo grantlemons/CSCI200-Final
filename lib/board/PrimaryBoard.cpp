@@ -16,12 +16,12 @@ std::array<const char *, SYMBOL_COUNT> PrimaryBoard::_symbols =
 
 PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandlerI> ncHandler,
                            std::unique_ptr<GraphicalBoardI> gBoard)
-    : Board::Board(ncHandler, std::move(gBoard)) {
+    : Board::Board(ncHandler, std::move(gBoard)), _cells() {
     init_cells();
 }
 
 PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandlerI> ncHandler)
-    : Board::Board(ncHandler, def_primary_nopts(ncHandler)) {
+    : Board::Board(ncHandler, def_primary_nopts(ncHandler)), _cells() {
     init_cells();
 }
 
@@ -30,15 +30,8 @@ void PrimaryBoard::init_cells() {
         getGraphicalBoard()->create_child_boards();
 
     for (unsigned int i = 0; i < 9; i++) {
-        LeafBoard *newBoard =
-            new LeafBoard(getNcHandler(), std::move(gBoards.at(i)));
-        _cells.at(i) = newBoard;
-    }
-}
-
-PrimaryBoard::~PrimaryBoard() {
-    for (LeafBoard *const cell : _cells) {
-        delete cell;
+        _cells.at(i) = std::unique_ptr<LeafBoard>(
+            new LeafBoard(getNcHandler(), std::move(gBoards.at(i))));
     }
 }
 
@@ -50,7 +43,8 @@ void PrimaryBoard::draw() {
     getGraphicalBoard()->draw_board(_symbols,
                                     getNcHandler()->get_default_channels());
 
-    for (LeafBoard *cell : _cells) {
+    for (unsigned int i = 0; i < CELL_COUNT; i++) {
+        LeafBoard *cell = _cells.at(i).get();
         cell->draw();
     }
 }
@@ -72,13 +66,13 @@ void PrimaryBoard::mark_cell(const unsigned int INDEX, const CellOwner OWNER) {
 
 std::optional<LeafBoard *>
 PrimaryBoard::select_board(const unsigned int INDEX) {
-    LeafBoard *cell = _cells.at(INDEX);
+    LeafBoard *cell = _cells.at(INDEX).get();
     std::optional<LeafBoard *> opt = std::optional(cell);
 
     return cell->get_winner() == None ? opt : std::nullopt;
 }
 
-ncplane_options def_primary_nopts(std::shared_ptr<NcHandler> ncHandler) {
+ncplane_options def_primary_nopts(std::shared_ptr<NcHandlerI> ncHandler) {
     ncplane *std = ncHandler->get_stdplane();
 
     const unsigned int ROWS = (3u * 11u) + 2u;
@@ -96,7 +90,8 @@ ncplane_options def_primary_nopts(std::shared_ptr<NcHandler> ncHandler) {
     board_origin_x = static_cast<int>(std_center_x - (COLS / 2u));
 
     ncplane_options nopts = {
-        board_origin_y, board_origin_x, ROWS, COLS, NULL, NULL, NULL, 0, 0, 0,
+        board_origin_y, board_origin_x, ROWS, COLS, nullptr,
+        nullptr,        nullptr,        0,    0,    0,
     };
 
     return nopts;

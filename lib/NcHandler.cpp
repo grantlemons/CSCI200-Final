@@ -1,7 +1,9 @@
 #include "lib/NcHandler.h"
 
+#include <bits/types/FILE.h>
 #include <clocale>
 #include <cstdint>
+#include <cstdio>
 #include <notcurses/notcurses.h>
 
 const uint32_t NcHandler::RED_CHANNEL = NCCHANNEL_INITIALIZER(0xc3, 0x40, 0x43);
@@ -12,18 +14,19 @@ const uint32_t NcHandler::WHITE_CHANNEL =
 const uint32_t NcHandler::GREY_CHANNEL =
     NCCHANNEL_INITIALIZER(0x77, 0x77, 0x77);
 
-const notcurses_options opts = {NULL,
+const notcurses_options opts = {nullptr,
                                 NCLOGLEVEL_SILENT,
                                 0,
                                 0,
                                 0,
                                 0,
                                 NCOPTION_SUPPRESS_BANNERS +
+                                    NCOPTION_NO_ALTERNATE_SCREEN +
                                     NCOPTION_DRAIN_INPUT};
 
 NcHandler::NcHandler() {
     setlocale(LC_ALL, "");
-    nc = notcurses_init(&opts, NULL);
+    nc = notcurses_init(&opts, fopen("/dev/null", "a"));
 }
 
 NcHandler::~NcHandler() {

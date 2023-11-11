@@ -2,6 +2,7 @@
 #define NC_HANDLER
 
 #include "lib/interfaces/NcHandlerI.h"
+#include "lib/interfaces/NcPlaneWrapperI.h"
 
 #include <cstdint>
 #include <notcurses/notcurses.h>
@@ -47,6 +48,8 @@ public:
     NcHandler(NcHandler &other) = delete;
     void operator=(const NcHandler &) = delete;
 
+    ncplane *get_stdplane() const;
+
     uint32_t get_default_bg_channel() const;
     uint32_t get_default_fg_channel() const;
     uint64_t get_default_channels() const;
@@ -58,7 +61,6 @@ public:
      */
     static uint64_t combine_channels(const uint32_t BG_CHANNEL,
                                      const uint32_t FG_CHANNEL);
-    ncplane *get_stdplane() const;
     void render();
 };
 

@@ -24,6 +24,8 @@ public:
                    NcPlaneWrapper &other);
     ~NcPlaneWrapper();
 
+    void dim_yx(unsigned int *const ROWS,
+                unsigned int *const COLS) const override final;
     unsigned int get_rows() const override final;
     unsigned int get_cols() const override final;
 

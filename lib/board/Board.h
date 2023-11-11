@@ -4,6 +4,7 @@
 #include "lib/GraphicalBoard.h"
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
+#include "lib/interfaces/NcPlaneWrapperI.h"
 
 #include <array>
 #include <cstdint>
@@ -48,7 +49,8 @@ protected:
      * @param PLANE The plane used as the primary plane of the new
      * _gBoard.
      */
-    Board(std::shared_ptr<NcHandlerI> ncHandler, ncplane *const PLANE);
+    Board(std::shared_ptr<NcHandlerI> ncHandler,
+          std::unique_ptr<NcPlaneWrapperI> PLANE);
 
     /**
      * A constructor that takes raw info for the underlying graphical board.

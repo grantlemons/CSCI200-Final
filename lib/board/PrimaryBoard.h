@@ -33,7 +33,7 @@ private:
     /**
      * Array storing ownership of its component LeafBoards.
      */
-    std::array<LeafBoard *, CELL_COUNT> _cells;
+    std::array<std::unique_ptr<LeafBoard>, CELL_COUNT> _cells;
 
     CellOwner get_cell_owner(const unsigned int INDEX) const override final;
 
@@ -72,7 +72,7 @@ public:
      */
     PrimaryBoard(std::shared_ptr<NcHandlerI> ncHandler);
 
-    ~PrimaryBoard();
+    ~PrimaryBoard() = default;
     PrimaryBoard(PrimaryBoard &) = delete;
     void operator=(const PrimaryBoard &) = delete;
 

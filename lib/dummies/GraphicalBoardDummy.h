@@ -17,7 +17,8 @@ public:
     void draw_o(const unsigned int INDEX) override final;
     void fill_x() override final;
     void fill_o() override final;
-    std::array<ncplane *, CELL_COUNT> get_child_planes() const override final;
+    virtual std::array<NcPlaneWrapperI *, CELL_COUNT> *
+    get_child_planes() override final;
     std::array<std::unique_ptr<GraphicalBoardI>, CELL_COUNT>
     create_child_boards() const override final;
 };

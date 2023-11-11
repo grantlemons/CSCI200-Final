@@ -45,9 +45,7 @@ int main() {
     }
     ncHandler->render();
 
-    while (1)
-        ;
+    // while (1);
 
-    delete selected;
     return EXIT_SUCCESS;
 }

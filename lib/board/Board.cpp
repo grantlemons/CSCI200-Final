@@ -3,6 +3,7 @@
 #include "lib/GraphicalBoard.h"
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
+#include "lib/interfaces/NcPlaneWrapperI.h"
 
 #include <array>
 #include <cmath>
@@ -14,8 +15,10 @@ Board::Board(std::shared_ptr<NcHandlerI> ncHandler,
              std::unique_ptr<GraphicalBoardI> gBoard)
     : _ncHandler(ncHandler), _gBoard(std::move(gBoard)) {}
 
-Board::Board(std::shared_ptr<NcHandlerI> ncHandler, ncplane *const PLANE)
-    : _ncHandler(ncHandler), _gBoard(new GraphicalBoard(ncHandler, PLANE)) {}
+Board::Board(std::shared_ptr<NcHandlerI> ncHandler,
+             std::unique_ptr<NcPlaneWrapperI> plane)
+    : _ncHandler(ncHandler),
+      _gBoard(new GraphicalBoard(ncHandler, std::move(plane))) {}
 
 Board::Board(std::shared_ptr<NcHandlerI> ncHandler, const ncplane_options NOPTS)
     : _ncHandler(ncHandler), _gBoard(new GraphicalBoard(ncHandler, NOPTS)) {}
