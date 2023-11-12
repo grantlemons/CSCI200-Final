@@ -86,38 +86,6 @@ void Board::mark_cell(const unsigned int INDEX, const CellOwner OWNER) {
     }
 }
 
-constexpr unsigned int negative_mod(const int A, const int B) {
-    return static_cast<unsigned int>(
-        A - (B * static_cast<int>(floor(static_cast<double>(A) / B))));
-}
-
-constexpr void horizontal_others(const unsigned int INDEX, unsigned int &other1,
-                                 unsigned int &other2) {
-    const unsigned int ROW_LEN = 3;
-
-    other1 = negative_mod(static_cast<int>(INDEX - 1u), ROW_LEN);
-    other2 = (INDEX + 1u) % ROW_LEN;
-}
-constexpr void vertical_others(const unsigned int INDEX, unsigned int &other1,
-                               unsigned int &other2) {
-    const unsigned int ROW_LEN = 3;
-
-    other1 = negative_mod(static_cast<int>(INDEX - ROW_LEN), CELL_COUNT);
-    other2 = (INDEX + ROW_LEN) % CELL_COUNT;
-}
-constexpr void diagonal_fours_others(const unsigned int INDEX,
-                                     unsigned int &other1,
-                                     unsigned int &other2) {
-    other1 = negative_mod(static_cast<int>(INDEX - 4u), CELL_COUNT + 3u);
-    other2 = (INDEX + 4u) % CELL_COUNT + 3u;
-}
-constexpr void diagonal_twos_others(const unsigned int INDEX,
-                                    unsigned int &other1,
-                                    unsigned int &other2) {
-    other1 = negative_mod(static_cast<int>(INDEX - 2u), CELL_COUNT + 1u);
-    other2 = (INDEX + 2u) % CELL_COUNT + 1u;
-}
-
 std::ostream &operator<<(std::ostream &out, const Board &BRD) {
     out << "[";
     for (unsigned int i = 0; i < CELL_COUNT - 1; i++) {

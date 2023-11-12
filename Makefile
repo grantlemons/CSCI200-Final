@@ -4,7 +4,7 @@ DOCS_DIR = docs
 
 LIB_FILES = lib/Shared.cpp lib/board/Board.cpp lib/board/LeafBoard.cpp lib/board/PrimaryBoard.cpp lib/GraphicalBoard.cpp lib/NcHandler.cpp lib/wrappers/NcPlaneWrapper.cpp
 DUMMY_FILES = lib/dummies/GraphicalBoardDummy.cpp lib/dummies/NcHandlerDummy.cpp lib/dummies/NcPlaneWrapperDummy.cpp
-TEST_FILES = lib/board/tests/BoardTests.cpp lib/board/tests/BoardHelperTests.cpp
+TEST_FILES = lib/board/tests/BoardWinTests.cpp lib/board/tests/BoardHelperTests.cpp lib/board/tests/PrimaryBoardTests.cpp lib/board/tests/LeafBoardTests.cpp
 
 SRC_FILES = main.cpp $(LIB_FILES)
 TEST_SRC_FILES = test.cpp $(LIB_FILES) $(DUMMY_FILES) $(TEST_FILES)

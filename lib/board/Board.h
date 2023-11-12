@@ -7,6 +7,7 @@
 #include "lib/interfaces/NcPlaneWrapperI.h"
 
 #include <array>
+#include <cmath>
 #include <cstdint>
 #include <memory>
 #include <optional>
@@ -153,7 +154,10 @@ public:
  *
  * @relates Board
  */
-constexpr unsigned int negative_mod(const int A, const int B);
+inline constexpr unsigned int negative_mod(const int A, const int B) {
+    return static_cast<unsigned int>(
+        A - (B * static_cast<int>(std::floor(static_cast<double>(A) / B))));
+}
 
 /**
  * Gets the other indicies on a certain row of a 3x3 grid.
@@ -171,8 +175,14 @@ constexpr unsigned int negative_mod(const int A, const int B);
  *
  * @relates Board
  */
-constexpr void horizontal_others(const unsigned int INDEX, unsigned int &other1,
-                                 unsigned int &other2);
+inline constexpr void horizontal_others(const unsigned int INDEX,
+                                        unsigned int &other1,
+                                        unsigned int &other2) {
+    const unsigned int ROW_LEN = 3;
+
+    other1 = negative_mod(static_cast<int>(INDEX - 1u), ROW_LEN);
+    other2 = (INDEX + 1u) % ROW_LEN;
+}
 
 /**
  * Gets the other indicies on a certain column of a 3x3 grid.
@@ -190,8 +200,14 @@ constexpr void horizontal_others(const unsigned int INDEX, unsigned int &other1,
  *
  * @relates Board
  */
-constexpr void vertical_others(const unsigned int INDEX, unsigned int &other1,
-                               unsigned int &other2);
+inline constexpr void vertical_others(const unsigned int INDEX,
+                                      unsigned int &other1,
+                                      unsigned int &other2) {
+    const unsigned int ROW_LEN = 3;
+
+    other1 = negative_mod(static_cast<int>(INDEX - ROW_LEN), CELL_COUNT);
+    other2 = (INDEX + ROW_LEN) % CELL_COUNT;
+}
 
 /**
  * Gets the other indicies of a diagonal line on a 3x3 grid.
@@ -211,9 +227,12 @@ constexpr void vertical_others(const unsigned int INDEX, unsigned int &other1,
  *
  * @relates Board
  */
-constexpr void diagonal_fours_others(const unsigned int INDEX,
-                                     unsigned int &other1,
-                                     unsigned int &other2);
+inline constexpr void diagonal_fours_others(const unsigned int INDEX,
+                                            unsigned int &other1,
+                                            unsigned int &other2) {
+    other1 = negative_mod(static_cast<int>(INDEX - 4u), CELL_COUNT + 3u);
+    other2 = (INDEX + 4u) % CELL_COUNT + 3u;
+}
 
 /**
  * Gets the other indicies of a diagonal line on a 3x3 grid.
@@ -234,7 +253,11 @@ constexpr void diagonal_fours_others(const unsigned int INDEX,
  *
  * @relates Board
  */
-constexpr void diagonal_twos_others(const unsigned int INDEX,
-                                    unsigned int &other1, unsigned int &other2);
+inline constexpr void diagonal_twos_others(const unsigned int INDEX,
+                                           unsigned int &other1,
+                                           unsigned int &other2) {
+    other1 = negative_mod(static_cast<int>(INDEX - 2u), CELL_COUNT + 1u);
+    other2 = (INDEX + 2u) % CELL_COUNT + 1u;
+}
 
 #endif // !BOARD

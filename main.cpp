@@ -10,7 +10,7 @@
 #include <optional>
 
 int main() {
-    std::shared_ptr<NcHandler> ncHandler(new NcHandler());
+    std::shared_ptr<NcHandlerI> ncHandler(new NcHandler());
 
     PrimaryBoard pBoard(ncHandler);
     pBoard.draw();
