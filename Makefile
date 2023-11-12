@@ -1,6 +1,13 @@
 TARGET = FINAL
-SRC_FILES = main.cpp lib/Shared.cpp lib/board/Board.cpp lib/board/LeafBoard.cpp lib/board/PrimaryBoard.cpp lib/GraphicalBoard.cpp lib/NcHandler.cpp lib/wrappers/NcPlaneWrapper.cpp lib/dummies/GraphicalBoardDummy.cpp lib/dummies/NcHandlerDummy.cpp lib/dummies/NcPlaneWrapperDummy.cpp
+TEST_TARGET = TEST
 DOCS_DIR = docs
+
+LIB_FILES = lib/Shared.cpp lib/board/Board.cpp lib/board/LeafBoard.cpp lib/board/PrimaryBoard.cpp lib/GraphicalBoard.cpp lib/NcHandler.cpp lib/wrappers/NcPlaneWrapper.cpp
+DUMMY_FILES = lib/dummies/GraphicalBoardDummy.cpp lib/dummies/NcHandlerDummy.cpp lib/dummies/NcPlaneWrapperDummy.cpp
+TEST_FILES = lib/board/tests/BoardTests.cpp lib/board/tests/BoardHelperTests.cpp
+
+SRC_FILES = main.cpp $(LIB_FILES)
+TEST_SRC_FILES = test.cpp $(LIB_FILES) $(DUMMY_FILES) $(TEST_FILES)
 
 # I like this linker
 ifneq ("$(shell which mold)","")
@@ -22,6 +29,7 @@ CXXFLAGS_DEBUG = -g
 CXXVERSION = -std=c++17
 
 OBJECTS = $(SRC_FILES:.cpp=.o)
+TEST_OBJECTS = $(TEST_SRC_FILES:.cpp=.o)
 
 ifeq ($(shell echo "Windows"), "Windows")
 	TARGET := $(TARGET).exe
@@ -32,23 +40,28 @@ else
 	Q="
 endif
 
-all: $(TARGET) docs
+all: $(TARGET) $(TEST_TARGET) docs
 
 $(TARGET): $(OBJECTS)
-	@echo Building $@
+	$(CXX) $(CXXFLAGS) $(CXXVERSION) $(CXXFLAGS_DEBUG) -o $@ $^
+
+$(TEST_TARGET): $(TEST_OBJECTS)
 	$(CXX) $(CXXFLAGS) $(CXXVERSION) $(CXXFLAGS_DEBUG) -o $@ $^
 
 .cpp.o:
 	$(CXX) $(CXXFLAGS) $(CXXVERSION) $(CXXFLAGS_DEBUG) -o $@ -c $<
 
 clean:
-	$(DEL) -r $(TARGET) $(OBJECTS) $(DOCS_DIR) Makefile.bak
+	$(DEL) -r $(TARGET) $(OBJECTS) $(TEST_OBJECTS) $(DOCS_DIR) Makefile.bak
 
 depend:
 	@sed -i.bak '/^# DEPENDENCIES/,$$d' Makefile
 	@$(DEL) sed*
 	@echo $(Q)# DEPENDENCIES$(Q) >> Makefile
 	@$(CXX) -MM $(SRC_FILES) >> Makefile
+
+test: $(TEST_TARGET)
+	@./$(TEST_TARGET)
 
 docs: Doxyfile README.md
 	@$(DOXYGEN)
