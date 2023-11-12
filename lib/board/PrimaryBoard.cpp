@@ -73,13 +73,15 @@ PrimaryBoard::select_board(const unsigned int INDEX) {
 }
 
 ncplane_options def_primary_nopts(std::shared_ptr<NcHandlerI> ncHandler) {
-    ncplane *std = ncHandler->get_stdplane();
+    NcPlaneWrapperI *stdPlane = ncHandler->get_stdplane_wrapper();
 
     const unsigned int ROWS = (3u * 11u) + 2u;
     const unsigned int COLS = (3u * 20u) + 2u;
 
-    unsigned int std_rows, std_cols;
-    ncplane_dim_yx(std, &std_rows, &std_cols);
+    unsigned int std_rows{0}, std_cols{0};
+    stdPlane->dim_yx(&std_rows, &std_cols);
+
+    delete stdPlane;
 
     unsigned int std_center_y, std_center_x;
     std_center_y = std_rows / 2u;

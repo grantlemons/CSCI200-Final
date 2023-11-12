@@ -11,6 +11,8 @@
 
 class GraphicalBoardI {
 public:
+    virtual ~GraphicalBoardI() = default;
+
     /**
      * Draws a Tic-Tac-Toe board on the primary plane.
      *

@@ -13,7 +13,7 @@ GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandlerI> ncHandler,
                                const int Y, const int X,
                                const unsigned int ROWS, const unsigned int COLS)
     : _primaryPlane(new NcPlaneWrapper(ncHandler, Y, X, ROWS, COLS)),
-      _rows(ROWS + 1), _cols(COLS + 1) {
+      _rows{ROWS + 1}, _cols{COLS + 1} {
     init_child_planes();
 }
 
@@ -24,13 +24,10 @@ GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandlerI> ncHandler,
                          new NcPlaneWrapper(ncHandler, NOPTS))) {}
 
 GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandlerI> ncHandler,
-                               std::unique_ptr<NcPlaneWrapperI> plane) {
-    _rows = plane->get_rows() + 1;
-    _cols = plane->get_cols() + 1;
-
-    _ncHandler = ncHandler;
-    _primaryPlane = std::move(plane);
-
+                               std::unique_ptr<NcPlaneWrapperI> plane)
+    : _ncHandler{ncHandler}, _primaryPlane{std::move(plane)},
+      _rows{_primaryPlane->get_rows() + 1},
+      _cols{_primaryPlane->get_cols() + 1} {
     init_child_planes();
 }
 

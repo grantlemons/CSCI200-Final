@@ -15,17 +15,20 @@ NcPlaneWrapper::NcPlaneWrapper(std::shared_ptr<NcHandlerI> ncHandler,
 NcPlaneWrapper::NcPlaneWrapper(std::shared_ptr<NcHandlerI> ncHandler,
                                const ncplane_options NOPTS)
     : NcPlaneWrapper::NcPlaneWrapper(
-          ncHandler, ncplane_create(ncHandler->get_stdplane(), &NOPTS)) {}
-NcPlaneWrapper::NcPlaneWrapper(std::shared_ptr<NcHandlerI> ncHandler,
-                               ncplane *const PLANE)
-    : _ncHandler(ncHandler), _pPlane(PLANE) {}
-NcPlaneWrapper::NcPlaneWrapper(std::shared_ptr<NcHandlerI> ncHandler,
-                               NcPlaneWrapper &other)
-    : _ncHandler(ncHandler), _pPlane(ncplane_dup(other._pPlane, nullptr)) {}
+          ncplane_create(ncHandler->get_stdplane(), &NOPTS)) {
+    _isStdPlane = true;
+}
+NcPlaneWrapper::NcPlaneWrapper(ncplane *const PLANE)
+    : _pPlane{PLANE}, _isStdPlane{false} {}
+NcPlaneWrapper::NcPlaneWrapper(NcPlaneWrapper &other)
+    : _pPlane{ncplane_dup(other._pPlane, nullptr)},
+      _isStdPlane{other._isStdPlane} {}
 
 NcPlaneWrapper::~NcPlaneWrapper() {
-    ncplane_erase(_pPlane);
-    free(_pPlane);
+    if (!_isStdPlane) {
+        ncplane_erase(_pPlane);
+        free(_pPlane);
+    }
 }
 
 void NcPlaneWrapper::dim_yx(unsigned int *const ROWS,
@@ -33,32 +36,14 @@ void NcPlaneWrapper::dim_yx(unsigned int *const ROWS,
     ncplane_dim_yx(_pPlane, ROWS, COLS);
 }
 unsigned int NcPlaneWrapper::get_rows() const {
-    unsigned int *const ROWS = new unsigned int(0);
-    unsigned int *const COLS = new unsigned int(0);
-
-    dim_yx(ROWS, COLS);
-
-    unsigned int val = *ROWS;
-    delete ROWS;
-    delete COLS;
-
-    return val;
+    return ncplane_dim_y(_pPlane);
 }
 unsigned int NcPlaneWrapper::get_cols() const {
-    unsigned int *const ROWS = new unsigned int(0);
-    unsigned int *const COLS = new unsigned int(0);
-
-    dim_yx(ROWS, COLS);
-
-    unsigned int val = *COLS;
-    delete ROWS;
-    delete COLS;
-
-    return val;
+    return ncplane_dim_x(_pPlane);
 }
 
 NcPlaneWrapperI *NcPlaneWrapper::create_child(const ncplane_options *nopts) {
-    return new NcPlaneWrapper(_ncHandler, ncplane_create(_pPlane, nopts));
+    return new NcPlaneWrapper(ncplane_create(_pPlane, nopts));
 }
 
 int NcPlaneWrapper::load_nccell(nccell *c, const char *gcluster) {

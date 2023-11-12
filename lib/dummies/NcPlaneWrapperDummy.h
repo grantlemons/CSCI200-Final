@@ -1,5 +1,5 @@
-#ifndef NCPLANE_WRAPPER
-#define NCPLANE_WRAPPER
+#ifndef NCPLANE_WRAPPER_DUMMY
+#define NCPLANE_WRAPPER_DUMMY
 
 #include "lib/interfaces/NcHandlerI.h"
 #include "lib/interfaces/NcPlaneWrapperI.h"
@@ -10,8 +10,8 @@
 
 class NcPlaneWrapper : public NcPlaneWrapperI {
 private:
+    std::shared_ptr<NcHandlerI> _ncHandler;
     ncplane *const _pPlane;
-    bool _isStdPlane;
 
 public:
     NcPlaneWrapper(std::shared_ptr<NcHandlerI> ncHandler, const int Y,
@@ -19,9 +19,9 @@ public:
                    const unsigned int COLS);
     NcPlaneWrapper(std::shared_ptr<NcHandlerI> ncHandler,
                    const ncplane_options NOPTS);
-    NcPlaneWrapper(ncplane *const PLANE);
-    NcPlaneWrapper(NcPlaneWrapper &other);
-    NcPlaneWrapper();
+    NcPlaneWrapper(std::shared_ptr<NcHandlerI> ncHandler, ncplane *const PLANE);
+    NcPlaneWrapper(std::shared_ptr<NcHandlerI> ncHandler,
+                   NcPlaneWrapper &other);
     ~NcPlaneWrapper();
 
     void dim_yx(unsigned int *const ROWS,

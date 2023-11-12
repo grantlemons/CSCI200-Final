@@ -4,8 +4,22 @@
 #include <cstdint>
 #include <notcurses/notcurses.h>
 
+// Forward declaration to avoid recursive includes
+class NcPlaneWrapperI;
+
 class NcHandlerI {
 public:
+    virtual ~NcHandlerI() = default;
+
+    /**
+     * Getter for notcurses stdplane.
+     * Should not be used explicitly.
+     *
+     * @return The stdplane for the notcurses instance.
+     */
+    virtual ncplane *get_stdplane() const = 0;
+    virtual NcPlaneWrapperI *get_stdplane_wrapper() const = 0;
+
     /*
      * Gets default background color channel from the stdplane.
      *
@@ -26,13 +40,6 @@ public:
      * @return The combined default foreground and background channels.
      */
     virtual uint64_t get_default_channels() const = 0;
-
-    /**
-     * Getter for notcurses stdplane.
-     *
-     * @return The stdplane for the notcurses instance.
-     */
-    virtual ncplane *get_stdplane() const = 0;
 
     /**
      * Draws all actions on the screen.

@@ -4,12 +4,13 @@
 #include "lib/interfaces/NcHandlerI.h"
 
 #include <cstdint>
-#include <cstdlib>
 #include <memory>
 #include <notcurses/notcurses.h>
 
 class NcPlaneWrapperI {
 public:
+    virtual ~NcPlaneWrapperI() = default;
+
     virtual void dim_yx(unsigned int *const ROWS,
                         unsigned int *const COLS) const = 0;
     virtual unsigned int get_rows() const = 0;

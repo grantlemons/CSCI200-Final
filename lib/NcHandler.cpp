@@ -1,5 +1,8 @@
 #include "lib/NcHandler.h"
 
+#include "interfaces/NcPlaneWrapperI.h"
+#include "wrappers/NcPlaneWrapper.h"
+
 #include <bits/types/FILE.h>
 #include <clocale>
 #include <cstdint>
@@ -35,13 +38,13 @@ NcHandler::~NcHandler() {
 }
 
 uint32_t NcHandler::get_default_bg_channel() const {
-    return ncplane_bchannel(get_stdplane());
+    return ncplane_bchannel(notcurses_stdplane(nc));
 }
 uint32_t NcHandler::get_default_fg_channel() const {
-    return ncplane_fchannel(get_stdplane());
+    return ncplane_fchannel(notcurses_stdplane(nc));
 }
 uint64_t NcHandler::get_default_channels() const {
-    return ncplane_channels(get_stdplane());
+    return ncplane_channels(notcurses_stdplane(nc));
 }
 
 uint64_t NcHandler::combine_channels(const uint32_t BG_CHANNEL,
@@ -52,6 +55,10 @@ uint64_t NcHandler::combine_channels(const uint32_t BG_CHANNEL,
 
 ncplane *NcHandler::get_stdplane() const {
     return notcurses_stdplane(nc);
+}
+
+NcPlaneWrapperI *NcHandler::get_stdplane_wrapper() const {
+    return new NcPlaneWrapper(notcurses_stdplane(nc));
 }
 
 void NcHandler::render() {
