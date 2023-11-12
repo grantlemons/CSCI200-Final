@@ -8,6 +8,8 @@
 
 class NcHandlerDummy : public NcHandlerI {
 public:
+    NcHandlerDummy();
+
     NcHandlerDummy(NcHandlerDummy &other) = delete;
     void operator=(const NcHandlerDummy &) = delete;
 
