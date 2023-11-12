@@ -11,10 +11,9 @@ class NcPlaneWrapperI {
 public:
     virtual ~NcPlaneWrapperI() = default;
 
-    virtual void dim_yx(unsigned int *const ROWS,
-                        unsigned int *const COLS) const = 0;
-    virtual unsigned int get_rows() const = 0;
-    virtual unsigned int get_cols() const = 0;
+    virtual void dim_yx(int &ROWS, int &COLS) const = 0;
+    virtual int get_rows() const = 0;
+    virtual int get_cols() const = 0;
 
     virtual NcPlaneWrapperI *create_child(const ncplane_options *nopts) = 0;
 

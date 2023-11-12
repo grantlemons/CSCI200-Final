@@ -21,67 +21,43 @@ TEST_SUITE("Board CheckWin Tests") {
             board.set_cell_owner(0, X);
             board.set_cell_owner(1, X);
 
+            REQUIRE_EQ(board.get_cell_owner(2), None);
             CHECK_FALSE(board.check_win(1, X));
-
-            // Reset state
-            board.set_cell_owner(0, None);
-            board.set_cell_owner(1, None);
         }
         SUBCASE("No Win Row 2") {
             board.set_cell_owner(3, X);
             board.set_cell_owner(4, X);
 
+            REQUIRE_EQ(board.get_cell_owner(5), None);
             CHECK_FALSE(board.check_win(4, X));
-
-            // Reset state
-            board.set_cell_owner(3, None);
-            board.set_cell_owner(4, None);
         }
         SUBCASE("No Win Row 3") {
             board.set_cell_owner(6, X);
             board.set_cell_owner(7, X);
 
+            REQUIRE_EQ(board.get_cell_owner(8), None);
             CHECK_FALSE(board.check_win(7, X));
-
-            // Reset state
-            board.set_cell_owner(6, None);
-            board.set_cell_owner(7, None);
         }
         SUBCASE("Win Row 1") {
             board.set_cell_owner(0, X);
             board.set_cell_owner(1, X);
             board.set_cell_owner(2, X);
 
-            CHECK(board.check_win(3, X));
-
-            // Reset state
-            board.set_cell_owner(0, None);
-            board.set_cell_owner(1, None);
-            board.set_cell_owner(2, None);
+            CHECK(board.check_win(2, X));
         }
         SUBCASE("Win Row 2") {
             board.set_cell_owner(3, X);
             board.set_cell_owner(4, X);
             board.set_cell_owner(5, X);
 
-            CHECK(board.check_win(6, X));
-
-            // Reset state
-            board.set_cell_owner(3, None);
-            board.set_cell_owner(4, None);
-            board.set_cell_owner(5, None);
+            CHECK(board.check_win(5, X));
         }
-        SUBCASE("No Win Row 3") {
+        SUBCASE("Win Row 3") {
             board.set_cell_owner(6, X);
             board.set_cell_owner(7, X);
             board.set_cell_owner(8, X);
 
             CHECK(board.check_win(8, X));
-
-            // Reset state
-            board.set_cell_owner(6, None);
-            board.set_cell_owner(7, None);
-            board.set_cell_owner(8, None);
         }
     }
 
@@ -92,31 +68,22 @@ TEST_SUITE("Board CheckWin Tests") {
             board.set_cell_owner(0, X);
             board.set_cell_owner(3, X);
 
+            REQUIRE_EQ(board.get_cell_owner(6), None);
             CHECK_FALSE(board.check_win(3, X));
-
-            // Reset state
-            board.set_cell_owner(0, None);
-            board.set_cell_owner(3, None);
         }
         SUBCASE("No Win Column 2") {
             board.set_cell_owner(1, X);
             board.set_cell_owner(4, X);
 
+            REQUIRE_EQ(board.get_cell_owner(7), None);
             CHECK_FALSE(board.check_win(4, X));
-
-            // Reset state
-            board.set_cell_owner(1, None);
-            board.set_cell_owner(4, None);
         }
         SUBCASE("No Win Column 3") {
             board.set_cell_owner(2, X);
             board.set_cell_owner(5, X);
 
+            REQUIRE_EQ(board.get_cell_owner(8), None);
             CHECK_FALSE(board.check_win(5, X));
-
-            // Reset state
-            board.set_cell_owner(2, None);
-            board.set_cell_owner(5, None);
         }
         SUBCASE("Win Column 1") {
             board.set_cell_owner(0, X);
@@ -124,11 +91,6 @@ TEST_SUITE("Board CheckWin Tests") {
             board.set_cell_owner(6, X);
 
             CHECK(board.check_win(6, X));
-
-            // Reset state
-            board.set_cell_owner(0, None);
-            board.set_cell_owner(3, None);
-            board.set_cell_owner(6, None);
         }
         SUBCASE("Win Column 2") {
             board.set_cell_owner(1, X);
@@ -136,23 +98,13 @@ TEST_SUITE("Board CheckWin Tests") {
             board.set_cell_owner(7, X);
 
             CHECK(board.check_win(7, X));
-
-            // Reset state
-            board.set_cell_owner(1, None);
-            board.set_cell_owner(4, None);
-            board.set_cell_owner(7, None);
         }
-        SUBCASE("No Win Column 3") {
+        SUBCASE("Win Column 3") {
             board.set_cell_owner(2, X);
             board.set_cell_owner(5, X);
             board.set_cell_owner(8, X);
 
             CHECK(board.check_win(8, X));
-
-            // Reset state
-            board.set_cell_owner(2, None);
-            board.set_cell_owner(5, None);
-            board.set_cell_owner(8, None);
         }
     }
 
@@ -163,10 +115,8 @@ TEST_SUITE("Board CheckWin Tests") {
             board.set_cell_owner(2, X);
             board.set_cell_owner(6, X);
 
+            REQUIRE_EQ(board.get_cell_owner(4), None);
             CHECK_FALSE(board.check_win(6, X));
-
-            board.set_cell_owner(2, None);
-            board.set_cell_owner(6, None);
         }
         SUBCASE("Win Twos") {
             board.set_cell_owner(2, X);
@@ -174,20 +124,14 @@ TEST_SUITE("Board CheckWin Tests") {
             board.set_cell_owner(4, X);
 
             CHECK(board.check_win(4, X));
-
-            board.set_cell_owner(2, None);
-            board.set_cell_owner(6, None);
-            board.set_cell_owner(4, None);
         }
 
         SUBCASE("No Win Fours") {
             board.set_cell_owner(0, X);
             board.set_cell_owner(8, X);
 
+            REQUIRE_EQ(board.get_cell_owner(4), None);
             CHECK_FALSE(board.check_win(8, X));
-
-            board.set_cell_owner(0, None);
-            board.set_cell_owner(8, None);
         }
         SUBCASE("Win Fours") {
             board.set_cell_owner(0, X);
@@ -195,10 +139,6 @@ TEST_SUITE("Board CheckWin Tests") {
             board.set_cell_owner(4, X);
 
             CHECK_FALSE(board.check_win(4, X));
-
-            board.set_cell_owner(0, None);
-            board.set_cell_owner(8, None);
-            board.set_cell_owner(4, None);
         }
     }
 }

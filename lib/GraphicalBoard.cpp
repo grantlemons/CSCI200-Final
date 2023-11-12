@@ -1,5 +1,7 @@
 #include "lib/GraphicalBoard.h"
 
+#include "gsl/assert"
+#include "gsl/narrow"
 #include "lib/NcHandler.h"
 #include "lib/interfaces/NcPlaneWrapperI.h"
 #include "lib/wrappers/NcPlaneWrapper.h"
@@ -10,9 +12,11 @@
 #include <unistd.h>
 
 GraphicalBoard::GraphicalBoard(NcHandlerI *ncHandler, const int Y, const int X,
-                               const unsigned int ROWS, const unsigned int COLS)
+                               const int ROWS, const int COLS)
     : _primaryPlane(new NcPlaneWrapper(ncHandler, Y, X, ROWS, COLS)),
       _rows{ROWS + 1}, _cols{COLS + 1} {
+    Expects(ROWS >= 0 && COLS >= 0);
+
     init_child_planes();
 }
 
@@ -31,15 +35,17 @@ GraphicalBoard::GraphicalBoard(NcHandlerI *ncHandler,
 }
 
 void GraphicalBoard::init_child_planes() {
-    const unsigned int ROWS_PER_BCELL = (_rows - 2) / 3;
-    const unsigned int COLS_PER_BCELL = (_cols - 2) / 3;
+    const unsigned int ROWS_PER_BCELL =
+        (gsl::narrow<unsigned int>(_rows) - 2u) / 3u;
+    const unsigned int COLS_PER_BCELL =
+        (gsl::narrow<unsigned int>(_cols) - 2u) / 3u;
 
     for (unsigned int i = 0; i < 9; i++) {
-        unsigned int column = i % 3u;
-        unsigned int row = (i - column) / 3u;
+        unsigned int column = i % 3;
+        unsigned int row = (i - column) / 3;
 
-        int newY = static_cast<int>(1u + (ROWS_PER_BCELL * row));
-        int newX = static_cast<int>(1u + (COLS_PER_BCELL * column));
+        int newY = 1 + gsl::narrow<int>((ROWS_PER_BCELL * row));
+        int newX = 1 + gsl::narrow<int>((COLS_PER_BCELL * column));
 
         ncplane_options child_nopts =
             create_nopts(newY, newX, ROWS_PER_BCELL - 1, COLS_PER_BCELL - 1);
@@ -52,18 +58,20 @@ void GraphicalBoard::init_child_planes() {
 void GraphicalBoard::draw_board(
     const std::array<const char *, SYMBOL_COUNT> SYMBOLS,
     const uint64_t CELL_CHANNELS) {
-    const unsigned int ROWS_PER_BCELL = (_rows - 2) / 3u;
-    const unsigned int COLS_PER_BCELL = (_cols - 2) / 3u;
+    const int ROWS_PER_BCELL = (gsl::narrow<int>(_rows) - 2) / 3;
+    const int COLS_PER_BCELL = (gsl::narrow<int>(_cols) - 2) / 3;
 
     // calculate lines positions and lengths
-    const int H_IDX_1 = static_cast<int>(ROWS_PER_BCELL);
-    const int H_IDX_2 = static_cast<int>(2u * ROWS_PER_BCELL);
+    const int H_IDX_1 = ROWS_PER_BCELL;
+    const int H_IDX_2 = 2 * ROWS_PER_BCELL;
 
-    const int V_IDX_1 = static_cast<int>(COLS_PER_BCELL);
-    const int V_IDX_2 = static_cast<int>(2u * COLS_PER_BCELL);
+    const int V_IDX_1 = COLS_PER_BCELL;
+    const int V_IDX_2 = 2 * COLS_PER_BCELL;
 
-    const unsigned int H_LINE_LEN = (3u * COLS_PER_BCELL) + 1u;
-    const unsigned int V_LINE_LEN = (3u * ROWS_PER_BCELL) + 1u;
+    const unsigned int H_LINE_LEN =
+        gsl::narrow<unsigned int>((3 * COLS_PER_BCELL) + 1);
+    const unsigned int V_LINE_LEN =
+        gsl::narrow<unsigned int>((3 * ROWS_PER_BCELL) + 1);
 
     // define cells
     nccell HORI_CELL, VERT_CELL, JUNC_CELL;
@@ -101,8 +109,11 @@ void GraphicalBoard::draw_board(
     _ncHandler->render();
 }
 
-void GraphicalBoard::draw_x(const unsigned int INDEX) {
-    NcPlaneWrapperI *const PLANE = _childPlanes.at(INDEX);
+void GraphicalBoard::draw_x(const int INDEX) {
+    Expects(INDEX >= 0 && INDEX <= 9);
+
+    NcPlaneWrapperI *const PLANE =
+        _childPlanes.at(gsl::narrow<unsigned int>(INDEX));
     const nccell red = NCCELL_INITIALIZER(
         '\0', 0,
         NcHandler::combine_channels(NcHandler::RED_CHANNEL,
@@ -115,8 +126,11 @@ void GraphicalBoard::draw_x(const unsigned int INDEX) {
     _ncHandler->render();
 }
 
-void GraphicalBoard::draw_o(const unsigned int INDEX) {
-    NcPlaneWrapperI *const PLANE = _childPlanes.at(INDEX);
+void GraphicalBoard::draw_o(const int INDEX) {
+    Expects(INDEX >= 0 && INDEX <= 9);
+
+    NcPlaneWrapperI *const PLANE =
+        _childPlanes.at(gsl::narrow<unsigned int>(INDEX));
     const nccell blue = NCCELL_INITIALIZER(
         '\0', 0,
         NcHandler::combine_channels(NcHandler::BLUE_CHANNEL,

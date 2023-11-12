@@ -1,6 +1,8 @@
 #ifndef BOARD
 #define BOARD
 
+#include "gsl/assert"
+#include "gsl/narrow"
 #include "lib/GraphicalBoard.h"
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
@@ -97,8 +99,7 @@ public:
      *
      * @see get_cell_owner()
      */
-    virtual bool check_win(const unsigned int INDEX,
-                           const CellOwner OWNER) const;
+    virtual bool check_win(const int INDEX, const CellOwner OWNER) const;
 
     /**
      * Gets the owner of a given index.
@@ -106,7 +107,7 @@ public:
      * @param INDEX the index of the cell to check ownership.
      * @return The owner of the cell (Can be NONE variant).
      */
-    virtual CellOwner get_cell_owner(const unsigned int INDEX) const = 0;
+    virtual CellOwner get_cell_owner(const int INDEX) const = 0;
 
     /**
      * Uses the component GraphicalBoard to draw a Tic-Tac-Toe board.
@@ -127,7 +128,7 @@ public:
      * @see GraphicalBoard::draw_x()
      * @see GraphicalBoard::draw_o()
      */
-    virtual void mark_cell(const unsigned int INDEX, const CellOwner OWNER);
+    virtual void mark_cell(const int INDEX, const CellOwner OWNER);
 
     /**
      * Defines the way Board types are outputted to streams.
@@ -154,9 +155,8 @@ public:
  *
  * @relates Board
  */
-inline constexpr unsigned int negative_mod(const int A, const int B) {
-    return static_cast<unsigned int>(
-        A - (B * static_cast<int>(std::floor(static_cast<double>(A) / B))));
+inline constexpr int negative_mod(const int A, const int B) {
+    return A - (B * gsl::narrow<int>(std::floor(gsl::narrow<double>(A) / B)));
 }
 
 /**
@@ -175,13 +175,18 @@ inline constexpr unsigned int negative_mod(const int A, const int B) {
  *
  * @relates Board
  */
-inline constexpr void horizontal_others(const unsigned int INDEX,
-                                        unsigned int &other1,
-                                        unsigned int &other2) {
-    const unsigned int ROW_LEN = 3;
+inline constexpr void horizontal_others(const int INDEX, int &other1,
+                                        int &other2) {
+    Expects(INDEX >= 0 && INDEX <= 9);
 
-    other1 = negative_mod(static_cast<int>(INDEX - 1u), ROW_LEN);
-    other2 = (INDEX + 1u) % ROW_LEN;
+    const int ROW_LEN = 3;
+    other1 = negative_mod(INDEX - 1, ROW_LEN) + ROW_LEN;
+    other2 = negative_mod(INDEX + 1, ROW_LEN) + ROW_LEN;
+
+    Expects(other1 != other2);
+    Expects(other1 != INDEX && other2 != INDEX);
+    Expects(other1 >= 0 && other1 <= 9);
+    Expects(other2 >= 0 && other2 <= 9);
 }
 
 /**
@@ -200,13 +205,18 @@ inline constexpr void horizontal_others(const unsigned int INDEX,
  *
  * @relates Board
  */
-inline constexpr void vertical_others(const unsigned int INDEX,
-                                      unsigned int &other1,
-                                      unsigned int &other2) {
-    const unsigned int ROW_LEN = 3;
+inline constexpr void vertical_others(const int INDEX, int &other1,
+                                      int &other2) {
+    Expects(INDEX >= 0 && INDEX <= 9);
 
-    other1 = negative_mod(static_cast<int>(INDEX - ROW_LEN), CELL_COUNT);
-    other2 = (INDEX + ROW_LEN) % CELL_COUNT;
+    const int ROW_LEN = 3;
+    other1 = negative_mod(INDEX - ROW_LEN, CELL_COUNT);
+    other2 = negative_mod(INDEX + ROW_LEN, CELL_COUNT);
+
+    Expects(other1 != other2);
+    Expects(other1 != INDEX && other2 != INDEX);
+    Expects(other1 >= 0 && other1 <= 9);
+    Expects(other2 >= 0 && other2 <= 9);
 }
 
 /**
@@ -227,11 +237,17 @@ inline constexpr void vertical_others(const unsigned int INDEX,
  *
  * @relates Board
  */
-inline constexpr void diagonal_fours_others(const unsigned int INDEX,
-                                            unsigned int &other1,
-                                            unsigned int &other2) {
-    other1 = negative_mod(static_cast<int>(INDEX - 4u), CELL_COUNT + 3u);
-    other2 = (INDEX + 4u) % CELL_COUNT + 3u;
+inline constexpr void diagonal_fours_others(const int INDEX, int &other1,
+                                            int &other2) {
+    Expects(INDEX == 0 || INDEX == 4 || INDEX == 8);
+
+    other1 = negative_mod(INDEX - 4, CELL_COUNT + 3);
+    other2 = negative_mod(INDEX + 4, CELL_COUNT + 3);
+
+    Expects(other1 != other2);
+    Expects(other1 != INDEX && other2 != INDEX);
+    Expects(other1 == 0 || other1 == 4 || other1 == 8);
+    Expects(other2 == 0 || other2 == 4 || other2 == 8);
 }
 
 /**
@@ -253,11 +269,17 @@ inline constexpr void diagonal_fours_others(const unsigned int INDEX,
  *
  * @relates Board
  */
-inline constexpr void diagonal_twos_others(const unsigned int INDEX,
-                                           unsigned int &other1,
-                                           unsigned int &other2) {
-    other1 = negative_mod(static_cast<int>(INDEX - 2u), CELL_COUNT + 1u);
-    other2 = (INDEX + 2u) % CELL_COUNT + 1u;
+inline constexpr void diagonal_twos_others(const int INDEX, int &other1,
+                                           int &other2) {
+    Expects(INDEX == 2 || INDEX == 4 || INDEX == 6);
+
+    other1 = negative_mod(INDEX, 6) + 2;
+    other2 = negative_mod(INDEX + 2, 6) + 2;
+
+    Expects(other1 != other2);
+    Expects(other1 != INDEX && other2 != INDEX);
+    Expects(other1 == 2 || other1 == 4 || other1 == 6);
+    Expects(other2 == 2 || other2 == 4 || other2 == 6);
 }
 
 #endif // !BOARD

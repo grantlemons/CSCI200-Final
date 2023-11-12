@@ -1,5 +1,7 @@
 #include "lib/wrappers/NcPlaneWrapper.h"
 
+#include "gsl/assert"
+#include "gsl/narrow"
 #include "lib/interfaces/NcHandlerI.h"
 
 #include <cstdint>
@@ -8,9 +10,12 @@
 #include <notcurses/notcurses.h>
 
 NcPlaneWrapper::NcPlaneWrapper(NcHandlerI *ncHandler, const int Y, const int X,
-                               const unsigned int ROWS, const unsigned int COLS)
-    : NcPlaneWrapper::NcPlaneWrapper(ncHandler,
-                                     create_nopts(Y, X, ROWS, COLS)) {}
+                               const int ROWS, const int COLS)
+    : NcPlaneWrapper::NcPlaneWrapper(
+          ncHandler, create_nopts(Y, X, gsl::narrow<unsigned int>(ROWS),
+                                  gsl::narrow<unsigned int>(COLS))) {
+    Expects(ROWS >= 0 && COLS >= 0);
+}
 NcPlaneWrapper::NcPlaneWrapper(NcHandlerI *ncHandler,
                                const ncplane_options NOPTS)
     : NcPlaneWrapper::NcPlaneWrapper(
@@ -27,15 +32,27 @@ NcPlaneWrapper::~NcPlaneWrapper() {
     }
 }
 
-void NcPlaneWrapper::dim_yx(unsigned int *const ROWS,
-                            unsigned int *const COLS) const {
-    ncplane_dim_yx(_pPlane, ROWS, COLS);
+void NcPlaneWrapper::dim_yx(int &ROWS, int &COLS) const {
+    unsigned int localRows, localCols;
+
+    ncplane_dim_yx(_pPlane, &localRows, &localCols);
+
+    ROWS = gsl::narrow<int>(localRows);
+    COLS = gsl::narrow<int>(localCols);
 }
-unsigned int NcPlaneWrapper::get_rows() const {
-    return ncplane_dim_y(_pPlane);
+int NcPlaneWrapper::get_rows() const {
+    int res = gsl::narrow<int>(ncplane_dim_y(_pPlane));
+
+    Ensures(res >= 0);
+
+    return res;
 }
-unsigned int NcPlaneWrapper::get_cols() const {
-    return ncplane_dim_x(_pPlane);
+int NcPlaneWrapper::get_cols() const {
+    int res = gsl::narrow<int>(ncplane_dim_x(_pPlane));
+
+    Ensures(res >= 0);
+
+    return res;
 }
 
 NcPlaneWrapperI *NcPlaneWrapper::create_child(const ncplane_options *nopts) {
@@ -52,10 +69,10 @@ int NcPlaneWrapper::set_base_cell(const nccell *c) {
 int NcPlaneWrapper::cursor_move_yx(const int X, const int Y) {
     return ncplane_cursor_move_yx(_pPlane, X, Y);
 }
-int NcPlaneWrapper::hline(const nccell *c, const unsigned LEN) {
+int NcPlaneWrapper::hline(const nccell *c, const unsigned int LEN) {
     return ncplane_hline(_pPlane, c, LEN);
 }
-int NcPlaneWrapper::vline(const nccell *c, const unsigned LEN) {
+int NcPlaneWrapper::vline(const nccell *c, const unsigned int LEN) {
     return ncplane_vline(_pPlane, c, LEN);
 }
 int NcPlaneWrapper::putc_yx(const int Y, const int X, const nccell *c) {

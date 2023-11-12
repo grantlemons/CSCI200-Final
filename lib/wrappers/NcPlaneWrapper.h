@@ -15,17 +15,16 @@ private:
 
 public:
     NcPlaneWrapper(NcHandlerI *ncHandler, const int Y, const int X,
-                   const unsigned int ROWS, const unsigned int COLS);
+                   const int ROWS, const int COLS);
     NcPlaneWrapper(ncplane *const PLANE, const bool isStdPlane);
     NcPlaneWrapper(NcHandlerI *ncHandler, const ncplane_options NOPTS);
     NcPlaneWrapper(NcPlaneWrapper &other);
     NcPlaneWrapper();
     ~NcPlaneWrapper();
 
-    void dim_yx(unsigned int *const ROWS,
-                unsigned int *const COLS) const override final;
-    unsigned int get_rows() const override final;
-    unsigned int get_cols() const override final;
+    void dim_yx(int &ROWS, int &COLS) const override final;
+    int get_rows() const override final;
+    int get_cols() const override final;
 
     NcPlaneWrapperI *
     create_child(const ncplane_options *const nopts) override final;
@@ -34,8 +33,8 @@ public:
     int set_base_cell(const nccell *const c) override final;
 
     int cursor_move_yx(const int X, const int Y) override final;
-    int hline(const nccell *const c, const unsigned LEN) override final;
-    int vline(const nccell *const c, const unsigned LEN) override final;
+    int hline(const nccell *const c, const unsigned int LEN) override final;
+    int vline(const nccell *const c, const unsigned int LEN) override final;
     int putc_yx(const int Y, const int X, const nccell *const c) override final;
     void erase() override final;
 };

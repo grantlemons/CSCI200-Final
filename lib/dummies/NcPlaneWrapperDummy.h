@@ -12,10 +12,9 @@ class NcPlaneWrapperDummy : public NcPlaneWrapperI {
 public:
     NcPlaneWrapperDummy();
 
-    void dim_yx(unsigned int *const ROWS,
-                unsigned int *const COLS) const override final;
-    unsigned int get_rows() const override final;
-    unsigned int get_cols() const override final;
+    void dim_yx(int &ROWS, int &COLS) const override final;
+    int get_rows() const override final;
+    int get_cols() const override final;
 
     NcPlaneWrapperI *
     create_child(const ncplane_options *const nopts) override final;

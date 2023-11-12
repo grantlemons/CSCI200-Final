@@ -1,5 +1,7 @@
 #include "lib/board/Board.h"
 
+#include "gsl/assert"
+#include "gsl/narrow"
 #include "lib/GraphicalBoard.h"
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
@@ -7,6 +9,7 @@
 
 #include <array>
 #include <cmath>
+#include <iostream>
 #include <memory>
 #include <notcurses/notcurses.h>
 #include <ostream>
@@ -32,9 +35,10 @@ std::shared_ptr<NcHandlerI> Board::getNcHandler() const {
     return _ncHandler;
 }
 
-bool Board::check_win(const unsigned int INDEX, const CellOwner OWNER) const {
-    unsigned int horizontal_other1, horizontal_other2, vertical_other1,
-        vertical_other2;
+bool Board::check_win(const int INDEX, const CellOwner OWNER) const {
+    Expects(INDEX >= 0 && INDEX <= 9);
+
+    int horizontal_other1, horizontal_other2, vertical_other1, vertical_other2;
 
     horizontal_others(INDEX, horizontal_other1, horizontal_other2);
     vertical_others(INDEX, vertical_other1, vertical_other2);
@@ -44,21 +48,23 @@ bool Board::check_win(const unsigned int INDEX, const CellOwner OWNER) const {
     // |0| |2|
     // | |4| |
     // |6| |8|
-    bool include_diagonals2 = true;
-    bool include_diagonals4 = true;
-    unsigned int diagonal_other1 = 0, diagonal_other2 = 0;
-    unsigned int diagonal_other3 = 0, diagonal_other4 = 0;
+    bool include_diagonals2{false};
+    bool include_diagonals4{false};
+
+    int diagonal_other1{0}, diagonal_other2{0};
+    int diagonal_other3{0}, diagonal_other4{0};
     if (INDEX == 4) {
+        include_diagonals2 = true;
+        include_diagonals4 = true;
         diagonal_twos_others(INDEX, diagonal_other1, diagonal_other2);
         diagonal_fours_others(INDEX, diagonal_other3, diagonal_other4);
     } else if (INDEX % 4 == 0) {
-        include_diagonals2 = false;
+        include_diagonals4 = true;
         diagonal_fours_others(INDEX, diagonal_other3, diagonal_other4);
     } else if (INDEX % 2 == 0) {
-        include_diagonals4 = false;
+        include_diagonals2 = true;
         diagonal_twos_others(INDEX, diagonal_other1, diagonal_other2);
     }
-
     const bool WON_HORI = get_cell_owner(horizontal_other1) == OWNER &&
                           get_cell_owner(horizontal_other2) == OWNER;
     const bool WON_VERT = get_cell_owner(vertical_other1) == OWNER &&
@@ -70,10 +76,16 @@ bool Board::check_win(const unsigned int INDEX, const CellOwner OWNER) const {
                                      get_cell_owner(diagonal_other3) == OWNER &&
                                      get_cell_owner(diagonal_other4) == OWNER;
 
-    return WON_HORI || WON_VERT || WON_DIAGONAL_TWOS || WON_DIAGONALS_FOURS;
+    bool res =
+        get_cell_owner(INDEX) == OWNER &&
+        (WON_HORI || WON_VERT || WON_DIAGONAL_TWOS || WON_DIAGONALS_FOURS);
+
+    return res;
 }
 
-void Board::mark_cell(const unsigned int INDEX, const CellOwner OWNER) {
+void Board::mark_cell(const int INDEX, const CellOwner OWNER) {
+    Expects(INDEX >= 0 && INDEX <= 9);
+
     switch (OWNER) {
     case X:
         _gBoard->draw_x(INDEX);
@@ -88,7 +100,7 @@ void Board::mark_cell(const unsigned int INDEX, const CellOwner OWNER) {
 
 std::ostream &operator<<(std::ostream &out, const Board &BRD) {
     out << "[";
-    for (unsigned int i = 0; i < CELL_COUNT - 1; i++) {
+    for (int i = 0; i < gsl::narrow<int>(CELL_COUNT - 1); i++) {
         out << BRD.get_cell_owner(i) << ", ";
 
         if ((i + 1) % 3 == 0) {

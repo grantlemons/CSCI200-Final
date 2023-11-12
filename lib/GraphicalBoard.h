@@ -41,7 +41,7 @@ private:
     std::array<NcPlaneWrapperI *, CELL_COUNT> _childPlanes;
 
     /** The height and width of the primary plane */
-    unsigned int _rows, _cols;
+    int _rows, _cols;
 
     void init_child_planes();
 
@@ -64,7 +64,7 @@ public:
      * @see _childPlanes
      */
     GraphicalBoard(NcHandlerI *ncHandler, const int Y, const int X,
-                   const unsigned int ROWS, const unsigned int COLS);
+                   const int ROWS, const int COLS);
 
     /**
      * A constructor that takes in an ncplane_options struct for a plane and
@@ -104,8 +104,8 @@ public:
 
     void draw_board(const std::array<const char *, SYMBOL_COUNT> SYMBOLS,
                     const uint64_t CELL_CHANNELS) override final;
-    void draw_x(const unsigned int INDEX) override final;
-    void draw_o(const unsigned int INDEX) override final;
+    void draw_x(const int INDEX) override final;
+    void draw_o(const int INDEX) override final;
     void fill_x() override final;
     void fill_o() override final;
     std::array<NcPlaneWrapperI *, CELL_COUNT> *

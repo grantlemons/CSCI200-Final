@@ -34,14 +34,14 @@ public:
      *
      * @param INDEX The index of the cell to mark.
      */
-    virtual void draw_x(const unsigned int INDEX) = 0;
+    virtual void draw_x(const int INDEX) = 0;
 
     /**
      * Marks a cell at an index as belonging to the O player.
      *
      * @param INDEX The index of the cell to mark.
      */
-    virtual void draw_o(const unsigned int INDEX) = 0;
+    virtual void draw_o(const int INDEX) = 0;
 
     /**
      * Marks all cells as belonging to the X player.

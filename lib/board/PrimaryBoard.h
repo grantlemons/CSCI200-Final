@@ -84,13 +84,12 @@ public:
      *
      * If the selected LeafBoard is already owned, the function returns nullopt.
      */
-    std::optional<LeafBoard *> select_board(const unsigned int INDEX);
+    std::optional<LeafBoard *> select_board(const int INDEX);
 
-    CellOwner get_cell_owner(const unsigned int INDEX) const override final;
+    CellOwner get_cell_owner(const int INDEX) const override final;
 
     void draw() override final;
-    void mark_cell(const unsigned int INDEX,
-                   const CellOwner OWNER) override final;
+    void mark_cell(const int INDEX, const CellOwner OWNER) override final;
 };
 
 // Helper functions

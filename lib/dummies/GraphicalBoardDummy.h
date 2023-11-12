@@ -15,8 +15,8 @@ public:
 
     void draw_board(const std::array<const char *, SYMBOL_COUNT> SYMBOLS,
                     const uint64_t CELL_CHANNELS) override final;
-    void draw_x(const unsigned int INDEX) override final;
-    void draw_o(const unsigned int INDEX) override final;
+    void draw_x(const int INDEX) override final;
+    void draw_o(const int INDEX) override final;
     void fill_x() override final;
     void fill_o() override final;
     virtual std::array<NcPlaneWrapperI *, CELL_COUNT> *

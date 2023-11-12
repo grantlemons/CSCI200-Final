@@ -1,4 +1,5 @@
 #include "doctest.h"
+#include "gsl/narrow"
 #include "lib/NcHandler.h"
 #include "lib/board/LeafBoard.h"
 #include "lib/dummies/NcPlaneWrapperDummy.h"
@@ -16,5 +17,19 @@ LeafBoard create_l_board() {
 }
 
 TEST_SUITE("Leaf Board Tests") {
-    TEST_CASE("Test Cells Init") {}
+    TEST_CASE("Test Cells Init") {
+        LeafBoard board = create_l_board();
+
+        for (int i = 0; i < gsl::narrow<int>(CELL_COUNT); i++) {
+            REQUIRE_EQ(board.get_cell_owner(i), None);
+        }
+    }
+    TEST_CASE("Test Setting Cells") {
+        LeafBoard board = create_l_board();
+
+        for (int i = 0; i < gsl::narrow<int>(CELL_COUNT); i++) {
+            REQUIRE_EQ(board.get_cell_owner(i), None);
+            CHECK_EQ(board.get_cell_owner(i), X);
+        }
+    }
 }
