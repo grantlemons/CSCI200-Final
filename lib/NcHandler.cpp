@@ -58,7 +58,7 @@ ncplane *NcHandler::get_stdplane() const {
 }
 
 NcPlaneWrapperI *NcHandler::get_stdplane_wrapper() const {
-    return new NcPlaneWrapper(notcurses_stdplane(nc));
+    return new NcPlaneWrapper(notcurses_stdplane(nc), true);
 }
 
 void NcHandler::render() {

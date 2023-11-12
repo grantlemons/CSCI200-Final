@@ -14,11 +14,9 @@ NcPlaneWrapper::NcPlaneWrapper(NcHandlerI *ncHandler, const int Y, const int X,
 NcPlaneWrapper::NcPlaneWrapper(NcHandlerI *ncHandler,
                                const ncplane_options NOPTS)
     : NcPlaneWrapper::NcPlaneWrapper(
-          ncplane_create(ncHandler->get_stdplane(), &NOPTS)) {
-    _isStdPlane = true;
-}
-NcPlaneWrapper::NcPlaneWrapper(ncplane *const PLANE)
-    : _pPlane{PLANE}, _isStdPlane{false} {}
+          ncplane_create(ncHandler->get_stdplane(), &NOPTS), false) {}
+NcPlaneWrapper::NcPlaneWrapper(ncplane *const PLANE, const bool isStdPlane)
+    : _pPlane{PLANE}, _isStdPlane{isStdPlane} {}
 NcPlaneWrapper::NcPlaneWrapper(NcPlaneWrapper &other)
     : _pPlane{ncplane_dup(other._pPlane, nullptr)},
       _isStdPlane{other._isStdPlane} {}
@@ -26,7 +24,6 @@ NcPlaneWrapper::NcPlaneWrapper(NcPlaneWrapper &other)
 NcPlaneWrapper::~NcPlaneWrapper() {
     if (!_isStdPlane) {
         ncplane_erase(_pPlane);
-        free(_pPlane);
     }
 }
 
@@ -42,7 +39,7 @@ unsigned int NcPlaneWrapper::get_cols() const {
 }
 
 NcPlaneWrapperI *NcPlaneWrapper::create_child(const ncplane_options *nopts) {
-    return new NcPlaneWrapper(ncplane_create(_pPlane, nopts));
+    return new NcPlaneWrapper(ncplane_create(_pPlane, nopts), false);
 }
 
 int NcPlaneWrapper::load_nccell(nccell *c, const char *gcluster) {
