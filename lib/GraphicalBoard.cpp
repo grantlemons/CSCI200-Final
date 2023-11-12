@@ -9,21 +9,20 @@
 #include <notcurses/notcurses.h>
 #include <unistd.h>
 
-GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandlerI> ncHandler,
-                               const int Y, const int X,
+GraphicalBoard::GraphicalBoard(NcHandlerI *ncHandler, const int Y, const int X,
                                const unsigned int ROWS, const unsigned int COLS)
     : _primaryPlane(new NcPlaneWrapper(ncHandler, Y, X, ROWS, COLS)),
       _rows{ROWS + 1}, _cols{COLS + 1} {
     init_child_planes();
 }
 
-GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandlerI> ncHandler,
+GraphicalBoard::GraphicalBoard(NcHandlerI *ncHandler,
                                const ncplane_options NOPTS)
     : GraphicalBoard::GraphicalBoard(
           ncHandler, std::unique_ptr<NcPlaneWrapperI>(
                          new NcPlaneWrapper(ncHandler, NOPTS))) {}
 
-GraphicalBoard::GraphicalBoard(std::shared_ptr<NcHandlerI> ncHandler,
+GraphicalBoard::GraphicalBoard(NcHandlerI *ncHandler,
                                std::unique_ptr<NcPlaneWrapperI> plane)
     : _ncHandler{ncHandler}, _primaryPlane{std::move(plane)},
       _rows{_primaryPlane->get_rows() + 1},

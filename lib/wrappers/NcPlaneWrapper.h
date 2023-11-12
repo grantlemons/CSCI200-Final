@@ -14,11 +14,9 @@ private:
     bool _isStdPlane;
 
 public:
-    NcPlaneWrapper(std::shared_ptr<NcHandlerI> ncHandler, const int Y,
-                   const int X, const unsigned int ROWS,
-                   const unsigned int COLS);
-    NcPlaneWrapper(std::shared_ptr<NcHandlerI> ncHandler,
-                   const ncplane_options NOPTS);
+    NcPlaneWrapper(NcHandlerI *ncHandler, const int Y, const int X,
+                   const unsigned int ROWS, const unsigned int COLS);
+    NcPlaneWrapper(NcHandlerI *ncHandler, const ncplane_options NOPTS);
     NcPlaneWrapper(ncplane *const PLANE);
     NcPlaneWrapper(NcPlaneWrapper &other);
     NcPlaneWrapper();

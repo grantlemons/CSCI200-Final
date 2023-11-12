@@ -9,19 +9,13 @@
 #include <notcurses/notcurses.h>
 
 class NcPlaneWrapper : public NcPlaneWrapperI {
-private:
-    std::shared_ptr<NcHandlerI> _ncHandler;
-    ncplane *const _pPlane;
-
 public:
-    NcPlaneWrapper(std::shared_ptr<NcHandlerI> ncHandler, const int Y,
-                   const int X, const unsigned int ROWS,
-                   const unsigned int COLS);
-    NcPlaneWrapper(std::shared_ptr<NcHandlerI> ncHandler,
-                   const ncplane_options NOPTS);
-    NcPlaneWrapper(std::shared_ptr<NcHandlerI> ncHandler, ncplane *const PLANE);
-    NcPlaneWrapper(std::shared_ptr<NcHandlerI> ncHandler,
-                   NcPlaneWrapper &other);
+    NcPlaneWrapper(NcHandlerI *ncHandler, const int Y, const int X,
+                   const unsigned int ROWS, const unsigned int COLS);
+    NcPlaneWrapper(NcHandlerI *ncHandler, const ncplane_options NOPTS);
+    NcPlaneWrapper(ncplane *const PLANE);
+    NcPlaneWrapper(NcPlaneWrapper &other);
+    NcPlaneWrapper();
     ~NcPlaneWrapper();
 
     void dim_yx(unsigned int *const ROWS,

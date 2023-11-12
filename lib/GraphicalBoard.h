@@ -23,7 +23,7 @@ private:
     /** The handler object used to access the underlying
      * notcurses instance.
      */
-    std::shared_ptr<NcHandlerI> _ncHandler;
+    NcHandlerI *_ncHandler;
 
     /** The primary plane used as a canvas for drawing the board. */
     std::unique_ptr<NcPlaneWrapperI> _primaryPlane;
@@ -63,9 +63,8 @@ public:
      * @see _primaryPlane
      * @see _childPlanes
      */
-    GraphicalBoard(std::shared_ptr<NcHandlerI> ncHandler, const int Y,
-                   const int X, const unsigned int ROWS,
-                   const unsigned int COLS);
+    GraphicalBoard(NcHandlerI *ncHandler, const int Y, const int X,
+                   const unsigned int ROWS, const unsigned int COLS);
 
     /**
      * A constructor that takes in an ncplane_options struct for a plane and
@@ -81,8 +80,7 @@ public:
      * @see _primaryPlane
      * @see _childPlanes
      */
-    GraphicalBoard(std::shared_ptr<NcHandlerI> ncHandler,
-                   const ncplane_options NOPTS);
+    GraphicalBoard(NcHandlerI *ncHandler, const ncplane_options NOPTS);
 
     /**
      * A constructor that takes in an notcurses plane and uses it as its primary
@@ -97,7 +95,7 @@ public:
      * @see _primaryPlane
      * @see _childPlanes
      */
-    GraphicalBoard(std::shared_ptr<NcHandlerI> ncHandler,
+    GraphicalBoard(NcHandlerI *ncHandler,
                    std::unique_ptr<NcPlaneWrapperI> plane);
 
     GraphicalBoard(GraphicalBoard &) = delete;

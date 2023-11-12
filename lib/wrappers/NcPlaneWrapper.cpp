@@ -7,12 +7,11 @@
 #include <memory>
 #include <notcurses/notcurses.h>
 
-NcPlaneWrapper::NcPlaneWrapper(std::shared_ptr<NcHandlerI> ncHandler,
-                               const int Y, const int X,
+NcPlaneWrapper::NcPlaneWrapper(NcHandlerI *ncHandler, const int Y, const int X,
                                const unsigned int ROWS, const unsigned int COLS)
     : NcPlaneWrapper::NcPlaneWrapper(ncHandler,
                                      create_nopts(Y, X, ROWS, COLS)) {}
-NcPlaneWrapper::NcPlaneWrapper(std::shared_ptr<NcHandlerI> ncHandler,
+NcPlaneWrapper::NcPlaneWrapper(NcHandlerI *ncHandler,
                                const ncplane_options NOPTS)
     : NcPlaneWrapper::NcPlaneWrapper(
           ncplane_create(ncHandler->get_stdplane(), &NOPTS)) {
