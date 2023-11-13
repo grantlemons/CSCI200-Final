@@ -67,7 +67,7 @@ docs: Doxyfile README.md
 	@$(DOXYGEN)
 
 memcheck:
-	@valgrind --leak-check=full $(TARGET)
+	@valgrind --leak-check=full ./$(TARGET)
 
 zip:
 	@tar czf $(TARGET).tar.gz --exclude-ignore=.gitignore --exclude=".git" --exclude=".gitignore" .
