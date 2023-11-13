@@ -25,7 +25,7 @@ GraphicalBoardDummy::get_child_planes() {
         new std::array<NcPlaneWrapperI *, CELL_COUNT>{};
 
     for (unsigned int i = 0; i < CELL_COUNT; i++) {
-        planes->at(i) = new NcPlaneWrapperDummy();
+        planes->at(i) = new NcPlaneWrapperDummy{};
     }
 
     return planes;
@@ -37,7 +37,7 @@ GraphicalBoardDummy::create_child_boards() const {
 
     for (unsigned int i = 0; i < CELL_COUNT; i++) {
         boards.at(i) =
-            std::unique_ptr<GraphicalBoardI>(new GraphicalBoardDummy());
+            std::unique_ptr<GraphicalBoardI>{new GraphicalBoardDummy{}};
     }
 
     return boards;

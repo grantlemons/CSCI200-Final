@@ -1,8 +1,10 @@
+#include "lib/GraphicalBoard.h"
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
 #include "lib/board/Board.h"
 #include "lib/board/LeafBoard.h"
 #include "lib/board/PrimaryBoard.h"
+#include "lib/interfaces/GraphicalBoardI.h"
 
 #include <cstdint>
 #include <iostream>
@@ -10,9 +12,13 @@
 #include <optional>
 
 int main() {
-    std::shared_ptr<NcHandlerI> ncHandler(new NcHandler());
+    std::shared_ptr<NcHandlerI> ncHandler{new NcHandler{}};
+    std::unique_ptr<NcPlaneWrapperI> stdPlane{
+        ncHandler->get_stdplane_wrapper()};
+    std::unique_ptr<GraphicalBoardI> gBoard{
+        new GraphicalBoard{ncHandler.get(), std::move(stdPlane)}};
 
-    PrimaryBoard pBoard(ncHandler);
+    PrimaryBoard pBoard{ncHandler};
     pBoard.draw();
 
     LeafBoard *selected = nullptr;
@@ -46,7 +52,7 @@ int main() {
     pBoard.check_win(2, X);
     ncHandler->render();
 
-    while (1);
+    // while (1);
 
     return EXIT_SUCCESS;
 }

@@ -56,7 +56,7 @@ int NcPlaneWrapper::get_cols() const {
 }
 
 NcPlaneWrapperI *NcPlaneWrapper::create_child(const ncplane_options *nopts) {
-    return new NcPlaneWrapper(ncplane_create(_pPlane, nopts), false);
+    return new NcPlaneWrapper{ncplane_create(_pPlane, nopts), false};
 }
 
 int NcPlaneWrapper::load_nccell(nccell *c, const char *gcluster) {

@@ -13,7 +13,7 @@
 
 GraphicalBoard::GraphicalBoard(NcHandlerI *ncHandler, const int Y, const int X,
                                const int ROWS, const int COLS)
-    : _primaryPlane(new NcPlaneWrapper(ncHandler, Y, X, ROWS, COLS)),
+    : _primaryPlane{new NcPlaneWrapper{ncHandler, Y, X, ROWS, COLS}},
       _rows{ROWS + 1}, _cols{COLS + 1} {
     Expects(ROWS >= 0 && COLS >= 0);
 
@@ -22,9 +22,9 @@ GraphicalBoard::GraphicalBoard(NcHandlerI *ncHandler, const int Y, const int X,
 
 GraphicalBoard::GraphicalBoard(NcHandlerI *ncHandler,
                                const ncplane_options NOPTS)
-    : GraphicalBoard::GraphicalBoard(
-          ncHandler, std::unique_ptr<NcPlaneWrapperI>(
-                         new NcPlaneWrapper(ncHandler, NOPTS))) {}
+    : GraphicalBoard::GraphicalBoard{
+          ncHandler, std::unique_ptr<NcPlaneWrapperI>{
+                         new NcPlaneWrapper(ncHandler, NOPTS)}} {}
 
 GraphicalBoard::GraphicalBoard(NcHandlerI *ncHandler,
                                std::unique_ptr<NcPlaneWrapperI> plane)
@@ -188,8 +188,8 @@ GraphicalBoard::create_child_boards() const {
     for (unsigned int i = 0; i < CELL_COUNT; i++) {
         NcPlaneWrapperI *const PLANE = _childPlanes.at(i);
 
-        boards.at(i) = std::unique_ptr<GraphicalBoardI>(new GraphicalBoard(
-            _ncHandler, std::unique_ptr<NcPlaneWrapperI>(PLANE)));
+        boards.at(i) = std::unique_ptr<GraphicalBoardI>{new GraphicalBoard{
+            _ncHandler, std::unique_ptr<NcPlaneWrapperI>{PLANE}}};
     }
 
     return boards;

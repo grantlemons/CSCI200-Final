@@ -18,12 +18,12 @@ std::array<const char *, SYMBOL_COUNT> PrimaryBoard::_symbols =
 
 PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandlerI> ncHandler,
                            std::unique_ptr<GraphicalBoardI> gBoard)
-    : Board::Board(ncHandler, std::move(gBoard)), _cells() {
+    : Board::Board{ncHandler, std::move(gBoard)}, _cells{} {
     init_cells();
 }
 
 PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandlerI> ncHandler)
-    : Board::Board(ncHandler, def_primary_nopts(ncHandler)), _cells() {
+    : Board::Board{ncHandler, def_primary_nopts(ncHandler)}, _cells{} {
     init_cells();
 }
 
@@ -32,8 +32,8 @@ void PrimaryBoard::init_cells() {
         getGraphicalBoard()->create_child_boards();
 
     for (unsigned int i = 0; i < 9; i++) {
-        _cells.at(i) = std::unique_ptr<LeafBoard>(
-            new LeafBoard(getNcHandler(), std::move(gBoards.at(i))));
+        _cells.at(i) = std::unique_ptr<LeafBoard>{
+            new LeafBoard(getNcHandler(), std::move(gBoards.at(i)))};
     }
 }
 

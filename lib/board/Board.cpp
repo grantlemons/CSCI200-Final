@@ -16,16 +16,16 @@
 
 Board::Board(std::shared_ptr<NcHandlerI> ncHandler,
              std::unique_ptr<GraphicalBoardI> gBoard)
-    : _ncHandler(ncHandler), _gBoard(std::move(gBoard)) {}
+    : _ncHandler{ncHandler}, _gBoard{std::move(gBoard)} {}
 
 Board::Board(std::shared_ptr<NcHandlerI> ncHandler,
              std::unique_ptr<NcPlaneWrapperI> plane)
-    : _ncHandler(ncHandler),
-      _gBoard(new GraphicalBoard(ncHandler.get(), std::move(plane))) {}
+    : _ncHandler{ncHandler},
+      _gBoard{new GraphicalBoard{ncHandler.get(), std::move(plane)}} {}
 
 Board::Board(std::shared_ptr<NcHandlerI> ncHandler, const ncplane_options NOPTS)
-    : _ncHandler(ncHandler),
-      _gBoard(new GraphicalBoard(ncHandler.get(), NOPTS)) {}
+    : _ncHandler{ncHandler},
+      _gBoard{new GraphicalBoard{ncHandler.get(), NOPTS}} {}
 
 GraphicalBoardI *Board::getGraphicalBoard() const {
     return _gBoard.get();
