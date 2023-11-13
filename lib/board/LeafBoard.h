@@ -65,7 +65,7 @@ public:
      *
      * @param ncHandler The handler object used to access the underlying
      * notcurses instance.
-     * @param PLANE The plane used as the primary plane of the board's new
+     * @param plane The plane used as the primary plane of the board's new
      * GraphicalBoard.
      *
      * @see NcHandler::combine_channels()

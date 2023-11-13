@@ -5,17 +5,17 @@
 #include "lib/board/LeafBoard.h"
 #include "lib/board/PrimaryBoard.h"
 #include "lib/dummies/GraphicalBoardDummy.h"
+#include "lib/dummies/NcHandlerDummy.h"
 #include "lib/interfaces/NcHandlerI.h"
-#include "lib/interfaces/NcPlaneWrapperI.h"
 
 #include <optional>
 
 PrimaryBoard create_p_board();
 PrimaryBoard create_p_board() {
-    std::shared_ptr<NcHandlerI> handler{new NcHandler()};
-    std::unique_ptr<GraphicalBoardI> gBoard{new GraphicalBoardDummy()};
+    std::shared_ptr<NcHandlerI> handler{new NcHandlerDummy()};
+    std::unique_ptr<GraphicalBoardI> gBoardDummy{new GraphicalBoardDummy()};
 
-    return PrimaryBoard{handler, std::move(gBoard)};
+    return PrimaryBoard{handler, std::move(gBoardDummy)};
 }
 
 TEST_SUITE("Primary Board Tests") {

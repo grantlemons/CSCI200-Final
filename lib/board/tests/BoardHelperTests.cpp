@@ -1,6 +1,8 @@
 #include "doctest.h"
 #include "lib/board/Board.h"
 
+#include <iostream>
+
 TEST_SUITE("Board Helper Tests") {
     TEST_CASE("Negative Mod") {
         SUBCASE("Positive A Argument") {

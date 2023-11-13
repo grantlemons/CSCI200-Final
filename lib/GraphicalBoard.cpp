@@ -31,6 +31,8 @@ GraphicalBoard::GraphicalBoard(NcHandlerI *ncHandler,
     : _ncHandler{ncHandler}, _primaryPlane{std::move(plane)},
       _rows{_primaryPlane->get_rows() + 1},
       _cols{_primaryPlane->get_cols() + 1} {
+    Expects(_rows >= 0 && _cols >= 0);
+
     init_child_planes();
 }
 
@@ -41,14 +43,14 @@ void GraphicalBoard::init_child_planes() {
         (gsl::narrow<unsigned int>(_cols) - 2u) / 3u;
 
     for (unsigned int i = 0; i < 9; i++) {
-        unsigned int column = i % 3;
-        unsigned int row = (i - column) / 3;
+        const unsigned int COLUMN = i % 3u;
+        const unsigned int ROW = (i - COLUMN) / 3u;
 
-        int newY = 1 + gsl::narrow<int>((ROWS_PER_BCELL * row));
-        int newX = 1 + gsl::narrow<int>((COLS_PER_BCELL * column));
+        int newY = 1 + gsl::narrow<int>((ROWS_PER_BCELL * ROW));
+        int newX = 1 + gsl::narrow<int>((COLS_PER_BCELL * COLUMN));
 
         ncplane_options child_nopts =
-            create_nopts(newY, newX, ROWS_PER_BCELL - 1, COLS_PER_BCELL - 1);
+            create_nopts(newY, newX, ROWS_PER_BCELL - 1u, COLS_PER_BCELL - 1u);
         NcPlaneWrapperI *tmp = _primaryPlane->create_child(&child_nopts);
 
         _childPlanes.at(i) = tmp;
@@ -58,8 +60,8 @@ void GraphicalBoard::init_child_planes() {
 void GraphicalBoard::draw_board(
     const std::array<const char *, SYMBOL_COUNT> SYMBOLS,
     const uint64_t CELL_CHANNELS) {
-    const int ROWS_PER_BCELL = (gsl::narrow<int>(_rows) - 2) / 3;
-    const int COLS_PER_BCELL = (gsl::narrow<int>(_cols) - 2) / 3;
+    const int ROWS_PER_BCELL = (_rows - 2) / 3;
+    const int COLS_PER_BCELL = (_cols - 2) / 3;
 
     // calculate lines positions and lengths
     const int H_IDX_1 = ROWS_PER_BCELL;

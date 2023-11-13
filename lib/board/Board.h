@@ -156,7 +156,7 @@ public:
  * @relates Board
  */
 inline constexpr int negative_mod(const int A, const int B) {
-    return A - (B * gsl::narrow<int>(std::floor(gsl::narrow<double>(A) / B)));
+    return A - (B * gsl::narrow<int>(std::floor(static_cast<double>(A) / B)));
 }
 
 /**
@@ -180,13 +180,13 @@ inline constexpr void horizontal_others(const int INDEX, int &other1,
     Expects(INDEX >= 0 && INDEX <= 9);
 
     const int ROW_LEN = 3;
-    other1 = negative_mod(INDEX - 1, ROW_LEN) + ROW_LEN;
-    other2 = negative_mod(INDEX + 1, ROW_LEN) + ROW_LEN;
+    other1 = negative_mod(INDEX - 1, ROW_LEN) + (INDEX / ROW_LEN) * ROW_LEN;
+    other2 = negative_mod(INDEX + 1, ROW_LEN) + (INDEX / ROW_LEN) * ROW_LEN;
 
-    Expects(other1 != other2);
-    Expects(other1 != INDEX && other2 != INDEX);
-    Expects(other1 >= 0 && other1 <= 9);
-    Expects(other2 >= 0 && other2 <= 9);
+    Ensures(other1 != other2);
+    Ensures(other1 != INDEX && other2 != INDEX);
+    Ensures(other1 >= 0 && other1 <= 9);
+    Ensures(other2 >= 0 && other2 <= 9);
 }
 
 /**
@@ -213,10 +213,10 @@ inline constexpr void vertical_others(const int INDEX, int &other1,
     other1 = negative_mod(INDEX - ROW_LEN, CELL_COUNT);
     other2 = negative_mod(INDEX + ROW_LEN, CELL_COUNT);
 
-    Expects(other1 != other2);
-    Expects(other1 != INDEX && other2 != INDEX);
-    Expects(other1 >= 0 && other1 <= 9);
-    Expects(other2 >= 0 && other2 <= 9);
+    Ensures(other1 != other2);
+    Ensures(other1 != INDEX && other2 != INDEX);
+    Ensures(other1 >= 0 && other1 <= 9);
+    Ensures(other2 >= 0 && other2 <= 9);
 }
 
 /**
@@ -244,10 +244,10 @@ inline constexpr void diagonal_fours_others(const int INDEX, int &other1,
     other1 = negative_mod(INDEX - 4, CELL_COUNT + 3);
     other2 = negative_mod(INDEX + 4, CELL_COUNT + 3);
 
-    Expects(other1 != other2);
-    Expects(other1 != INDEX && other2 != INDEX);
-    Expects(other1 == 0 || other1 == 4 || other1 == 8);
-    Expects(other2 == 0 || other2 == 4 || other2 == 8);
+    Ensures(other1 != other2);
+    Ensures(other1 != INDEX && other2 != INDEX);
+    Ensures(other1 == 0 || other1 == 4 || other1 == 8);
+    Ensures(other2 == 0 || other2 == 4 || other2 == 8);
 }
 
 /**
@@ -276,10 +276,10 @@ inline constexpr void diagonal_twos_others(const int INDEX, int &other1,
     other1 = negative_mod(INDEX, 6) + 2;
     other2 = negative_mod(INDEX + 2, 6) + 2;
 
-    Expects(other1 != other2);
-    Expects(other1 != INDEX && other2 != INDEX);
-    Expects(other1 == 2 || other1 == 4 || other1 == 6);
-    Expects(other2 == 2 || other2 == 4 || other2 == 6);
+    Ensures(other1 != other2);
+    Ensures(other1 != INDEX && other2 != INDEX);
+    Ensures(other1 == 2 || other1 == 4 || other1 == 6);
+    Ensures(other2 == 2 || other2 == 4 || other2 == 6);
 }
 
 #endif // !BOARD

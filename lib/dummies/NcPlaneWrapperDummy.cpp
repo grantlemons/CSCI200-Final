@@ -9,12 +9,15 @@
 
 NcPlaneWrapperDummy::NcPlaneWrapperDummy() {}
 
-void NcPlaneWrapperDummy::dim_yx(int &ROWS, int &COLS) const {}
+void NcPlaneWrapperDummy::dim_yx(int &ROWS, int &COLS) const {
+    ROWS = 1;
+    COLS = 1;
+}
 int NcPlaneWrapperDummy::get_rows() const {
-    return 0;
+    return 1;
 }
 int NcPlaneWrapperDummy::get_cols() const {
-    return 0;
+    return 1;
 }
 
 NcPlaneWrapperI *
