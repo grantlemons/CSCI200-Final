@@ -3,10 +3,8 @@
 #include "interfaces/NcPlaneWrapperI.h"
 #include "wrappers/NcPlaneWrapper.h"
 
-#include <bits/types/FILE.h>
 #include <clocale>
 #include <cstdint>
-#include <cstdio>
 #include <notcurses/notcurses.h>
 
 const uint32_t NcHandler::RED_CHANNEL = NCCHANNEL_INITIALIZER(0xc3, 0x40, 0x43);
@@ -24,12 +22,11 @@ const notcurses_options opts = {nullptr,
                                 0,
                                 0,
                                 NCOPTION_SUPPRESS_BANNERS +
-                                    NCOPTION_NO_ALTERNATE_SCREEN +
                                     NCOPTION_DRAIN_INPUT};
 
 NcHandler::NcHandler() {
     setlocale(LC_ALL, "");
-    nc = notcurses_init(&opts, fopen("/dev/null", "a"));
+    nc = notcurses_init(&opts, nullptr);
 }
 
 NcHandler::~NcHandler() {
