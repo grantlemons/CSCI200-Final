@@ -3,7 +3,9 @@
 
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
-#include "lib/board/Board.h"
+#include "lib/board/BoardA.h"
+#include "lib/interfaces/GraphicalAreaI.h"
+#include "lib/interfaces/NcPlaneWrapperI.h"
 
 #include <array>
 #include <memory>
@@ -23,7 +25,7 @@
  * @see PrimaryBoard
  * @see Board
  */
-class LeafBoard : virtual public Board {
+class LeafBoard : virtual public BoardA {
 private:
     /**
      * The unicode characters used when drawing the graphical representation of
@@ -58,20 +60,7 @@ public:
      * @see NcHandler::combine_channels()
      */
     LeafBoard(std::shared_ptr<NcHandlerI> ncHandler,
-              std::unique_ptr<GraphicalBoardI> gBoard);
-
-    /**
-     * A constructor for LeafBoard.
-     *
-     * @param ncHandler The handler object used to access the underlying
-     * notcurses instance.
-     * @param plane The plane used as the primary plane of the board's new
-     * GraphicalBoard.
-     *
-     * @see NcHandler::combine_channels()
-     */
-    LeafBoard(std::shared_ptr<NcHandlerI> ncHandler,
-              std::unique_ptr<NcPlaneWrapperI> plane);
+              std::shared_ptr<GraphicalAreaI> gBoard);
 
     ~LeafBoard() = default;
     LeafBoard(LeafBoard &) = delete;

@@ -2,6 +2,7 @@
 
 #include "gsl/assert"
 #include "gsl/narrow"
+#include "lib/interfaces/GraphicalAreaI.h"
 #include "lib/interfaces/NcHandlerI.h"
 
 #include <cstdint>
@@ -55,7 +56,7 @@ int NcPlaneWrapper::get_cols() const {
     return res;
 }
 
-NcPlaneWrapperI *NcPlaneWrapper::create_child(const ncplane_options *nopts) {
+GraphicalAreaI *NcPlaneWrapper::create_child(const ncplane_options *nopts) {
     return new NcPlaneWrapper{ncplane_create(_pPlane, nopts), false};
 }
 

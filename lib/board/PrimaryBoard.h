@@ -3,8 +3,9 @@
 
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
-#include "lib/board/Board.h"
+#include "lib/board/BoardA.h"
 #include "lib/board/LeafBoard.h"
+#include "lib/interfaces/GraphicalAreaI.h"
 
 #include <array>
 #include <memory>
@@ -20,7 +21,7 @@
  * @see LeafBoard
  * @see Board
  */
-class PrimaryBoard : virtual public Board {
+class PrimaryBoard : virtual public BoardA {
 private:
     /**
      * The unicode characters used when drawing the graphical representation of
@@ -55,7 +56,7 @@ public:
      * @see NcHandler::combine_channels()
      */
     PrimaryBoard(std::shared_ptr<NcHandlerI> ncHandler,
-                 std::unique_ptr<GraphicalBoardI> gBoard);
+                 std::shared_ptr<GraphicalAreaI> gBoard);
 
     /**
      * The constructor for PrimaryBoard.

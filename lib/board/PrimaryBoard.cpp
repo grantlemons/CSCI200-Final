@@ -4,7 +4,7 @@
 #include "gsl/narrow"
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
-#include "lib/board/Board.h"
+#include "lib/board/BoardA.h"
 #include "lib/board/LeafBoard.h"
 
 #include <array>
@@ -17,23 +17,23 @@ std::array<const char *, SYMBOL_COUNT> PrimaryBoard::_symbols =
     std::array<const char *, SYMBOL_COUNT>({"\u2501", "\u2503", "\u254B"});
 
 PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandlerI> ncHandler,
-                           std::unique_ptr<GraphicalBoardI> gBoard)
-    : Board::Board{ncHandler, std::move(gBoard)}, _cells{} {
+                           std::shared_ptr<GraphicalAreaI> gBoard)
+    : BoardA::BoardA{ncHandler, gBoard}, _cells{} {
     init_cells();
 }
 
 PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandlerI> ncHandler)
-    : Board::Board{ncHandler, def_primary_nopts(ncHandler)}, _cells{} {
+    : BoardA::BoardA{ncHandler, def_primary_nopts(ncHandler)}, _cells{} {
     init_cells();
 }
 
 void PrimaryBoard::init_cells() {
-    std::array<std::unique_ptr<GraphicalBoardI>, CELL_COUNT> gBoards =
-        getGraphicalBoard()->create_child_boards();
+    std::array<std::shared_ptr<GraphicalAreaI>, CELL_COUNT> *gBoards =
+        getGraphicalBoard()->get_children();
 
     for (unsigned int i = 0; i < 9; i++) {
         _cells.at(i) = std::unique_ptr<LeafBoard>{
-            new LeafBoard(getNcHandler(), std::move(gBoards.at(i)))};
+            new LeafBoard(getNcHandler(), gBoards->at(i))};
     }
 }
 

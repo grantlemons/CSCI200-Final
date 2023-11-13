@@ -1,9 +1,10 @@
-#include "lib/GraphicalBoard.h"
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
-#include "lib/board/Board.h"
+#include "lib/board/BoardA.h"
 #include "lib/board/LeafBoard.h"
 #include "lib/board/PrimaryBoard.h"
+#include "lib/graphical_board/GraphicalBoardA.h"
+#include "lib/graphical_board/PrimaryGraphicalBoard.h"
 #include "lib/interfaces/GraphicalBoardI.h"
 
 #include <cstdint>
@@ -13,10 +14,10 @@
 
 int main() {
     std::shared_ptr<NcHandlerI> ncHandler{new NcHandler{}};
-    std::unique_ptr<NcPlaneWrapperI> stdPlane{
+    std::shared_ptr<NcPlaneWrapperI> stdPlane{
         ncHandler->get_stdplane_wrapper()};
     std::unique_ptr<GraphicalBoardI> gBoard{
-        new GraphicalBoard{ncHandler.get(), std::move(stdPlane)}};
+        new PrimaryGraphicalBoard{ncHandler.get(), stdPlane}};
 
     PrimaryBoard pBoard{ncHandler};
     pBoard.draw();

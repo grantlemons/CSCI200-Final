@@ -3,9 +3,10 @@
 
 #include "gsl/assert"
 #include "gsl/narrow"
-#include "lib/GraphicalBoard.h"
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
+#include "lib/interfaces/GraphicalAreaI.h"
+#include "lib/interfaces/GraphicalBoardI.h"
 #include "lib/interfaces/NcPlaneWrapperI.h"
 
 #include <array>
@@ -19,7 +20,7 @@
  * @class Board
  * Abstract class representation of a logical board.
  */
-class Board {
+class BoardA {
 private:
     /** The handler object used to access the underlying
      * notcurses instance.
@@ -30,7 +31,7 @@ private:
      * Component graphical board used to represent actions on the logical board
      * graphically.
      */
-    std::unique_ptr<GraphicalBoardI> _gBoard;
+    std::shared_ptr<GraphicalAreaI> _gBoard;
 
 protected:
     /**
@@ -40,31 +41,8 @@ protected:
      * notcurses instance.
      * @param gBoard The associated graphical board to construct with.
      */
-    Board(std::shared_ptr<NcHandlerI> ncHandler,
-          std::unique_ptr<GraphicalBoardI> gBoard);
-
-    /**
-     * A constructor that takes a plane to use for the underlying graphical
-     * board.
-     *
-     * @param ncHandler The handler object used to access the underlying
-     * notcurses instance.
-     * @param PLANE The plane used as the primary plane of the new
-     * _gBoard.
-     */
-    Board(std::shared_ptr<NcHandlerI> ncHandler,
-          std::unique_ptr<NcPlaneWrapperI> PLANE);
-
-    /**
-     * A constructor that takes raw info for the underlying graphical board.
-     *
-     * @param ncHandler The handler object used to access the underlying
-     * notcurses instance.
-     * @param NOPTS The configuration used to form the primary plane.
-     *
-     * @see ncplane_create()
-     */
-    Board(std::shared_ptr<NcHandlerI> ncHandler, const ncplane_options NOPTS);
+    BoardA(std::shared_ptr<NcHandlerI> ncHandler,
+           std::shared_ptr<GraphicalAreaI> gBoard);
 
     /**
      * Getter for the associated GraphicalBoard instance.
@@ -80,10 +58,10 @@ protected:
      */
     std::shared_ptr<NcHandlerI> getNcHandler() const;
 
-    virtual ~Board() = default;
+    virtual ~BoardA() = default;
 
-    Board(Board &) = delete;
-    void operator=(const Board &) = delete;
+    BoardA(BoardA &) = delete;
+    void operator=(const BoardA &) = delete;
 
 public:
     /**
@@ -99,7 +77,7 @@ public:
      *
      * @see get_cell_owner()
      */
-    virtual bool check_win(const int INDEX, const CellOwner OWNER) const;
+    bool check_win(const int INDEX, const CellOwner OWNER) const;
 
     /**
      * Gets the owner of a given index.
@@ -133,7 +111,7 @@ public:
     /**
      * Defines the way Board types are outputted to streams.
      */
-    friend std::ostream &operator<<(std::ostream &out, const Board &BRD);
+    friend std::ostream &operator<<(std::ostream &out, const BoardA &BRD);
 };
 
 // Helper functions

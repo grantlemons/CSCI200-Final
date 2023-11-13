@@ -1,6 +1,7 @@
 #ifndef NCPLANE_WRAPPER
 #define NCPLANE_WRAPPER
 
+#include "lib/interfaces/GraphicalAreaI.h"
 #include "lib/interfaces/NcHandlerI.h"
 #include "lib/interfaces/NcPlaneWrapperI.h"
 
@@ -26,7 +27,7 @@ public:
     int get_rows() const override final;
     int get_cols() const override final;
 
-    NcPlaneWrapperI *
+    GraphicalAreaI *
     create_child(const ncplane_options *const nopts) override final;
 
     int load_nccell(nccell *const c, const char *const gcluster) override final;

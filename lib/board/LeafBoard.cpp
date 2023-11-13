@@ -3,7 +3,7 @@
 #include "gsl/assert"
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
-#include "lib/board/Board.h"
+#include "lib/board/BoardA.h"
 
 #include <array>
 #include <cstdint>
@@ -14,12 +14,8 @@ std::array<const char *, SYMBOL_COUNT> LeafBoard::_symbols =
     std::array<const char *, SYMBOL_COUNT>{"\u2500", "\u2502", "\u253C"};
 
 LeafBoard::LeafBoard(std::shared_ptr<NcHandlerI> ncHandler,
-                     std::unique_ptr<GraphicalBoardI> gBoard)
-    : Board::Board{ncHandler, std::move(gBoard)}, _cells{}, _winner{None} {}
-
-LeafBoard::LeafBoard(std::shared_ptr<NcHandlerI> ncHandler,
-                     std::unique_ptr<NcPlaneWrapperI> plane)
-    : Board::Board{ncHandler, std::move(plane)}, _cells{}, _winner{None} {}
+                     std::shared_ptr<GraphicalAreaI> gBoard)
+    : BoardA::BoardA{ncHandler, gBoard}, _cells{}, _winner{None} {}
 
 CellOwner LeafBoard::get_cell_owner(const int INDEX) const {
     Expects(INDEX >= 0 && INDEX <= 9);
