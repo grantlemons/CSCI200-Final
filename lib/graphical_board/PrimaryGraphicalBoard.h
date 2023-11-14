@@ -5,7 +5,6 @@
 #include "lib/interfaces/NcHandlerI.h"
 #include "lib/interfaces/NcPlaneWrapperI.h"
 
-#include <memory>
 #include <notcurses/notcurses.h>
 
 class PrimaryGraphicalBoard : virtual public GraphicalBoardA {

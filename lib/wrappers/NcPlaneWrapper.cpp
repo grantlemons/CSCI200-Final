@@ -7,7 +7,6 @@
 
 #include <cstdint>
 #include <cstdlib>
-#include <memory>
 #include <notcurses/notcurses.h>
 
 NcPlaneWrapper::NcPlaneWrapper(NcHandlerI *ncHandler, const int Y, const int X,

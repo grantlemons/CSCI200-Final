@@ -4,7 +4,6 @@
 #include "lib/interfaces/NcHandlerI.h"
 
 #include <cstdint>
-#include <memory>
 #include <notcurses/notcurses.h>
 
 class GraphicalAreaI {

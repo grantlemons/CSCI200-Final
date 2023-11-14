@@ -8,7 +8,6 @@
 #include "lib/wrappers/NcPlaneWrapper.h"
 
 #include <array>
-#include <memory>
 #include <notcurses/notcurses.h>
 #include <unistd.h>
 

@@ -4,7 +4,6 @@
 #include "lib/graphical_board/GraphicalBoardA.h"
 #include "lib/interfaces/NcHandlerI.h"
 
-#include <memory>
 #include <notcurses/notcurses.h>
 
 class LeafGraphicalBoard : virtual public GraphicalBoardA {

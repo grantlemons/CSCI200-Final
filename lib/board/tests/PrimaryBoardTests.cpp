@@ -15,12 +15,12 @@
 
 PrimaryBoard create_p_board();
 PrimaryBoard create_p_board() {
-    std::shared_ptr<NcHandlerI> handler{new NcHandlerDummy{}};
+    std::unique_ptr<NcHandlerI> handler{new NcHandlerDummy{}};
     NcPlaneWrapperI *plane{new NcPlaneWrapperDummy{}};
     std::unique_ptr<GraphicalBoardI> gBoardDummy{
         new GraphicalBoardDummy{plane}};
 
-    return PrimaryBoard{handler, std::move(gBoardDummy)};
+    return PrimaryBoard{handler.get(), std::move(gBoardDummy)};
 }
 
 TEST_SUITE("Primary Board Tests") {

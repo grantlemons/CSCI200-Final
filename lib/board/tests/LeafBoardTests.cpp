@@ -12,11 +12,11 @@
 
 LeafBoard create_l_board();
 LeafBoard create_l_board() {
-    std::shared_ptr<NcHandlerI> handler{new NcHandlerDummy{}};
+    std::unique_ptr<NcHandlerI> handler{new NcHandlerDummy{}};
     NcPlaneWrapperI *plane{new NcPlaneWrapperDummy{}};
     GraphicalBoardI *gBoardDummy = new GraphicalBoardDummy{plane};
 
-    return LeafBoard{handler, gBoardDummy};
+    return LeafBoard{handler.get(), gBoardDummy};
 }
 
 TEST_SUITE("Leaf Board Tests") {

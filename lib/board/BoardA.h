@@ -12,7 +12,6 @@
 #include <array>
 #include <cmath>
 #include <cstdint>
-#include <memory>
 #include <optional>
 #include <ostream>
 
@@ -25,7 +24,7 @@ private:
     /** The handler object used to access the underlying
      * notcurses instance.
      */
-    std::shared_ptr<NcHandlerI> _ncHandler;
+    NcHandlerI *_ncHandler;
 
 protected:
     /**
@@ -35,7 +34,7 @@ protected:
      * notcurses instance.
      * @param gBoard The associated graphical board to construct with.
      */
-    BoardA(std::shared_ptr<NcHandlerI> ncHandler);
+    BoardA(NcHandlerI *ncHandler);
 
     /**
      * Getter for the associated GraphicalBoard instance.
@@ -49,7 +48,7 @@ protected:
      *
      * @return A pointer to the private NcHandler.
      */
-    std::shared_ptr<NcHandlerI> getNcHandler() const;
+    NcHandlerI *getNcHandler() const;
 
     virtual ~BoardA() = default;
 

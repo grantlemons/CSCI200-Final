@@ -11,13 +11,12 @@
 
 #include <array>
 #include <cmath>
-#include <memory>
 #include <notcurses/notcurses.h>
 #include <ostream>
 
-BoardA::BoardA(std::shared_ptr<NcHandlerI> ncHandler) : _ncHandler{ncHandler} {}
+BoardA::BoardA(NcHandlerI *ncHandler) : _ncHandler{ncHandler} {}
 
-std::shared_ptr<NcHandlerI> BoardA::getNcHandler() const {
+NcHandlerI *BoardA::getNcHandler() const {
     return _ncHandler;
 }
 

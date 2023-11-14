@@ -9,7 +9,6 @@
 #include "lib/interfaces/NcPlaneWrapperI.h"
 
 #include <array>
-#include <memory>
 #include <notcurses/notcurses.h>
 
 /**
@@ -68,7 +67,7 @@ public:
      *
      * @see NcHandler::combine_channels()
      */
-    LeafBoard(std::shared_ptr<NcHandlerI> ncHandler, GraphicalBoardI *gBoard);
+    LeafBoard(NcHandlerI *ncHandler, GraphicalBoardI *gBoard);
 
     ~LeafBoard() = default;
     LeafBoard(LeafBoard &) = delete;

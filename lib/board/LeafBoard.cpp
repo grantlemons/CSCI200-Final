@@ -14,8 +14,7 @@
 std::array<const char *, SYMBOL_COUNT> LeafBoard::_symbols =
     std::array<const char *, SYMBOL_COUNT>{"\u2500", "\u2502", "\u253C"};
 
-LeafBoard::LeafBoard(std::shared_ptr<NcHandlerI> ncHandler,
-                     GraphicalBoardI *gBoard)
+LeafBoard::LeafBoard(NcHandlerI *ncHandler, GraphicalBoardI *gBoard)
     : BoardA::BoardA{ncHandler}, _gBoard{gBoard}, _cells{}, _winner{None} {}
 
 GraphicalBoardI *LeafBoard::getGraphicalBoard() const {

@@ -16,13 +16,13 @@
 #include <optional>
 
 int main() {
-    std::shared_ptr<NcHandlerI> ncHandler{new NcHandlerDummy{}};
+    std::unique_ptr<NcHandlerI> ncHandler{new NcHandlerDummy{}};
     NcPlaneWrapperI *stdPlane{new NcPlaneWrapperDummy{}};
     std::unique_ptr<GraphicalBoardI> gBoard{new GraphicalBoardDummy{stdPlane}};
     // std::unique_ptr<GraphicalBoardI> gBoard{
     //     new PrimaryGraphicalBoard{ncHandler.get(), stdPlane}};
 
-    PrimaryBoard pBoard{ncHandler, std::move(gBoard)};
+    PrimaryBoard pBoard{ncHandler.get(), std::move(gBoard)};
     pBoard.draw();
 
     LeafBoard *selected = nullptr;

@@ -18,13 +18,13 @@
 std::array<const char *, SYMBOL_COUNT> PrimaryBoard::_symbols =
     std::array<const char *, SYMBOL_COUNT>({"\u2501", "\u2503", "\u254B"});
 
-PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandlerI> ncHandler,
+PrimaryBoard::PrimaryBoard(NcHandlerI *ncHandler,
                            std::unique_ptr<GraphicalBoardI> gBoard)
     : BoardA::BoardA{ncHandler}, _gBoard{std::move(gBoard)}, _cells{} {
     init_cells();
 }
 
-PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandlerI> ncHandler)
+PrimaryBoard::PrimaryBoard(NcHandlerI *ncHandler)
     : BoardA::BoardA{ncHandler}, _cells{} {
     init_cells();
 }
@@ -85,7 +85,7 @@ std::optional<LeafBoard *> PrimaryBoard::select_board(const int INDEX) {
     return cell->get_winner() == None ? opt : std::nullopt;
 }
 
-ncplane_options def_primary_nopts(std::shared_ptr<NcHandlerI> ncHandler) {
+ncplane_options def_primary_nopts(NcHandlerI *ncHandler) {
     NcPlaneWrapperI *stdPlane = ncHandler->get_stdplane_wrapper();
 
     const int ROWS = (3 * 11) + 2;

@@ -6,7 +6,6 @@
 #include "lib/interfaces/NcPlaneWrapperI.h"
 
 #include <cstdint>
-#include <memory>
 #include <notcurses/notcurses.h>
 
 class NcPlaneWrapper : virtual public NcPlaneWrapperI {

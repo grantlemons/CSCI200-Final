@@ -8,7 +8,6 @@
 
 #include <array>
 #include <cstdint>
-#include <memory>
 
 class GraphicalBoardI : virtual public GraphicalAreaI {
 public:
