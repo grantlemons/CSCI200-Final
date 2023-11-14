@@ -56,8 +56,8 @@ Primary Board     Active Leaf Board (0)     Description
 ```
 Primary Board     Active Leaf Board (4)     Description
    | | | |              | | | |             Leaf Board 4 is now active.
-   | |A| |              | | | |             O must make a move in the newly active Leaf Board.
-   | | | |              | | | |
+   | |A| |              | | | |             O must make a move in the newly
+   | | | |              | | | |             active Leaf Board.
 ```
 
 ```
@@ -72,14 +72,61 @@ Primary Board     Active Leaf Board (4)     Description
 ```
 Primary Board     Active Leaf Board (0)     Description
    |A| | |              | | | |             Leaf Board 0 is now active.
-   | | | |              | |X| |             X must make a move in the newly active Leaf Board.
-   | | | |              | | | |             State for Leaf Board 0 persists from turn one.
+   | | | |              | |X| |             X must make a move in the newly
+   | | | |              | | | |             active Leaf Board.
+                                            State for Leaf Board 0 persists from
+                                            turn one.
 ```
 
 ## Dependencies
 
 - [Notcurses](https://github.com/dankamongmen/notcurses)
+- [GSL](#gsl)
+
+### Optional Dependencies
+
 - [Doxygen](https://www.doxygen.nl/) (for documentation)
+- [Doxygen Awesome CSS](#doxygen-awesome-css) (for documentation styling)
+
+## Submodules
+
+This project includes multiple git submodules. As such, users should clone
+using the `--recurse-submodules` flag.
+
+To update submodules use the following command:
+
+```shell
+git submodule update --init --recursive
+```
+
+Alternatively, users may choose to clone these submodules manually according
+to the information provided in `.gitmodules`. Pay close attention to the specific
+branches used for each submodule.
+
+### Doxygen Awesome CSS {#doxygen-awesome-css}
+
+Doxygen's default HTML output looks like a router configuration menu, so this
+project uses [Doxygen Awesome CSS](https://github.com/jothepro/doxygen-awesome-css)
+to improve the layout and styling of its documentation.
+
+For the convenience of not needing to install an additional library, this is
+provided through a git submodule in the `doxygen-awesome-css/` directory.
+
+This dependency is optional, omission will result in an error when building
+documentation. To resolve, either clone the submodule or edit the `Doxyfile`
+to exclude the styling this dependency provides.
+
+### GSL {#gsl}
+
+This project uses [Microsoft's Guidelines Support Library](https://github.com/microsoft/GSL)
+for certain functions (checked narrowing, preconditions, and postconditions).
+
+For the convenience of not needing to install an additional library, this is
+provided through a git submodule in the `GSL/` directory.
+
+The header files of this directory are included in linking, and are referenced
+within the code. As such, installing GSL locally will likely not link correctly
+with this project.
 
 ## Documentation
 
