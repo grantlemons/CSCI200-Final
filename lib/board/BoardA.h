@@ -36,13 +36,6 @@ protected:
     BoardA(NcHandlerI *ncHandler);
 
     /**
-     * Getter for the associated GraphicalBoard instance.
-     *
-     * @return A pointer to the private GraphicalBoard.
-     */
-    virtual GraphicalBoardI *getGraphicalBoard() const = 0;
-
-    /**
      * Getter for the associated NcHandler instance.
      *
      * @return A pointer to the private NcHandler.
@@ -55,6 +48,13 @@ protected:
     void operator=(const BoardA &) = delete;
 
 public:
+    /**
+     * Getter for the associated GraphicalBoard instance.
+     *
+     * @return A pointer to the private GraphicalBoard.
+     */
+    virtual GraphicalBoardI *getGraphicalBoard() const = 0;
+
     /**
      * Checks if the given player has won the current board.
      *
