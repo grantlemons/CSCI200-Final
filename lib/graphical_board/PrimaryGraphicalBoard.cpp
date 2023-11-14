@@ -48,8 +48,58 @@ void PrimaryGraphicalBoard::init_child_planes() {
 
         ncplane_options child_nopts = NcPlaneWrapper::create_nopts(
             newY, newX, ROWS_PER_BCELL - 1u, COLS_PER_BCELL - 1u);
-        GraphicalAreaI *tmp = new LeafGraphicalBoard{_ncHandler, child_nopts};
+        NcPlaneWrapperI *const newPlane =
+            dynamic_cast<NcPlaneWrapperI *>(create_child(&child_nopts));
+        GraphicalAreaI *tmp = new LeafGraphicalBoard{_ncHandler, newPlane};
 
         _children.at(i) = std::unique_ptr<GraphicalAreaI>{tmp};
     }
+}
+
+void PrimaryGraphicalBoard::draw_x(const int INDEX) {
+    GraphicalBoardA::draw_x(INDEX);
+    fill_x(INDEX);
+}
+
+void PrimaryGraphicalBoard::draw_o(const int INDEX) {
+    GraphicalBoardA::draw_o(INDEX);
+    fill_o(INDEX);
+}
+
+void PrimaryGraphicalBoard::fill_x(const int INDEX) {
+    GraphicalBoardA *const TARGET{dynamic_cast<GraphicalBoardA *>(
+        _children.at(gsl::narrow<unsigned int>(INDEX)).get())};
+
+    for (unsigned int i = 0; i < CELL_COUNT; i++) {
+        GraphicalAreaI *const CHILD = TARGET->get_children().at(i);
+        const nccell red = NCCELL_INITIALIZER(
+            '\0', 0,
+            NcHandler::combine_channels(NcHandler::RED_CHANNEL,
+                                        _ncHandler->get_default_fg_channel()));
+
+        CHILD->erase();
+        CHILD->set_base_cell(&red);
+    }
+
+    // update the screen with the new changes
+    _ncHandler->render();
+}
+
+void PrimaryGraphicalBoard::fill_o(const int INDEX) {
+    GraphicalBoardA *const TARGET{dynamic_cast<GraphicalBoardA *>(
+        _children.at(gsl::narrow<unsigned int>(INDEX)).get())};
+
+    for (unsigned int i = 0; i < CELL_COUNT; i++) {
+        GraphicalAreaI *const CHILD = TARGET->get_children().at(i);
+        const nccell red = NCCELL_INITIALIZER(
+            '\0', 0,
+            NcHandler::combine_channels(NcHandler::RED_CHANNEL,
+                                        _ncHandler->get_default_fg_channel()));
+
+        CHILD->erase();
+        CHILD->set_base_cell(&red);
+    }
+
+    // update the screen with the new changes
+    _ncHandler->render();
 }

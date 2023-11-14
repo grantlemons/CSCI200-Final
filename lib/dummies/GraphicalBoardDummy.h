@@ -10,6 +10,11 @@
 #include <cstdint>
 #include <memory>
 
+/**
+ * @class GraphicalBoardDummy
+ * Dummy class used as a substitute for GraphicalBoardI classes for testing
+ * purposes.
+ */
 class GraphicalBoardDummy : public GraphicalBoardI {
 private:
     std::shared_ptr<NcPlaneWrapperI> _primaryPlane;
@@ -20,14 +25,21 @@ private:
     GraphicalBoardDummy(std::shared_ptr<NcPlaneWrapperI> plane);
 
 public:
+    /**
+     * Constructor for GraphicalBoard dummy.
+     *
+     * @param plane The primary plane used by the methods of the class.
+     *
+     * This is needed to create child planes.
+     *
+     * @see init_child_planes()
+     */
     GraphicalBoardDummy(NcPlaneWrapperI *plane);
 
     void draw_board(const std::array<const char *, SYMBOL_COUNT> SYMBOLS,
                     const uint64_t CELL_CHANNELS) override final;
     void draw_x(const int INDEX) override final;
     void draw_o(const int INDEX) override final;
-    void fill_x() override final;
-    void fill_o() override final;
     std::array<GraphicalAreaI *, CELL_COUNT> get_children() override final;
 
     void dim_yx(int &ROWS, int &COLS) const override final;

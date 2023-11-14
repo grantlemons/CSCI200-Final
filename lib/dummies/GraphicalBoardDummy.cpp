@@ -30,8 +30,6 @@ void GraphicalBoardDummy::draw_board(
     const uint64_t CELL_CHANNELS) {}
 void GraphicalBoardDummy::draw_x(const int INDEX) {}
 void GraphicalBoardDummy::draw_o(const int INDEX) {}
-void GraphicalBoardDummy::fill_x() {}
-void GraphicalBoardDummy::fill_o() {}
 
 std::array<GraphicalAreaI *, CELL_COUNT> GraphicalBoardDummy::get_children() {
     std::array<GraphicalAreaI *, CELL_COUNT> planes{};

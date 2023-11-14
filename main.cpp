@@ -15,13 +15,11 @@
 
 int main() {
     std::unique_ptr<NcHandlerI> ncHandler{new NcHandler{}};
-    NcPlaneWrapperI *stdPlane{ncHandler->get_stdplane_wrapper()};
-    std::unique_ptr<GraphicalBoardI> gBoard{
-        new PrimaryGraphicalBoard{ncHandler.get(), stdPlane}};
 
-    PrimaryBoard pBoard{ncHandler.get(), std::move(gBoard)};
+    PrimaryBoard pBoard{ncHandler.get()};
     pBoard.draw();
 
+    CellOwner victor = None;
     LeafBoard *selected = nullptr;
     std::optional<LeafBoard *> opt = nullptr;
 
@@ -50,10 +48,13 @@ int main() {
         selected = opt.value();
         selected->set_cell_owner(2, X);
     }
-    pBoard.check_win(2, X);
+    pBoard.mark_cell(2, pBoard.get_cell_owner(2));
+    if (pBoard.check_win(2, X)) {
+        victor = X;
+    }
     ncHandler->render();
 
-    // while (1);
+    while (victor == None) {}
 
     return EXIT_SUCCESS;
 }

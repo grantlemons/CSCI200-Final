@@ -9,6 +9,13 @@
 #include <array>
 #include <cstdint>
 
+/**
+ * @class GraphicalBoardI
+ * Interface for graphical board classes.
+ *
+ * @see GraphicalBoardA
+ * @see GraphicalBoardDummy
+ */
 class GraphicalBoardI : virtual public GraphicalAreaI {
 public:
     virtual ~GraphicalBoardI() = default;
@@ -42,16 +49,6 @@ public:
      * @param INDEX The index of the cell to mark.
      */
     virtual void draw_o(const int INDEX) = 0;
-
-    /**
-     * Marks all cells as belonging to the X player.
-     */
-    virtual void fill_x() = 0;
-
-    /**
-     * Marks all cells as belonging to the O player.
-     */
-    virtual void fill_o() = 0;
 
     /**
      * Getter for the board's child planes.

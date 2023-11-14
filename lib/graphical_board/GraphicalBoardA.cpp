@@ -119,38 +119,6 @@ void GraphicalBoardA::draw_o(const int INDEX) {
     _ncHandler->render();
 }
 
-void GraphicalBoardA::fill_x() {
-    for (unsigned int i = 0; i < CELL_COUNT; i++) {
-        GraphicalAreaI *const CHILD = _children.at(i).get();
-        const nccell red = NCCELL_INITIALIZER(
-            '\0', 0,
-            NcHandler::combine_channels(NcHandler::RED_CHANNEL,
-                                        _ncHandler->get_default_fg_channel()));
-
-        CHILD->erase();
-        CHILD->set_base_cell(&red);
-    }
-
-    // update the screen with the new changes
-    _ncHandler->render();
-}
-
-void GraphicalBoardA::fill_o() {
-    for (unsigned int i = 0; i < CELL_COUNT; i++) {
-        GraphicalAreaI *const CHILD = _children.at(i).get();
-        const nccell blue = NCCELL_INITIALIZER(
-            '\0', 0,
-            NcHandler::combine_channels(NcHandler::BLUE_CHANNEL,
-                                        _ncHandler->get_default_fg_channel()));
-
-        CHILD->erase();
-        CHILD->set_base_cell(&blue);
-    }
-
-    // update the screen with the new changes
-    _ncHandler->render();
-}
-
 std::array<GraphicalAreaI *, CELL_COUNT> GraphicalBoardA::get_children() {
     std::array<GraphicalAreaI *, CELL_COUNT> arr{};
 

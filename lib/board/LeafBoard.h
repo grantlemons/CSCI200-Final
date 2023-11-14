@@ -51,7 +51,6 @@ private:
      *
      * @see get_winner()
      * @see set_cell_owner()
-     * @see Board::check_win()
      */
     CellOwner _winner;
 
@@ -83,7 +82,6 @@ public:
      *
      * @param INDEX The index of the cell to set the owner of.
      * @param OWNER The player to set the owner of the cell to.
-     * @return Success or failure.
      *
      * @see _cells
      * @see _winner
@@ -98,18 +96,6 @@ public:
     CellOwner get_winner() const;
 
     void draw() override final;
-
-    /**
-     * Uses the component GraphicalBoard to mark the owner of the board
-     * appropriately.
-     *
-     * @param OWNER The user for whom to mark the board.
-     *
-     * @see Board::getGraphicalBoard()
-     * @see GraphicalBoard::fill_x()
-     * @see GraphicalBoard::fill_o()
-     */
-    void mark_fill(const CellOwner OWNER);
 };
 
 #endif // !LEAFBOARD

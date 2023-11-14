@@ -16,7 +16,7 @@
 #include <ostream>
 
 /**
- * @class Board
+ * @class BoardA
  * Abstract class representation of a logical board.
  */
 class BoardA {
@@ -32,7 +32,6 @@ protected:
      *
      * @param ncHandler The handler object used to access the underlying
      * notcurses instance.
-     * @param gBoard The associated graphical board to construct with.
      */
     BoardA(NcHandlerI *ncHandler);
 
@@ -83,7 +82,6 @@ public:
      * Uses the component GraphicalBoard to draw a Tic-Tac-Toe board.
      *
      * @see _gBoard
-     * @see GraphicalBoard::draw_board()
      */
     virtual void draw() = 0;
 
@@ -95,10 +93,8 @@ public:
      * @param OWNER The user for whom to mark the cell.
      *
      * @see _gBoard
-     * @see GraphicalBoard::draw_x()
-     * @see GraphicalBoard::draw_o()
      */
-    virtual void mark_cell(const int INDEX, const CellOwner OWNER);
+    void mark_cell(const int INDEX, const CellOwner OWNER);
 
     /**
      * Defines the way Board types are outputted to streams.
@@ -123,7 +119,7 @@ public:
  * @param B The divisor of the modulus operation.
  * @return The result of the modulus operation.
  *
- * @relates Board
+ * @relates BoardA
  */
 inline constexpr int negative_mod(const int A, const int B) {
     return A - (B * gsl::narrow<int>(std::floor(static_cast<double>(A) / B)));
@@ -143,7 +139,7 @@ inline constexpr int negative_mod(const int A, const int B) {
  *
  * @see vertical_others()
  *
- * @relates Board
+ * @relates BoardA
  */
 inline constexpr void horizontal_others(const int INDEX, int &other1,
                                         int &other2) {
@@ -173,7 +169,7 @@ inline constexpr void horizontal_others(const int INDEX, int &other1,
  *
  * @see horizontal_others()
  *
- * @relates Board
+ * @relates BoardA
  */
 inline constexpr void vertical_others(const int INDEX, int &other1,
                                       int &other2) {
@@ -205,7 +201,7 @@ inline constexpr void vertical_others(const int INDEX, int &other1,
  *
  * @see diagonal_twos_others()
  *
- * @relates Board
+ * @relates BoardA
  */
 inline constexpr void diagonal_fours_others(const int INDEX, int &other1,
                                             int &other2) {
@@ -237,7 +233,7 @@ inline constexpr void diagonal_fours_others(const int INDEX, int &other1,
  *
  * @see diagonal_twos_others()
  *
- * @relates Board
+ * @relates BoardA
  */
 inline constexpr void diagonal_twos_others(const int INDEX, int &other1,
                                            int &other2) {

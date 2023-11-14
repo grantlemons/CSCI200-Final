@@ -100,7 +100,6 @@ public:
     CellOwner get_cell_owner(const int INDEX) const override final;
 
     void draw() override final;
-    void mark_cell(const int INDEX, const CellOwner OWNER) override final;
 };
 
 // Helper functions

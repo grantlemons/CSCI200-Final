@@ -45,19 +45,6 @@ CellOwner LeafBoard::get_winner() const {
     return _winner;
 }
 
-void LeafBoard::mark_fill(const CellOwner OWNER) {
-    switch (OWNER) {
-    case X:
-        getGraphicalBoard()->fill_x();
-        break;
-    case O:
-        getGraphicalBoard()->fill_o();
-        break;
-    default:
-        break;
-    }
-}
-
 void LeafBoard::draw() {
     getGraphicalBoard()->draw_board(
         _symbols,

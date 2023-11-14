@@ -12,7 +12,7 @@
  * @class NcHandler
  * RAII Handler for a notcurses instance.
  */
-class NcHandler : public NcHandlerI {
+class NcHandler : virtual public NcHandlerI {
 private:
     /** The underlying notcurses instance. */
     notcurses *nc;

@@ -8,16 +8,52 @@
 #include <cstdint>
 #include <notcurses/notcurses.h>
 
+/**
+ * @class NcPlaneWrapper
+ * Wrapper class around notcurses plane type.
+ */
 class NcPlaneWrapper : virtual public NcPlaneWrapperI {
 private:
     ncplane *const _pPlane;
     bool _isStdPlane;
 
 public:
+    /**
+     * Constructor using the raw dimensions and location of the plane to
+     * construct.
+     *
+     * @param ncHandler The handler object used to access the underlying
+     * notcurses instance.
+     * @param Y The Y coordinate of the new plane's top left corner.
+     * @param X The X coordinate of the new plane's top left corner.
+     * @param ROWS The number of rows composing the new plane. (Height)
+     * @param COLS The number of columns composing the new plane. (Width)
+     *
+     * @see NcPlaneWrapper(NcHandlerI *, ncplane_options)
+     */
     NcPlaneWrapper(NcHandlerI *ncHandler, const int Y, const int X,
                    const int ROWS, const int COLS);
+
+    /**
+     * Constructor using dependency injection that takes the plane to wrap.
+     *
+     * @param PLANE The plane to wrap.
+     * @param isStdPlane If the given plane is the stdplane.
+     *
+     * Changes destruction behavior.
+     */
     NcPlaneWrapper(ncplane *const PLANE, const bool isStdPlane);
+
+    /**
+     * Constructor using an ncplane_options struct for options to construct.
+     */
     NcPlaneWrapper(NcHandlerI *ncHandler, const ncplane_options NOPTS);
+
+    /**
+     * Copy constructor for wrapper.
+     *
+     * Uses `ncplane_dup()` to copy the underlying ncplane.
+     */
     NcPlaneWrapper(NcPlaneWrapper &other);
     NcPlaneWrapper();
     ~NcPlaneWrapper();
@@ -33,7 +69,15 @@ public:
     int set_base_cell(const nccell *const c) override final;
 
     int cursor_move_yx(const int X, const int Y) override final;
+
+    /**
+     * @copydoc GraphicalAreaI::hline()
+     */
     int hline(const nccell *const c, const unsigned int LEN) override final;
+
+    /**
+     * @copydoc GraphicalAreaI::vline()
+     */
     int vline(const nccell *const c, const unsigned int LEN) override final;
     int putc_yx(const int Y, const int X, const nccell *const c) override final;
     void erase() override final;

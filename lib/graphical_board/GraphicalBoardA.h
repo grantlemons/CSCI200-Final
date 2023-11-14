@@ -13,8 +13,8 @@
 #include <notcurses/notcurses.h>
 
 /**
- * @class GraphicalBoard
- * Representation of a Tic-Tac-Toe board's graphical elements.
+ * @class GraphicalBoardA
+ * Abstract class representation of a Tic-Tac-Toe board's graphical elements.
  *
  * Contains functionality for drawing Tic-Tac-Toe boards as well as marking
  * their cells.
@@ -41,8 +41,10 @@ protected:
      */
     std::array<std::unique_ptr<GraphicalAreaI>, CELL_COUNT> _children;
 
-    /** The height and width of the primary plane */
-    int _rows, _cols;
+    /** The height of the primary plane */
+    int _rows;
+    /** The width of the primary plane */
+    int _cols;
 
     /**
      * A constructor that takes in the raw info for a plane and forms its
@@ -95,6 +97,11 @@ protected:
      */
     GraphicalBoardA(NcHandlerI *const ncHandler, NcPlaneWrapperI *const PLANE);
 
+    /**
+     * Virtual function for initializing child planes.
+     *
+     * Implemented differently for PrimaryGraphicalBoard and LeafGraphicalBoard.
+     */
     virtual void init_child_planes() = 0;
 
 public:
@@ -104,10 +111,8 @@ public:
 
     void draw_board(const std::array<const char *, SYMBOL_COUNT> SYMBOLS,
                     const uint64_t CELL_CHANNELS) override final;
-    void draw_x(const int INDEX) override final;
-    void draw_o(const int INDEX) override final;
-    void fill_x() override final;
-    void fill_o() override final;
+    virtual void draw_x(const int INDEX) override;
+    virtual void draw_o(const int INDEX) override;
     std::array<GraphicalAreaI *, CELL_COUNT> get_children() override final;
 
     // Inherited methods of NcPlaneWrapperI

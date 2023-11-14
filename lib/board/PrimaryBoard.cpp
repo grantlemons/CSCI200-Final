@@ -25,7 +25,10 @@ PrimaryBoard::PrimaryBoard(NcHandlerI *ncHandler,
 }
 
 PrimaryBoard::PrimaryBoard(NcHandlerI *ncHandler)
-    : BoardA::BoardA{ncHandler}, _cells{} {
+    : BoardA::BoardA{ncHandler},
+      _gBoard{std::unique_ptr<GraphicalBoardI>{
+          new PrimaryGraphicalBoard{ncHandler, def_primary_nopts(ncHandler)}}},
+      _cells{} {
     init_cells();
 }
 
@@ -56,23 +59,6 @@ void PrimaryBoard::draw() {
     for (unsigned int i = 0; i < CELL_COUNT; i++) {
         LeafBoard *cell = _cells.at(i).get();
         cell->draw();
-    }
-}
-
-void PrimaryBoard::mark_cell(const int INDEX, const CellOwner OWNER) {
-    Expects(INDEX >= 0 && INDEX <= 9);
-
-    switch (OWNER) {
-    case X:
-        getGraphicalBoard()->draw_x(INDEX);
-        _cells.at(gsl::narrow<unsigned int>(INDEX))->mark_fill(OWNER);
-        break;
-    case O:
-        getGraphicalBoard()->draw_o(INDEX);
-        _cells.at(gsl::narrow<unsigned int>(INDEX))->mark_fill(OWNER);
-        break;
-    default:
-        break;
     }
 }
 

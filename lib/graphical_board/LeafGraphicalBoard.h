@@ -6,6 +6,13 @@
 
 #include <notcurses/notcurses.h>
 
+/**
+ * @class LeafGraphicalBoard
+ * GraphicalBoard class with NcPlaneWrappers for cells.
+ *
+ * @see LeafBoard
+ * @see NcPlaneWrapper
+ */
 class LeafGraphicalBoard : virtual public GraphicalBoardA {
 private:
     void init_child_planes() override final;
