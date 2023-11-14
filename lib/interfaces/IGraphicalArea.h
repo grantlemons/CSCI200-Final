@@ -7,12 +7,12 @@
 #include <notcurses/notcurses.h>
 
 /**
- * @class GraphicalAreaI
+ * @class IGraphicalArea
  * Top-Level interface for all things graphical.
  */
-class GraphicalAreaI {
+class IGraphicalArea {
 public:
-    virtual ~GraphicalAreaI() = default;
+    virtual ~IGraphicalArea() = default;
 
     /**
      * Get the dimensions of the drawing area.
@@ -32,7 +32,7 @@ public:
     /**
      * Create another GraphicalAreaI from the current one.
      */
-    virtual GraphicalAreaI *create_child(ncplane_options const *nopts) = 0;
+    virtual IGraphicalArea *create_child(ncplane_options const *nopts) = 0;
 
     /**
      * Set a notcurses cell to have a specific gcluster.

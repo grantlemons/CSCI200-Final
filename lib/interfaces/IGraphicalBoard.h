@@ -3,22 +3,22 @@
 
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
-#include "lib/interfaces/GraphicalAreaI.h"
-#include "lib/interfaces/NcPlaneWrapperI.h"
+#include "lib/interfaces/IGraphicalArea.h"
+#include "lib/interfaces/INcPlaneWrapper.h"
 
 #include <array>
 #include <cstdint>
 
 /**
- * @class GraphicalBoardI
+ * @class IGraphicalBoard
  * Interface for graphical board classes.
  *
- * @see GraphicalBoardA
+ * @see AGraphicalBoard
  * @see GraphicalBoardDummy
  */
-class GraphicalBoardI : virtual public GraphicalAreaI {
+class IGraphicalBoard : virtual public IGraphicalArea {
 public:
-    virtual ~GraphicalBoardI() = default;
+    ~IGraphicalBoard() override = default;
 
     /**
      * Draws a Tic-Tac-Toe board on the primary plane.
@@ -33,22 +33,22 @@ public:
      * @see ncplane_vline()
      */
     virtual void
-    draw_board(const std::array<const char *, SYMBOL_COUNT> SYMBOLS,
-               const uint64_t CELL_CHANNELS) = 0;
+    draw_board(std::array<char const *, SYMBOL_COUNT> const SYMBOLS,
+               uint64_t const CELL_CHANNELS) = 0;
 
     /**
      * Marks a cell at an index as belonging to the X player.
      *
      * @param INDEX The index of the cell to mark.
      */
-    virtual void draw_x(const int INDEX) = 0;
+    virtual void draw_x(int const INDEX) = 0;
 
     /**
      * Marks a cell at an index as belonging to the O player.
      *
      * @param INDEX The index of the cell to mark.
      */
-    virtual void draw_o(const int INDEX) = 0;
+    virtual void draw_o(int const INDEX) = 0;
 
     /**
      * Getter for the board's child planes.
@@ -61,6 +61,6 @@ public:
      * 3|4|5
      * 6|7|8
      */
-    virtual std::array<GraphicalAreaI *, CELL_COUNT> get_children() = 0;
+    virtual std::array<IGraphicalArea *, CELL_COUNT> get_children() = 0;
 };
 #endif
