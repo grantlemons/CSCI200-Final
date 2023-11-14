@@ -1,19 +1,24 @@
 #include "doctest.h"
 #include "gsl/narrow"
-#include "lib/GraphicalBoard.h"
 #include "lib/Shared.h"
 #include "lib/board/LeafBoard.h"
 #include "lib/board/PrimaryBoard.h"
 #include "lib/dummies/GraphicalBoardDummy.h"
 #include "lib/dummies/NcHandlerDummy.h"
+#include "lib/dummies/NcPlaneWrapperDummy.h"
+#include "lib/graphical_board/GraphicalBoardA.h"
+#include "lib/interfaces/GraphicalBoardI.h"
 #include "lib/interfaces/NcHandlerI.h"
+#include "lib/interfaces/NcPlaneWrapperI.h"
 
 #include <optional>
 
 PrimaryBoard create_p_board();
 PrimaryBoard create_p_board() {
-    std::shared_ptr<NcHandlerI> handler{new NcHandlerDummy()};
-    std::unique_ptr<GraphicalBoardI> gBoardDummy{new GraphicalBoardDummy()};
+    std::shared_ptr<NcHandlerI> handler{new NcHandlerDummy{}};
+    NcPlaneWrapperI *plane{new NcPlaneWrapperDummy{}};
+    std::unique_ptr<GraphicalBoardI> gBoardDummy{
+        new GraphicalBoardDummy{plane}};
 
     return PrimaryBoard{handler, std::move(gBoardDummy)};
 }

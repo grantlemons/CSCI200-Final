@@ -11,18 +11,11 @@
 
 #include <array>
 #include <cmath>
-#include <iostream>
 #include <memory>
 #include <notcurses/notcurses.h>
 #include <ostream>
 
-BoardA::BoardA(std::shared_ptr<NcHandlerI> ncHandler,
-               std::shared_ptr<GraphicalAreaI> gBoard)
-    : _ncHandler{ncHandler}, _gBoard{gBoard} {}
-
-GraphicalBoardI *BoardA::getGraphicalBoard() const {
-    return gsl::narrow<GraphicalBoardI *>(_gBoard.get());
-}
+BoardA::BoardA(std::shared_ptr<NcHandlerI> ncHandler) : _ncHandler{ncHandler} {}
 
 std::shared_ptr<NcHandlerI> BoardA::getNcHandler() const {
     return _ncHandler;

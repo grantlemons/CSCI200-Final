@@ -1,9 +1,9 @@
 #ifndef PRIMARY_G_BOARD
 #define PRIMARY_G_BOARD
 
-#include "gsl/narrow"
 #include "lib/graphical_board/GraphicalBoardA.h"
 #include "lib/interfaces/NcHandlerI.h"
+#include "lib/interfaces/NcPlaneWrapperI.h"
 
 #include <memory>
 #include <notcurses/notcurses.h>
@@ -13,6 +13,8 @@ private:
     void init_child_planes() override final;
 
 public:
+    ~PrimaryGraphicalBoard();
+
     /**
      * A constructor that takes in the raw info for a plane and forms its
      * primary plane from those options.
@@ -28,7 +30,7 @@ public:
      *
      * @see create_nopts()
      */
-    PrimaryGraphicalBoard(NcHandlerI *ncHandler, const int Y, const int X,
+    PrimaryGraphicalBoard(NcHandlerI *const ncHandler, const int Y, const int X,
                           const int ROWS, const int COLS);
 
     /**
@@ -43,7 +45,8 @@ public:
      *
      * @see ncplane_create()
      */
-    PrimaryGraphicalBoard(NcHandlerI *ncHandler, const ncplane_options NOPTS);
+    PrimaryGraphicalBoard(NcHandlerI *const ncHandler,
+                          const ncplane_options NOPTS);
 
     /**
      * A constructor that takes in an notcurses plane and uses it as its primary
@@ -55,8 +58,8 @@ public:
      * notcurses instance.
      * @param PLANE The plane used as the primary plane.
      */
-    PrimaryGraphicalBoard(NcHandlerI *ncHandler,
-                          std::shared_ptr<NcPlaneWrapperI> plane);
+    PrimaryGraphicalBoard(NcHandlerI *const ncHandler,
+                          NcPlaneWrapperI *const PLANE);
 };
 
 #endif

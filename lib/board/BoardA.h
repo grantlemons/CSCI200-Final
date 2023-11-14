@@ -27,12 +27,6 @@ private:
      */
     std::shared_ptr<NcHandlerI> _ncHandler;
 
-    /**
-     * Component graphical board used to represent actions on the logical board
-     * graphically.
-     */
-    std::shared_ptr<GraphicalAreaI> _gBoard;
-
 protected:
     /**
      * A constructor that uses dependency injection.
@@ -41,15 +35,14 @@ protected:
      * notcurses instance.
      * @param gBoard The associated graphical board to construct with.
      */
-    BoardA(std::shared_ptr<NcHandlerI> ncHandler,
-           std::shared_ptr<GraphicalAreaI> gBoard);
+    BoardA(std::shared_ptr<NcHandlerI> ncHandler);
 
     /**
      * Getter for the associated GraphicalBoard instance.
      *
      * @return A pointer to the private GraphicalBoard.
      */
-    GraphicalBoardI *getGraphicalBoard() const;
+    virtual GraphicalBoardI *getGraphicalBoard() const = 0;
 
     /**
      * Getter for the associated NcHandler instance.

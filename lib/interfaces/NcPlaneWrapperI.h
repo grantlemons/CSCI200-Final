@@ -3,7 +3,7 @@
 
 #include "lib/interfaces/GraphicalAreaI.h"
 
-class NcPlaneWrapperI : public GraphicalAreaI {
+class NcPlaneWrapperI : virtual public GraphicalAreaI {
 public:
     virtual ~NcPlaneWrapperI() = default;
 };

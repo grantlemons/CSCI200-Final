@@ -10,7 +10,7 @@
 #include <cstdint>
 #include <memory>
 
-class GraphicalBoardI : public GraphicalAreaI {
+class GraphicalBoardI : virtual public GraphicalAreaI {
 public:
     virtual ~GraphicalBoardI() = default;
 
@@ -65,7 +65,6 @@ public:
      * 3|4|5
      * 6|7|8
      */
-    virtual std::array<std::shared_ptr<GraphicalAreaI>, CELL_COUNT> *
-    get_children() = 0;
+    virtual std::array<GraphicalAreaI *, CELL_COUNT> get_children() = 0;
 };
 #endif

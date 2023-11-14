@@ -3,6 +3,9 @@
 #include "lib/board/BoardA.h"
 #include "lib/board/LeafBoard.h"
 #include "lib/board/PrimaryBoard.h"
+#include "lib/dummies/GraphicalBoardDummy.h"
+#include "lib/dummies/NcHandlerDummy.h"
+#include "lib/dummies/NcPlaneWrapperDummy.h"
 #include "lib/graphical_board/GraphicalBoardA.h"
 #include "lib/graphical_board/PrimaryGraphicalBoard.h"
 #include "lib/interfaces/GraphicalBoardI.h"
@@ -13,13 +16,13 @@
 #include <optional>
 
 int main() {
-    std::shared_ptr<NcHandlerI> ncHandler{new NcHandler{}};
-    std::shared_ptr<NcPlaneWrapperI> stdPlane{
-        ncHandler->get_stdplane_wrapper()};
-    std::unique_ptr<GraphicalBoardI> gBoard{
-        new PrimaryGraphicalBoard{ncHandler.get(), stdPlane}};
+    std::shared_ptr<NcHandlerI> ncHandler{new NcHandlerDummy{}};
+    NcPlaneWrapperI *stdPlane{new NcPlaneWrapperDummy{}};
+    std::unique_ptr<GraphicalBoardI> gBoard{new GraphicalBoardDummy{stdPlane}};
+    // std::unique_ptr<GraphicalBoardI> gBoard{
+    //     new PrimaryGraphicalBoard{ncHandler.get(), stdPlane}};
 
-    PrimaryBoard pBoard{ncHandler};
+    PrimaryBoard pBoard{ncHandler, std::move(gBoard)};
     pBoard.draw();
 
     LeafBoard *selected = nullptr;

@@ -6,6 +6,8 @@
 #include "lib/Shared.h"
 #include "lib/board/BoardA.h"
 #include "lib/board/LeafBoard.h"
+#include "lib/interfaces/GraphicalAreaI.h"
+#include "lib/interfaces/GraphicalBoardI.h"
 
 #include <array>
 #include <cstdint>
@@ -17,23 +19,27 @@ std::array<const char *, SYMBOL_COUNT> PrimaryBoard::_symbols =
     std::array<const char *, SYMBOL_COUNT>({"\u2501", "\u2503", "\u254B"});
 
 PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandlerI> ncHandler,
-                           std::shared_ptr<GraphicalAreaI> gBoard)
-    : BoardA::BoardA{ncHandler, gBoard}, _cells{} {
+                           std::unique_ptr<GraphicalBoardI> gBoard)
+    : BoardA::BoardA{ncHandler}, _gBoard{std::move(gBoard)}, _cells{} {
     init_cells();
 }
 
 PrimaryBoard::PrimaryBoard(std::shared_ptr<NcHandlerI> ncHandler)
-    : BoardA::BoardA{ncHandler, def_primary_nopts(ncHandler)}, _cells{} {
+    : BoardA::BoardA{ncHandler}, _cells{} {
     init_cells();
 }
 
+GraphicalBoardI *PrimaryBoard::getGraphicalBoard() const {
+    return _gBoard.get();
+}
+
 void PrimaryBoard::init_cells() {
-    std::array<std::shared_ptr<GraphicalAreaI>, CELL_COUNT> *gBoards =
+    std::array<GraphicalAreaI *, CELL_COUNT> gBoards =
         getGraphicalBoard()->get_children();
 
     for (unsigned int i = 0; i < 9; i++) {
-        _cells.at(i) = std::unique_ptr<LeafBoard>{
-            new LeafBoard(getNcHandler(), gBoards->at(i))};
+        _cells.at(i) = std::unique_ptr<LeafBoard>{new LeafBoard{
+            getNcHandler(), dynamic_cast<GraphicalBoardI *>(gBoards.at(i))}};
     }
 }
 

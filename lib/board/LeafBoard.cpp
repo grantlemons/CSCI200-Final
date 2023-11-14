@@ -4,6 +4,7 @@
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
 #include "lib/board/BoardA.h"
+#include "lib/interfaces/GraphicalBoardI.h"
 
 #include <array>
 #include <cstdint>
@@ -14,8 +15,12 @@ std::array<const char *, SYMBOL_COUNT> LeafBoard::_symbols =
     std::array<const char *, SYMBOL_COUNT>{"\u2500", "\u2502", "\u253C"};
 
 LeafBoard::LeafBoard(std::shared_ptr<NcHandlerI> ncHandler,
-                     std::shared_ptr<GraphicalAreaI> gBoard)
-    : BoardA::BoardA{ncHandler, gBoard}, _cells{}, _winner{None} {}
+                     GraphicalBoardI *gBoard)
+    : BoardA::BoardA{ncHandler}, _gBoard{gBoard}, _cells{}, _winner{None} {}
+
+GraphicalBoardI *LeafBoard::getGraphicalBoard() const {
+    return _gBoard;
+}
 
 CellOwner LeafBoard::get_cell_owner(const int INDEX) const {
     Expects(INDEX >= 0 && INDEX <= 9);

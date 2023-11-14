@@ -42,7 +42,8 @@ public:
      *
      * @see ncplane_create()
      */
-    LeafGraphicalBoard(NcHandlerI *ncHandler, const ncplane_options NOPTS);
+    LeafGraphicalBoard(NcHandlerI *const ncHandler,
+                       const ncplane_options NOPTS);
 
     /**
      * A constructor that takes in an notcurses plane and uses it as its primary
@@ -54,8 +55,8 @@ public:
      * notcurses instance.
      * @param PLANE The plane used as the primary plane.
      */
-    LeafGraphicalBoard(NcHandlerI *ncHandler,
-                       std::shared_ptr<NcPlaneWrapperI> plane);
+    LeafGraphicalBoard(NcHandlerI *const ncHandler,
+                       NcPlaneWrapperI *const PLANE);
 };
 
 #endif

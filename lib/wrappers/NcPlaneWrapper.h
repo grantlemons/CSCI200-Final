@@ -9,7 +9,7 @@
 #include <memory>
 #include <notcurses/notcurses.h>
 
-class NcPlaneWrapper : public NcPlaneWrapperI {
+class NcPlaneWrapper : virtual public NcPlaneWrapperI {
 private:
     ncplane *const _pPlane;
     bool _isStdPlane;
@@ -38,30 +38,29 @@ public:
     int vline(const nccell *const c, const unsigned int LEN) override final;
     int putc_yx(const int Y, const int X, const nccell *const c) override final;
     void erase() override final;
+
+    /**
+     * Forms an struct describing the configuration of a notcurses plane from
+     * the data passed in.
+     *
+     * @param Y The Y coordinate of the new plane's top left corner.
+     * @param X The X coordinate of the new plane's top left corner.
+     * @param ROWS The number of rows composing the new plane. (Height)
+     * @param COLS The number of columns composing the new plane. (Width)
+     * @return An ncplane_options struct describing the configuration options.
+     */
+    static ncplane_options create_nopts(const int Y, const int X,
+                                        const unsigned int ROWS,
+                                        const unsigned int COLS);
+
+    /**
+     * Extracts the configuration used to form the given plane.
+     *
+     * @param PLANE The plane to extract the configuration from.
+     * @return An ncplane_options struct describing the plane's configuration
+     * options.
+     */
+    static ncplane_options extract_nopts(ncplane *PLANE);
 };
-
-// Helper functions
-
-/**
- * Forms an struct describing the configuration of a notcurses plane from the
- * data passed in.
- *
- * @param Y The Y coordinate of the new plane's top left corner.
- * @param X The X coordinate of the new plane's top left corner.
- * @param ROWS The number of rows composing the new plane. (Height)
- * @param COLS The number of columns composing the new plane. (Width)
- * @return An ncplane_options struct describing the configuration options.
- */
-ncplane_options create_nopts(const int Y, const int X, const unsigned int ROWS,
-                             const unsigned int COLS);
-
-/**
- * Extracts the configuration used to form the given plane.
- *
- * @param PLANE The plane to extract the configuration from.
- * @return An ncplane_options struct describing the plane's configuration
- * options.
- */
-ncplane_options extract_nopts(ncplane *PLANE);
 
 #endif

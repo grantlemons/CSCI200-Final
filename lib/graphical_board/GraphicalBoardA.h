@@ -19,7 +19,7 @@
  * Contains functionality for drawing Tic-Tac-Toe boards as well as marking
  * their cells.
  */
-class GraphicalBoardA : public GraphicalBoardI {
+class GraphicalBoardA : virtual public GraphicalBoardI {
 protected:
     /** The handler object used to access the underlying
      * notcurses instance.
@@ -27,7 +27,7 @@ protected:
     NcHandlerI *_ncHandler;
 
     /** The primary plane used as a canvas for drawing the board. */
-    std::shared_ptr<NcPlaneWrapperI> _primaryPlane;
+    NcPlaneWrapperI *_primaryPlane;
 
     /** The child planes used to represent the cells of the board
      *
@@ -39,7 +39,7 @@ protected:
      * 3|4|5
      * 6|7|8
      */
-    std::array<std::shared_ptr<GraphicalAreaI>, CELL_COUNT> _children;
+    std::array<std::unique_ptr<GraphicalAreaI>, CELL_COUNT> _children;
 
     /** The height and width of the primary plane */
     int _rows, _cols;
@@ -61,7 +61,7 @@ protected:
      * @see _primaryPlane
      * @see _childPlanes
      */
-    GraphicalBoardA(NcHandlerI *ncHandler, const int Y, const int X,
+    GraphicalBoardA(NcHandlerI *const ncHandler, const int Y, const int X,
                     const int ROWS, const int COLS);
 
     /**
@@ -78,7 +78,7 @@ protected:
      * @see _primaryPlane
      * @see _childPlanes
      */
-    GraphicalBoardA(NcHandlerI *ncHandler, const ncplane_options NOPTS);
+    GraphicalBoardA(NcHandlerI *const ncHandler, const ncplane_options NOPTS);
 
     /**
      * A constructor that takes in an notcurses plane and uses it as its primary
@@ -93,24 +93,22 @@ protected:
      * @see _primaryPlane
      * @see _childPlanes
      */
-    GraphicalBoardA(NcHandlerI *ncHandler,
-                    std::shared_ptr<NcPlaneWrapperI> plane);
-
-    GraphicalBoardA(GraphicalBoardA &) = delete;
-    void operator=(const GraphicalBoardA &) = delete;
-    ~GraphicalBoardA() = default;
+    GraphicalBoardA(NcHandlerI *const ncHandler, NcPlaneWrapperI *const PLANE);
 
     virtual void init_child_planes() = 0;
 
 public:
+    GraphicalBoardA(GraphicalBoardA &) = delete;
+    void operator=(const GraphicalBoardA &) = delete;
+    ~GraphicalBoardA() = default;
+
     void draw_board(const std::array<const char *, SYMBOL_COUNT> SYMBOLS,
                     const uint64_t CELL_CHANNELS) override final;
     void draw_x(const int INDEX) override final;
     void draw_o(const int INDEX) override final;
     void fill_x() override final;
     void fill_o() override final;
-    std::array<std::shared_ptr<GraphicalAreaI>, CELL_COUNT> *
-    get_children() override final;
+    std::array<GraphicalAreaI *, CELL_COUNT> get_children() override final;
 
     // Inherited methods of NcPlaneWrapperI
     void dim_yx(int &ROWS, int &COLS) const override final;

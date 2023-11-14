@@ -5,6 +5,7 @@
 #include "lib/Shared.h"
 #include "lib/board/BoardA.h"
 #include "lib/interfaces/GraphicalAreaI.h"
+#include "lib/interfaces/GraphicalBoardI.h"
 #include "lib/interfaces/NcPlaneWrapperI.h"
 
 #include <array>
@@ -36,6 +37,12 @@ private:
     static std::array<const char *, SYMBOL_COUNT> _symbols;
 
     /**
+     * Component graphical board used to represent actions on the logical board
+     * graphically.
+     */
+    GraphicalBoardI *_gBoard;
+
+    /**
      * Array storing ownership of its component cells.
      */
     std::array<LLCell, CELL_COUNT> _cells;
@@ -49,6 +56,8 @@ private:
      */
     CellOwner _winner;
 
+    GraphicalBoardI *getGraphicalBoard() const override final;
+
 public:
     /**
      * A constructor for LeafBoard using dependency injection.
@@ -59,8 +68,7 @@ public:
      *
      * @see NcHandler::combine_channels()
      */
-    LeafBoard(std::shared_ptr<NcHandlerI> ncHandler,
-              std::shared_ptr<GraphicalAreaI> gBoard);
+    LeafBoard(std::shared_ptr<NcHandlerI> ncHandler, GraphicalBoardI *gBoard);
 
     ~LeafBoard() = default;
     LeafBoard(LeafBoard &) = delete;

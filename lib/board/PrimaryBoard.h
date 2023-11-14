@@ -5,7 +5,9 @@
 #include "lib/Shared.h"
 #include "lib/board/BoardA.h"
 #include "lib/board/LeafBoard.h"
+#include "lib/graphical_board/PrimaryGraphicalBoard.h"
 #include "lib/interfaces/GraphicalAreaI.h"
+#include "lib/interfaces/GraphicalBoardI.h"
 
 #include <array>
 #include <memory>
@@ -32,6 +34,12 @@ private:
     static std::array<const char *, SYMBOL_COUNT> _symbols;
 
     /**
+     * Component graphical board used to represent actions on the logical board
+     * graphically.
+     */
+    std::unique_ptr<GraphicalBoardI> _gBoard;
+
+    /**
      * Array storing ownership of its component LeafBoards.
      */
     std::array<std::unique_ptr<LeafBoard>, CELL_COUNT> _cells;
@@ -45,6 +53,8 @@ private:
      */
     void init_cells();
 
+    GraphicalBoardI *getGraphicalBoard() const override final;
+
 public:
     /**
      * A constructor for PrimaryBoard using dependency injection.
@@ -56,7 +66,7 @@ public:
      * @see NcHandler::combine_channels()
      */
     PrimaryBoard(std::shared_ptr<NcHandlerI> ncHandler,
-                 std::shared_ptr<GraphicalAreaI> gBoard);
+                 std::unique_ptr<GraphicalBoardI> gBoard);
 
     /**
      * The constructor for PrimaryBoard.

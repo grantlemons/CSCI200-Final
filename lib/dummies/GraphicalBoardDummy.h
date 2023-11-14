@@ -3,6 +3,7 @@
 
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
+#include "lib/interfaces/GraphicalAreaI.h"
 #include "lib/interfaces/GraphicalBoardI.h"
 
 #include <array>
@@ -10,8 +11,16 @@
 #include <memory>
 
 class GraphicalBoardDummy : public GraphicalBoardI {
+private:
+    std::shared_ptr<NcPlaneWrapperI> _primaryPlane;
+    std::array<std::unique_ptr<GraphicalAreaI>, CELL_COUNT> _children;
+
+    void init_child_planes();
+
+    GraphicalBoardDummy(std::shared_ptr<NcPlaneWrapperI> plane);
+
 public:
-    GraphicalBoardDummy();
+    GraphicalBoardDummy(NcPlaneWrapperI *plane);
 
     void draw_board(const std::array<const char *, SYMBOL_COUNT> SYMBOLS,
                     const uint64_t CELL_CHANNELS) override final;
@@ -19,10 +28,22 @@ public:
     void draw_o(const int INDEX) override final;
     void fill_x() override final;
     void fill_o() override final;
-    virtual std::array<NcPlaneWrapperI *, CELL_COUNT> *
-    get_child_planes() override final;
-    std::array<std::unique_ptr<GraphicalBoardI>, CELL_COUNT>
-    create_child_boards() const override final;
+    std::array<GraphicalAreaI *, CELL_COUNT> get_children() override final;
+
+    void dim_yx(int &ROWS, int &COLS) const override final;
+    int get_rows() const override final;
+    int get_cols() const override final;
+
+    GraphicalAreaI *create_child(const ncplane_options *nopts) override final;
+
+    int load_nccell(nccell *const c, const char *gcluster) override final;
+    int set_base_cell(const nccell *const c) override final;
+
+    int cursor_move_yx(const int X, const int Y) override final;
+    int hline(const nccell *const c, const unsigned LEN) override final;
+    int vline(const nccell *const c, const unsigned LEN) override final;
+    int putc_yx(const int Y, const int X, const nccell *const c) override final;
+    void erase() override final;
 };
 
 #endif

@@ -12,22 +12,21 @@
 #include <notcurses/notcurses.h>
 #include <unistd.h>
 
-GraphicalBoardA::GraphicalBoardA(NcHandlerI *ncHandler, const int Y,
+GraphicalBoardA::GraphicalBoardA(NcHandlerI *const ncHandler, const int Y,
                                  const int X, const int ROWS, const int COLS)
     : _primaryPlane{new NcPlaneWrapper{ncHandler, Y, X, ROWS, COLS}},
       _rows{ROWS + 1}, _cols{COLS + 1} {
     Expects(ROWS >= 0 && COLS >= 0);
 }
 
-GraphicalBoardA::GraphicalBoardA(NcHandlerI *ncHandler,
+GraphicalBoardA::GraphicalBoardA(NcHandlerI *const ncHandler,
                                  const ncplane_options NOPTS)
-    : GraphicalBoardA::GraphicalBoardA{
-          ncHandler, std::shared_ptr<NcPlaneWrapperI>{
-                         new NcPlaneWrapper(ncHandler, NOPTS)}} {}
+    : GraphicalBoardA::GraphicalBoardA{ncHandler,
+                                       new NcPlaneWrapper(ncHandler, NOPTS)} {}
 
-GraphicalBoardA::GraphicalBoardA(NcHandlerI *ncHandler,
-                                 std::shared_ptr<NcPlaneWrapperI> plane)
-    : _ncHandler{ncHandler}, _primaryPlane{plane},
+GraphicalBoardA::GraphicalBoardA(NcHandlerI *const ncHandler,
+                                 NcPlaneWrapperI *const PLANE)
+    : _ncHandler{ncHandler}, _primaryPlane{PLANE},
       _rows{_primaryPlane->get_rows() + 1},
       _cols{_primaryPlane->get_cols() + 1} {
     Expects(_rows >= 0 && _cols >= 0);
@@ -90,8 +89,8 @@ void GraphicalBoardA::draw_board(
 void GraphicalBoardA::draw_x(const int INDEX) {
     Expects(INDEX >= 0 && INDEX <= 9);
 
-    const std::shared_ptr<GraphicalAreaI> PLANE =
-        _children.at(gsl::narrow<unsigned int>(INDEX));
+    GraphicalAreaI *const PLANE =
+        _children.at(gsl::narrow<unsigned int>(INDEX)).get();
     const nccell red = NCCELL_INITIALIZER(
         '\0', 0,
         NcHandler::combine_channels(NcHandler::RED_CHANNEL,
@@ -107,8 +106,8 @@ void GraphicalBoardA::draw_x(const int INDEX) {
 void GraphicalBoardA::draw_o(const int INDEX) {
     Expects(INDEX >= 0 && INDEX <= 9);
 
-    const std::shared_ptr<GraphicalAreaI> PLANE =
-        _children.at(gsl::narrow<unsigned int>(INDEX));
+    GraphicalAreaI *const PLANE =
+        _children.at(gsl::narrow<unsigned int>(INDEX)).get();
     const nccell blue = NCCELL_INITIALIZER(
         '\0', 0,
         NcHandler::combine_channels(NcHandler::BLUE_CHANNEL,
@@ -123,7 +122,7 @@ void GraphicalBoardA::draw_o(const int INDEX) {
 
 void GraphicalBoardA::fill_x() {
     for (unsigned int i = 0; i < CELL_COUNT; i++) {
-        const std::shared_ptr<GraphicalAreaI> CHILD = _children.at(i);
+        GraphicalAreaI *const CHILD = _children.at(i).get();
         const nccell red = NCCELL_INITIALIZER(
             '\0', 0,
             NcHandler::combine_channels(NcHandler::RED_CHANNEL,
@@ -139,7 +138,7 @@ void GraphicalBoardA::fill_x() {
 
 void GraphicalBoardA::fill_o() {
     for (unsigned int i = 0; i < CELL_COUNT; i++) {
-        const std::shared_ptr<GraphicalAreaI> CHILD = _children.at(i);
+        GraphicalAreaI *const CHILD = _children.at(i).get();
         const nccell blue = NCCELL_INITIALIZER(
             '\0', 0,
             NcHandler::combine_channels(NcHandler::BLUE_CHANNEL,
@@ -153,9 +152,14 @@ void GraphicalBoardA::fill_o() {
     _ncHandler->render();
 }
 
-std::array<std::shared_ptr<GraphicalAreaI>, CELL_COUNT> *
-GraphicalBoardA::get_children() {
-    return &_children;
+std::array<GraphicalAreaI *, CELL_COUNT> GraphicalBoardA::get_children() {
+    std::array<GraphicalAreaI *, CELL_COUNT> arr{};
+
+    for (unsigned int i = 0; i < CELL_COUNT; i++) {
+        arr.at(i) = _children.at(i).get();
+    }
+
+    return arr;
 }
 
 // Inherited methods of NcPlaneWrapperI
@@ -195,7 +199,7 @@ int GraphicalBoardA::putc_yx(const int Y, const int X, const nccell *const c) {
 void GraphicalBoardA::erase() {
     _primaryPlane->erase();
 
-    for (const GraphicalAreaI *child : get_children()) {
-        child->erase();
+    for (unsigned int i = 0; i < CELL_COUNT; i++) {
+        _children.at(i)->erase();
     }
 }

@@ -2,7 +2,6 @@
 
 #include "lib/dummies/NcPlaneWrapperDummy.h"
 
-#include <iostream>
 #include <notcurses/notcurses.h>
 
 NcHandlerDummy::NcHandlerDummy() {}

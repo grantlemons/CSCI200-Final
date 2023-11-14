@@ -83,9 +83,9 @@ void NcPlaneWrapper::erase() {
     return ncplane_erase(_pPlane);
 }
 
-// Helper functions
-ncplane_options create_nopts(const int Y, const int X, const unsigned int ROWS,
-                             const unsigned int COLS) {
+ncplane_options NcPlaneWrapper::create_nopts(const int Y, const int X,
+                                             const unsigned int ROWS,
+                                             const unsigned int COLS) {
     ncplane_options nopts = {
         Y, X, ROWS, COLS, nullptr, nullptr, nullptr, 0, 0, 0,
     };
@@ -93,7 +93,7 @@ ncplane_options create_nopts(const int Y, const int X, const unsigned int ROWS,
     return nopts;
 }
 
-ncplane_options extract_nopts(ncplane *PLANE) {
+ncplane_options NcPlaneWrapper::extract_nopts(ncplane *PLANE) {
     unsigned int rows, cols;
     ncplane_dim_yx(PLANE, &rows, &cols);
 
