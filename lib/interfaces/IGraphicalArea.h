@@ -1,7 +1,7 @@
 #ifndef GRAPHICAL_AREAI
 #define GRAPHICAL_AREAI
 
-#include "lib/interfaces/NcHandlerI.h"
+#include "lib/interfaces/INcHandler.h"
 
 #include <cstdint>
 #include <notcurses/notcurses.h>

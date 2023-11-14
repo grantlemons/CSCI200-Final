@@ -5,7 +5,7 @@
 #include <notcurses/notcurses.h>
 
 // Forward declaration to avoid recursive includes
-class NcPlaneWrapperI;
+class INcPlaneWrapper;
 
 /**
  * @class INcHandler
@@ -35,7 +35,7 @@ public:
      *
      * @see get_stdplane()
      */
-    [[nodiscard]] virtual NcPlaneWrapperI *get_stdplane_wrapper() const = 0;
+    [[nodiscard]] virtual INcPlaneWrapper *get_stdplane_wrapper() const = 0;
 
     /**
      * Gets default background color channel from the stdplane.
