@@ -2,7 +2,7 @@
 Checks: "-*,
         modernize-*,
         cppcoreguidelines-*,
-        modernize-use-trailing-return-type,
+        -modernize-use-trailing-return-type,
         readability-else-after-return,
         readability-static-accessed-through-instance,
         cppcoreguidelines-non-private-member-variables-in-classes,
@@ -13,6 +13,7 @@ Checks: "-*,
 WarningsAsErrors: ''
 HeaderFilterRegex: ''
 FormatStyle:     none
+HeaderFilterRegex: '^lib/.*$'
 
 CheckOptions:
   - key: misc-const-correctness.WarnPointersAsValues
@@ -45,6 +46,10 @@ CheckOptions:
   - key: readability-identifier-naming.GlobalPointerPrefix
     value: p
 
+  - key: readability-identifier-naming.ConstantPointerParameterCase
+    value: camelBack
+  - key: readability-identifier-naming.ConstantPointerParameterPrefix
+    value: P_
   - key: readability-identifier-naming.LocalConstantPointerCase
     value: camelBack
   - key: readability-identifier-naming.GlobalConstantPointerCase
@@ -53,3 +58,13 @@ CheckOptions:
     value: P_
   - key: readability-identifier-naming.GlobalConstantPointerPrefix
     value: P_
+
+  - key: readability-identifier-naming.AbstractClassSuffix
+    value: A
+  - key: readability-identifier-naming.AbstractClassIgnoredRegex
+    value: ^.*I$
+
+  - key: cppcoreguidelines-explicit-virtual-functions.AllowOverrideAndFinal
+    value: true
+  - key: modernize-use-override.AllowOverrideAndFinal
+    value: true

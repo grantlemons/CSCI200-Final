@@ -19,7 +19,7 @@ private:
     void init_child_planes() override final;
 
 public:
-    ~PrimaryGraphicalBoard();
+    ~PrimaryGraphicalBoard() override;
 
     /**
      * A constructor that takes in the raw info for a plane and forms its
@@ -36,8 +36,8 @@ public:
      *
      * @see create_nopts()
      */
-    PrimaryGraphicalBoard(NcHandlerI *const ncHandler, const int Y, const int X,
-                          const int ROWS, const int COLS);
+    PrimaryGraphicalBoard(NcHandlerI *const P_ncHandler, int const Y,
+                          int const X, int const ROWS, int const COLS);
 
     /**
      * A constructor that takes in an ncplane_options struct for a plane and
@@ -51,8 +51,8 @@ public:
      *
      * @see ncplane_create()
      */
-    PrimaryGraphicalBoard(NcHandlerI *const ncHandler,
-                          const ncplane_options NOPTS);
+    PrimaryGraphicalBoard(NcHandlerI *const P_ncHandler,
+                          ncplane_options const NOPTS);
 
     /**
      * A constructor that takes in an notcurses plane and uses it as its primary
@@ -64,25 +64,25 @@ public:
      * notcurses instance.
      * @param PLANE The plane used as the primary plane.
      */
-    PrimaryGraphicalBoard(NcHandlerI *const ncHandler,
-                          NcPlaneWrapperI *const PLANE);
+    PrimaryGraphicalBoard(NcHandlerI *const P_ncHandler,
+                          NcPlaneWrapperI *const P_plane);
 
-    void draw_x(const int INDEX) override final;
-    void draw_o(const int INDEX) override final;
+    void draw_x(int const INDEX) override final;
+    void draw_o(int const INDEX) override final;
 
     /**
      * Marks all cells of a child board as belonging to the X player.
      *
      * @param INDEX The index of the child board to mark.
      */
-    void fill_x(const int INDEX);
+    void fill_x(int const INDEX);
 
     /**
      * Marks all cells of a child board as belonging to the O player.
      *
      * @param INDEX The index of the child board to mark.
      */
-    void fill_o(const int INDEX);
+    void fill_o(int const INDEX);
 };
 
 #endif

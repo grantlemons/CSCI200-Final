@@ -33,8 +33,8 @@ public:
      *
      * @see create_nopts()
      */
-    LeafGraphicalBoard(NcHandlerI *ncHandler, const int Y, const int X,
-                       const int ROWS, const int COLS);
+    LeafGraphicalBoard(NcHandlerI *ncHandler, int const Y, int const X,
+                       int const ROWS, int const COLS);
 
     /**
      * A constructor that takes in an ncplane_options struct for a plane and
@@ -48,8 +48,8 @@ public:
      *
      * @see ncplane_create()
      */
-    LeafGraphicalBoard(NcHandlerI *const ncHandler,
-                       const ncplane_options NOPTS);
+    LeafGraphicalBoard(NcHandlerI *const P_ncHandler,
+                       ncplane_options const NOPTS);
 
     /**
      * A constructor that takes in an notcurses plane and uses it as its primary
@@ -61,8 +61,8 @@ public:
      * notcurses instance.
      * @param PLANE The plane used as the primary plane.
      */
-    LeafGraphicalBoard(NcHandlerI *const ncHandler,
-                       NcPlaneWrapperI *const PLANE);
+    LeafGraphicalBoard(NcHandlerI *const P_ncHandler,
+                       NcPlaneWrapperI *const P_plane);
 };
 
 #endif

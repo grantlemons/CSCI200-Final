@@ -24,10 +24,10 @@ protected:
     /** The handler object used to access the underlying
      * notcurses instance.
      */
-    NcHandlerI *_ncHandler;
+    NcHandlerI *mncHandler;
 
     /** The primary plane used as a canvas for drawing the board. */
-    NcPlaneWrapperI *_primaryPlane;
+    NcPlaneWrapperI *mprimaryPlane;
 
     /** The child planes used to represent the cells of the board
      *
@@ -39,12 +39,12 @@ protected:
      * 3|4|5
      * 6|7|8
      */
-    std::array<std::unique_ptr<GraphicalAreaI>, CELL_COUNT> _children;
+    std::array<std::unique_ptr<GraphicalAreaI>, CELL_COUNT> mchildren;
 
     /** The height of the primary plane */
-    int _rows;
+    int mrows;
     /** The width of the primary plane */
-    int _cols;
+    int mcols;
 
     /**
      * A constructor that takes in the raw info for a plane and forms its
@@ -63,8 +63,8 @@ protected:
      * @see _primaryPlane
      * @see _childPlanes
      */
-    GraphicalBoardA(NcHandlerI *const ncHandler, const int Y, const int X,
-                    const int ROWS, const int COLS);
+    GraphicalBoardA(NcHandlerI *const P_ncHandler, int const Y, int const X,
+                    int const ROWS, int const COLS);
 
     /**
      * A constructor that takes in an ncplane_options struct for a plane and
@@ -80,7 +80,7 @@ protected:
      * @see _primaryPlane
      * @see _childPlanes
      */
-    GraphicalBoardA(NcHandlerI *const ncHandler, const ncplane_options NOPTS);
+    GraphicalBoardA(NcHandlerI *const P_ncHandler, ncplane_options const NOPTS);
 
     /**
      * A constructor that takes in an notcurses plane and uses it as its primary
@@ -95,7 +95,8 @@ protected:
      * @see _primaryPlane
      * @see _childPlanes
      */
-    GraphicalBoardA(NcHandlerI *const ncHandler, NcPlaneWrapperI *const PLANE);
+    GraphicalBoardA(NcHandlerI *const P_ncHandler,
+                    NcPlaneWrapperI *const P_plane);
 
     /**
      * Virtual function for initializing child planes.
@@ -106,29 +107,30 @@ protected:
 
 public:
     GraphicalBoardA(GraphicalBoardA &) = delete;
-    void operator=(const GraphicalBoardA &) = delete;
-    ~GraphicalBoardA() = default;
+    void operator=(GraphicalBoardA const &) = delete;
+    ~GraphicalBoardA() override = default;
 
-    void draw_board(const std::array<const char *, SYMBOL_COUNT> SYMBOLS,
-                    const uint64_t CELL_CHANNELS) override final;
-    virtual void draw_x(const int INDEX) override;
-    virtual void draw_o(const int INDEX) override;
+    void draw_board(std::array<char const *, SYMBOL_COUNT> const SYMBOLS,
+                    uint64_t const CELL_CHANNELS) override final;
+    void draw_x(int const INDEX) override;
+    void draw_o(int const INDEX) override;
     std::array<GraphicalAreaI *, CELL_COUNT> get_children() override final;
 
     // Inherited methods of NcPlaneWrapperI
     void dim_yx(int &ROWS, int &COLS) const override final;
-    int get_rows() const override final;
-    int get_cols() const override final;
+    [[nodiscard]] int get_rows() const override final;
+    [[nodiscard]] int get_cols() const override final;
 
-    GraphicalAreaI *create_child(const ncplane_options *nopts) override final;
+    GraphicalAreaI *create_child(ncplane_options const *nopts) override final;
 
-    int load_nccell(nccell *const c, const char *gcluster) override final;
-    int set_base_cell(const nccell *const c) override final;
+    int load_nccell(nccell *const P_c, char const *gcluster) override final;
+    int set_base_cell(nccell const *const P_c) override final;
 
-    int cursor_move_yx(const int X, const int Y) override final;
-    int hline(const nccell *const c, const unsigned LEN) override final;
-    int vline(const nccell *const c, const unsigned LEN) override final;
-    int putc_yx(const int Y, const int X, const nccell *const c) override final;
+    int cursor_move_yx(int const X, int const Y) override final;
+    int hline(nccell const *const P_c, unsigned const LEN) override final;
+    int vline(nccell const *const P_c, unsigned const LEN) override final;
+    int putc_yx(int const Y, int const X,
+                nccell const *const P_c) override final;
     void erase() override final;
 };
 

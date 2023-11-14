@@ -70,10 +70,10 @@ memcheck:
 	@valgrind --leak-check=full ./$(TARGET)
 
 lint: .clang-tidy $(SRC_FILES)
-	@find . -regex '.*\.cpp' | xargs -I{} clang-tidy -p compile-commands.json {}
+	@find lib *.cpp -regex '.*\.cpp' -not -path '*/tests/*' | xargs -I{} clang-tidy -p compile-commands.json {}
 
 lint-fix: .clang-tidy $(SRC_FILES)
-	@find . -regex '.*\.cpp' | xargs -I{} clang-tidy -p compile-commands.json {} -fix
+	@find lib *.cpp -regex '.*\.cpp' -not -path '*/tests/*' | xargs -I{} clang-tidy -p compile-commands.json {} -fix
 
 zip:
 	@tar czf $(TARGET).tar.gz --exclude-ignore=.gitignore --exclude=".git" --exclude=".gitignore" .
