@@ -116,7 +116,7 @@ This dependency is optional, omission will result in an error when building
 documentation. To resolve, either clone the submodule or edit the `Doxyfile`
 to exclude the styling this dependency provides.
 
-### GSL {#gsl}
+### Guidelines Support Library {#gsl}
 
 This project uses [Microsoft's Guidelines Support Library](https://github.com/microsoft/GSL)
 for certain functions (checked narrowing, preconditions, and postconditions).
