@@ -44,16 +44,17 @@ void PrimaryGraphicalBoard::init_child_planes() {
         const unsigned int COLUMN = i % 3u;
         const unsigned int ROW = (i - COLUMN) / 3u;
 
-        int newY = 1 + gsl::narrow<int>((ROWS_PER_BCELL * ROW));
-        int newX = 1 + gsl::narrow<int>((COLS_PER_BCELL * COLUMN));
+        const int NEW_Y = 1 + gsl::narrow<int>((ROWS_PER_BCELL * ROW));
+        const int NEW_X = 1 + gsl::narrow<int>((COLS_PER_BCELL * COLUMN));
 
-        ncplane_options childNopts = NcPlaneWrapper::createNopts(
-            newY, newX, ROWS_PER_BCELL - 1u, COLS_PER_BCELL - 1u);
+        const ncplane_options CHILD_NOPTS = NcPlaneWrapper::createNopts(
+            NEW_Y, NEW_X, ROWS_PER_BCELL - 1u, COLS_PER_BCELL - 1u);
         auto *const P_newPlane =
-            dynamic_cast<INcPlaneWrapper *>(create_child(&childNopts));
-        IGraphicalArea *pTmp = new LeafGraphicalBoard{mncHandler, P_newPlane};
+            dynamic_cast<INcPlaneWrapper *>(create_child(&CHILD_NOPTS));
+        IGraphicalArea *const P_tmp =
+            new LeafGraphicalBoard{mncHandler, P_newPlane};
 
-        mchildren.at(i) = std::unique_ptr<IGraphicalArea>{pTmp};
+        mchildren.at(i) = std::unique_ptr<IGraphicalArea>{P_tmp};
     }
 }
 

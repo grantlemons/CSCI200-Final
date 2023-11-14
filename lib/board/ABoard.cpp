@@ -62,11 +62,8 @@ bool ABoard::check_win(const int INDEX, const CellOwner OWNER) const {
                                      get_cell_owner(diagonalOther3) == OWNER &&
                                      get_cell_owner(diagonalOther4) == OWNER;
 
-    bool res =
-        get_cell_owner(INDEX) == OWNER &&
-        (WON_HORI || WON_VERT || WON_DIAGONAL_TWOS || WON_DIAGONALS_FOURS);
-
-    return res;
+    return get_cell_owner(INDEX) == OWNER &&
+           (WON_HORI || WON_VERT || WON_DIAGONAL_TWOS || WON_DIAGONALS_FOURS);
 }
 
 void ABoard::mark_cell(const int INDEX, const CellOwner OWNER) {

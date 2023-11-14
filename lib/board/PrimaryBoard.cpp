@@ -46,8 +46,8 @@ void PrimaryBoard::init_cells() {
         getGraphicalBoard()->get_children();
 
     for (unsigned int i = 0; i < CELL_COUNT; i++) {
-        _cells.at(i) = std::unique_ptr<LeafBoard>{new LeafBoard{
-            getNcHandler(), dynamic_cast<IGraphicalBoard *>(gBoards.at(i))}};
+        _cells.at(i) = std::make_unique<LeafBoard>(
+            getNcHandler(), dynamic_cast<IGraphicalBoard *>(gBoards.at(i)));
     }
 }
 
@@ -71,9 +71,9 @@ std::optional<LeafBoard *> PrimaryBoard::select_board(const int INDEX) {
     Expects(INDEX >= 0 && INDEX <= 9);
 
     LeafBoard *const P_cell = _cells.at(gsl::narrow<unsigned int>(INDEX)).get();
-    std::optional<LeafBoard *> opt = std::optional(P_cell);
+    const std::optional<LeafBoard *> OPT = std::optional(P_cell);
 
-    return P_cell->get_winner() == NONE ? opt : std::nullopt;
+    return P_cell->get_winner() == NONE ? OPT : std::nullopt;
 }
 
 ncplane_options PrimaryBoard::defPrimaryNopts(INcHandler *const P_ncHandler) {
