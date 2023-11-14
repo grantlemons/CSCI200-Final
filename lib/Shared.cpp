@@ -4,7 +4,7 @@
 
 std::ostream &operator<<(std::ostream &out, const CellOwner OWNER) {
     switch (OWNER) {
-    case None:
+    case NONE:
         out << "N";
         break;
     case X:

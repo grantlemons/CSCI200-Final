@@ -3,10 +3,10 @@
 
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
-#include "lib/board/BoardA.h"
-#include "lib/interfaces/GraphicalAreaI.h"
-#include "lib/interfaces/GraphicalBoardI.h"
-#include "lib/interfaces/NcPlaneWrapperI.h"
+#include "lib/board/ABoard.h"
+#include "lib/interfaces/IGraphicalArea.h"
+#include "lib/interfaces/IGraphicalBoard.h"
+#include "lib/interfaces/INcPlaneWrapper.h"
 
 #include <array>
 #include <notcurses/notcurses.h>
@@ -25,7 +25,7 @@
  * @see PrimaryBoard
  * @see Board
  */
-class LeafBoard : virtual public BoardA {
+class LeafBoard : virtual public ABoard {
 private:
     /**
      * The unicode characters used when drawing the graphical representation of
@@ -33,13 +33,13 @@ private:
      *
      * Shared between all instances.
      */
-    static std::array<const char *, SYMBOL_COUNT> _symbols;
+    static const std::array<const char *, SYMBOL_COUNT> _symbols;
 
     /**
      * Component graphical board used to represent actions on the logical board
      * graphically.
      */
-    GraphicalBoardI *_gBoard;
+    IGraphicalBoard *_pGBoard;
 
     /**
      * Array storing ownership of its component cells.
@@ -64,15 +64,16 @@ public:
      *
      * @see NcHandler::combine_channels()
      */
-    LeafBoard(NcHandlerI *ncHandler, GraphicalBoardI *gBoard);
+    LeafBoard(INcHandler *ncHandler, IGraphicalBoard *gBoard);
 
-    ~LeafBoard() = default;
+    ~LeafBoard() override = default;
     LeafBoard(LeafBoard &) = delete;
     void operator=(const LeafBoard &) = delete;
 
-    GraphicalBoardI *getGraphicalBoard() const override final;
+    [[nodiscard]] IGraphicalBoard *getGraphicalBoard() const override final;
 
-    CellOwner get_cell_owner(const int INDEX) const override final;
+    [[nodiscard]] CellOwner
+    get_cell_owner(const int INDEX) const override final;
 
     /**
      * Attempts to set the owner of the given index.
@@ -93,7 +94,7 @@ public:
      *
      * @see _winner
      */
-    CellOwner get_winner() const;
+    [[nodiscard]] CellOwner get_winner() const;
 
     void draw() override final;
 };

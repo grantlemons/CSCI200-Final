@@ -3,22 +3,24 @@
 #include "gsl/assert"
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
-#include "lib/board/BoardA.h"
-#include "lib/interfaces/GraphicalBoardI.h"
+#include "lib/board/ABoard.h"
+#include "lib/interfaces/IGraphicalBoard.h"
 
 #include <array>
 #include <cstdint>
 #include <memory>
 #include <notcurses/notcurses.h>
 
-std::array<const char *, SYMBOL_COUNT> LeafBoard::_symbols =
+const std::array<const char *, SYMBOL_COUNT> LeafBoard::_symbols =
     std::array<const char *, SYMBOL_COUNT>{"\u2500", "\u2502", "\u253C"};
 
-LeafBoard::LeafBoard(NcHandlerI *ncHandler, GraphicalBoardI *gBoard)
-    : BoardA::BoardA{ncHandler}, _gBoard{gBoard}, _cells{}, _winner{None} {}
+LeafBoard::LeafBoard(INcHandler *const P_ncHandler,
+                     IGraphicalBoard *const P_gBoard)
+    : ABoard::ABoard{P_ncHandler}, _pGBoard{P_gBoard}, _cells{}, _winner{NONE} {
+}
 
-GraphicalBoardI *LeafBoard::getGraphicalBoard() const {
-    return _gBoard;
+IGraphicalBoard *LeafBoard::getGraphicalBoard() const {
+    return _pGBoard;
 }
 
 CellOwner LeafBoard::get_cell_owner(const int INDEX) const {
@@ -29,7 +31,7 @@ CellOwner LeafBoard::get_cell_owner(const int INDEX) const {
 
 void LeafBoard::set_cell_owner(const int INDEX, const CellOwner OWNER) {
     Expects(INDEX >= 0 && INDEX <= 9);
-    Expects(_cells.at(gsl::narrow<unsigned int>(INDEX)) == None);
+    Expects(_cells.at(gsl::narrow<unsigned int>(INDEX)) == NONE);
 
     _cells.at(gsl::narrow<unsigned int>(INDEX)) = OWNER;
     mark_cell(INDEX, OWNER);
@@ -48,6 +50,6 @@ CellOwner LeafBoard::get_winner() const {
 void LeafBoard::draw() {
     getGraphicalBoard()->draw_board(
         _symbols,
-        NcHandler::combine_channels(getNcHandler()->get_default_bg_channel(),
-                                    NcHandler::GREY_CHANNEL));
+        NcHandler::combineChannels(getNcHandler()->get_default_bg_channel(),
+                                   NcHandler::GREY_CHANNEL));
 }

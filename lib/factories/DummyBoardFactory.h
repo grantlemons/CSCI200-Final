@@ -4,9 +4,9 @@
 #include "lib/board/LeafBoard.h"
 #include "lib/board/PrimaryBoard.h"
 #include "lib/factories/AbstractBoardFactory.h"
-#include "lib/interfaces/GraphicalAreaI.h"
-#include "lib/interfaces/NcHandlerI.h"
-#include "lib/interfaces/NcPlaneWrapperI.h"
+#include "lib/interfaces/IGraphicalArea.h"
+#include "lib/interfaces/INcHandler.h"
+#include "lib/interfaces/INcPlaneWrapper.h"
 
 #include <memory>
 
@@ -16,9 +16,9 @@
  */
 class DummyBoardFactory : virtual public AbstractBoardFactory {
 private:
-    std::unique_ptr<NcHandlerI> _ncHandler;
-    NcPlaneWrapperI *_primaryPlane;
-    std::unique_ptr<GraphicalBoardI> _graphicalBoard;
+    std::unique_ptr<INcHandler> _ncHandler;
+    INcPlaneWrapper *_primaryPlane;
+    std::unique_ptr<IGraphicalBoard> _graphicalBoard;
     PrimaryBoard _primaryBoard;
 
 public:
@@ -27,11 +27,11 @@ public:
      */
     DummyBoardFactory();
 
-    NcHandlerI *getNcHandler() override final;
+    INcHandler *getNcHandler() override final;
     PrimaryBoard *getPrimaryBoard() override final;
-    GraphicalAreaI *getPrimaryGraphicalBoard() override final;
+    IGraphicalArea *getPrimaryGraphicalBoard() override final;
     LeafBoard *getLeafBoard(const int INDEX) override final;
-    GraphicalAreaI *getLeafGraphicalBoard(const int INDEX) override final;
+    IGraphicalArea *getLeafGraphicalBoard(const int INDEX) override final;
 };
 
 #endif // !DUMMY_BOARD_FACTORY

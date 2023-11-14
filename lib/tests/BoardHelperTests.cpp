@@ -1,5 +1,5 @@
 #include "doctest.h"
-#include "lib/board/BoardA.h"
+#include "lib/board/ABoard.h"
 
 TEST_SUITE("Board Helper Tests") {
     TEST_CASE("Negative Mod") {

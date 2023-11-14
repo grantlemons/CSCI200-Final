@@ -1,8 +1,8 @@
 #include "GraphicalBoardDummy.h"
 
 #include "lib/dummies/NcPlaneWrapperDummy.h"
-#include "lib/interfaces/GraphicalAreaI.h"
-#include "lib/interfaces/NcPlaneWrapperI.h"
+#include "lib/interfaces/IGraphicalArea.h"
+#include "lib/interfaces/INcPlaneWrapper.h"
 #include "lib/wrappers/NcPlaneWrapper.h"
 
 #include <memory>
@@ -10,17 +10,17 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
-GraphicalBoardDummy::GraphicalBoardDummy(NcPlaneWrapperI *const PLANE)
-    : _primaryPlane{std::shared_ptr<NcPlaneWrapperI>{PLANE}}, _children{} {
+GraphicalBoardDummy::GraphicalBoardDummy(INcPlaneWrapper *const P_plane)
+    : _primaryPlane{std::shared_ptr<INcPlaneWrapper>{P_plane}}, _children{} {
     init_child_planes();
 }
 
-GraphicalBoardDummy::GraphicalBoardDummy(std::shared_ptr<NcPlaneWrapperI> plane)
+GraphicalBoardDummy::GraphicalBoardDummy(std::shared_ptr<INcPlaneWrapper> plane)
     : _primaryPlane{plane}, _children{} {}
 
 void GraphicalBoardDummy::init_child_planes() {
     for (unsigned int i = 0; i < CELL_COUNT; i++) {
-        _children.at(i) = std::unique_ptr<GraphicalAreaI>{
+        _children.at(i) = std::unique_ptr<IGraphicalArea>{
             new GraphicalBoardDummy{_primaryPlane}};
     }
 }
@@ -31,8 +31,8 @@ void GraphicalBoardDummy::draw_board(
 void GraphicalBoardDummy::draw_x(const int INDEX) {}
 void GraphicalBoardDummy::draw_o(const int INDEX) {}
 
-std::array<GraphicalAreaI *, CELL_COUNT> GraphicalBoardDummy::get_children() {
-    std::array<GraphicalAreaI *, CELL_COUNT> planes{};
+std::array<IGraphicalArea *, CELL_COUNT> GraphicalBoardDummy::get_children() {
+    std::array<IGraphicalArea *, CELL_COUNT> planes{};
 
     for (unsigned int i = 0; i < CELL_COUNT; i++) {
         planes.at(i) = _children.at(i).get();
@@ -41,7 +41,7 @@ std::array<GraphicalAreaI *, CELL_COUNT> GraphicalBoardDummy::get_children() {
     return planes;
 }
 
-// Inherited methods of NcPlaneWrapperI
+// Inherited methods of INcPlaneWrapper
 void GraphicalBoardDummy::dim_yx(int &ROWS, int &COLS) const {
     _primaryPlane->dim_yx(ROWS, COLS);
 }
@@ -52,30 +52,30 @@ int GraphicalBoardDummy::get_cols() const {
     return _primaryPlane->get_cols();
 }
 
-GraphicalAreaI *
+IGraphicalArea *
 GraphicalBoardDummy::create_child(const ncplane_options *nopts) {
     return _primaryPlane->create_child(nopts);
 }
 
-int GraphicalBoardDummy::load_nccell(nccell *const c, const char *gcluster) {
-    return _primaryPlane->load_nccell(c, gcluster);
+int GraphicalBoardDummy::load_nccell(nccell *const P_c, const char *gcluster) {
+    return _primaryPlane->load_nccell(P_c, gcluster);
 }
-int GraphicalBoardDummy::set_base_cell(const nccell *const c) {
-    return _primaryPlane->set_base_cell(c);
+int GraphicalBoardDummy::set_base_cell(const nccell *const P_c) {
+    return _primaryPlane->set_base_cell(P_c);
 }
 
 int GraphicalBoardDummy::cursor_move_yx(const int X, const int Y) {
     return _primaryPlane->cursor_move_yx(X, Y);
 }
-int GraphicalBoardDummy::hline(const nccell *const c, const unsigned LEN) {
-    return _primaryPlane->hline(c, LEN);
+int GraphicalBoardDummy::hline(const nccell *const P_c, const unsigned LEN) {
+    return _primaryPlane->hline(P_c, LEN);
 }
-int GraphicalBoardDummy::vline(const nccell *const c, const unsigned LEN) {
-    return _primaryPlane->vline(c, LEN);
+int GraphicalBoardDummy::vline(const nccell *const P_c, const unsigned LEN) {
+    return _primaryPlane->vline(P_c, LEN);
 }
 int GraphicalBoardDummy::putc_yx(const int Y, const int X,
-                                 const nccell *const c) {
-    return _primaryPlane->putc_yx(Y, X, c);
+                                 const nccell *const P_c) {
+    return _primaryPlane->putc_yx(Y, X, P_c);
 }
 void GraphicalBoardDummy::erase() {
     _primaryPlane->erase();

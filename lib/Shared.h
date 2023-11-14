@@ -8,12 +8,12 @@
  * Options for cell ownership.
  */
 enum CellOwner {
-    None,
+    NONE,
     X,
     O,
 };
 
-typedef CellOwner LLCell;
+using LLCell = CellOwner;
 
 const unsigned int CELL_COUNT = 9;
 const unsigned int SYMBOL_COUNT = 3;

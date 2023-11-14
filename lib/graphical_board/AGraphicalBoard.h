@@ -3,9 +3,9 @@
 
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
-#include "lib/interfaces/GraphicalAreaI.h"
-#include "lib/interfaces/GraphicalBoardI.h"
-#include "lib/interfaces/NcPlaneWrapperI.h"
+#include "lib/interfaces/IGraphicalArea.h"
+#include "lib/interfaces/IGraphicalBoard.h"
+#include "lib/interfaces/INcPlaneWrapper.h"
 
 #include <array>
 #include <cstdint>
@@ -13,21 +13,21 @@
 #include <notcurses/notcurses.h>
 
 /**
- * @class GraphicalBoardA
+ * @class AGraphicalBoard
  * Abstract class representation of a Tic-Tac-Toe board's graphical elements.
  *
  * Contains functionality for drawing Tic-Tac-Toe boards as well as marking
  * their cells.
  */
-class GraphicalBoardA : virtual public GraphicalBoardI {
+class AGraphicalBoard : virtual public IGraphicalBoard {
 protected:
     /** The handler object used to access the underlying
      * notcurses instance.
      */
-    NcHandlerI *mncHandler;
+    INcHandler *mncHandler;
 
     /** The primary plane used as a canvas for drawing the board. */
-    NcPlaneWrapperI *mprimaryPlane;
+    INcPlaneWrapper *mprimaryPlane;
 
     /** The child planes used to represent the cells of the board
      *
@@ -39,7 +39,7 @@ protected:
      * 3|4|5
      * 6|7|8
      */
-    std::array<std::unique_ptr<GraphicalAreaI>, CELL_COUNT> mchildren;
+    std::array<std::unique_ptr<IGraphicalArea>, CELL_COUNT> mchildren;
 
     /** The height of the primary plane */
     int mrows;
@@ -63,8 +63,8 @@ protected:
      * @see _primaryPlane
      * @see _childPlanes
      */
-    GraphicalBoardA(NcHandlerI *const P_ncHandler, int const Y, int const X,
-                    int const ROWS, int const COLS);
+    AGraphicalBoard(INcHandler *const P_ncHandler, const int Y, const int X,
+                    const int ROWS, const int COLS);
 
     /**
      * A constructor that takes in an ncplane_options struct for a plane and
@@ -80,7 +80,7 @@ protected:
      * @see _primaryPlane
      * @see _childPlanes
      */
-    GraphicalBoardA(NcHandlerI *const P_ncHandler, ncplane_options const NOPTS);
+    AGraphicalBoard(INcHandler *const P_ncHandler, const ncplane_options NOPTS);
 
     /**
      * A constructor that takes in an notcurses plane and uses it as its primary
@@ -95,8 +95,8 @@ protected:
      * @see _primaryPlane
      * @see _childPlanes
      */
-    GraphicalBoardA(NcHandlerI *const P_ncHandler,
-                    NcPlaneWrapperI *const P_plane);
+    AGraphicalBoard(INcHandler *const P_ncHandler,
+                    INcPlaneWrapper *const P_plane);
 
     /**
      * Virtual function for initializing child planes.
@@ -106,31 +106,31 @@ protected:
     virtual void init_child_planes() = 0;
 
 public:
-    GraphicalBoardA(GraphicalBoardA &) = delete;
-    void operator=(GraphicalBoardA const &) = delete;
-    ~GraphicalBoardA() override = default;
+    AGraphicalBoard(AGraphicalBoard &) = delete;
+    void operator=(const AGraphicalBoard &) = delete;
+    ~AGraphicalBoard() override = default;
 
-    void draw_board(std::array<char const *, SYMBOL_COUNT> const SYMBOLS,
-                    uint64_t const CELL_CHANNELS) override final;
-    void draw_x(int const INDEX) override;
-    void draw_o(int const INDEX) override;
-    std::array<GraphicalAreaI *, CELL_COUNT> get_children() override final;
+    void draw_board(const std::array<const char *, SYMBOL_COUNT> SYMBOLS,
+                    const uint64_t CELL_CHANNELS) override final;
+    void draw_x(const int INDEX) override;
+    void draw_o(const int INDEX) override;
+    std::array<IGraphicalArea *, CELL_COUNT> get_children() override final;
 
     // Inherited methods of NcPlaneWrapperI
     void dim_yx(int &ROWS, int &COLS) const override final;
     [[nodiscard]] int get_rows() const override final;
     [[nodiscard]] int get_cols() const override final;
 
-    GraphicalAreaI *create_child(ncplane_options const *nopts) override final;
+    IGraphicalArea *create_child(const ncplane_options *nopts) override final;
 
-    int load_nccell(nccell *const P_c, char const *gcluster) override final;
-    int set_base_cell(nccell const *const P_c) override final;
+    int load_nccell(nccell *const P_c, const char *gcluster) override final;
+    int set_base_cell(const nccell *const P_c) override final;
 
-    int cursor_move_yx(int const X, int const Y) override final;
-    int hline(nccell const *const P_c, unsigned const LEN) override final;
-    int vline(nccell const *const P_c, unsigned const LEN) override final;
-    int putc_yx(int const Y, int const X,
-                nccell const *const P_c) override final;
+    int cursor_move_yx(const int X, const int Y) override final;
+    int hline(const nccell *const P_c, const unsigned LEN) override final;
+    int vline(const nccell *const P_c, const unsigned LEN) override final;
+    int putc_yx(const int Y, const int X,
+                const nccell *const P_c) override final;
     void erase() override final;
 };
 

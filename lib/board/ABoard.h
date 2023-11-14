@@ -5,9 +5,9 @@
 #include "gsl/narrow"
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
-#include "lib/interfaces/GraphicalAreaI.h"
-#include "lib/interfaces/GraphicalBoardI.h"
-#include "lib/interfaces/NcPlaneWrapperI.h"
+#include "lib/interfaces/IGraphicalArea.h"
+#include "lib/interfaces/IGraphicalBoard.h"
+#include "lib/interfaces/INcPlaneWrapper.h"
 
 #include <array>
 #include <cmath>
@@ -16,15 +16,15 @@
 #include <ostream>
 
 /**
- * @class BoardA
+ * @class ABoard
  * Abstract class representation of a logical board.
  */
-class BoardA {
+class ABoard {
 private:
     /** The handler object used to access the underlying
      * notcurses instance.
      */
-    NcHandlerI *_ncHandler;
+    INcHandler *_ncHandler;
 
 protected:
     /**
@@ -33,27 +33,27 @@ protected:
      * @param ncHandler The handler object used to access the underlying
      * notcurses instance.
      */
-    BoardA(NcHandlerI *ncHandler);
+    ABoard(INcHandler *ncHandler);
 
     /**
      * Getter for the associated NcHandler instance.
      *
      * @return A pointer to the private NcHandler.
      */
-    NcHandlerI *getNcHandler() const;
+    [[nodiscard]] INcHandler *getNcHandler() const;
 
-    virtual ~BoardA() = default;
-
-    BoardA(BoardA &) = delete;
-    void operator=(const BoardA &) = delete;
+    virtual ~ABoard() = default;
 
 public:
+    ABoard(ABoard &) = delete;
+    void operator=(const ABoard &) = delete;
+
     /**
      * Getter for the associated GraphicalBoard instance.
      *
      * @return A pointer to the private GraphicalBoard.
      */
-    virtual GraphicalBoardI *getGraphicalBoard() const = 0;
+    [[nodiscard]] virtual IGraphicalBoard *getGraphicalBoard() const = 0;
 
     /**
      * Checks if the given player has won the current board.
@@ -68,7 +68,7 @@ public:
      *
      * @see get_cell_owner()
      */
-    bool check_win(const int INDEX, const CellOwner OWNER) const;
+    [[nodiscard]] bool check_win(const int INDEX, const CellOwner OWNER) const;
 
     /**
      * Gets the owner of a given index.
@@ -76,7 +76,7 @@ public:
      * @param INDEX the index of the cell to check ownership.
      * @return The owner of the cell (Can be NONE variant).
      */
-    virtual CellOwner get_cell_owner(const int INDEX) const = 0;
+    [[nodiscard]] virtual CellOwner get_cell_owner(const int INDEX) const = 0;
 
     /**
      * Uses the component GraphicalBoard to draw a Tic-Tac-Toe board.
@@ -99,7 +99,7 @@ public:
     /**
      * Defines the way Board types are outputted to streams.
      */
-    friend std::ostream &operator<<(std::ostream &out, const BoardA &BRD);
+    friend std::ostream &operator<<(std::ostream &out, const ABoard &BRD);
 };
 
 // Helper functions
@@ -119,7 +119,7 @@ public:
  * @param B The divisor of the modulus operation.
  * @return The result of the modulus operation.
  *
- * @relates BoardA
+ * @relates ABoard
  */
 inline constexpr int negative_mod(const int A, const int B) {
     return A - (B * gsl::narrow<int>(std::floor(static_cast<double>(A) / B)));
@@ -139,7 +139,7 @@ inline constexpr int negative_mod(const int A, const int B) {
  *
  * @see vertical_others()
  *
- * @relates BoardA
+ * @relates ABoard
  */
 inline constexpr void horizontal_others(const int INDEX, int &other1,
                                         int &other2) {
@@ -169,7 +169,7 @@ inline constexpr void horizontal_others(const int INDEX, int &other1,
  *
  * @see horizontal_others()
  *
- * @relates BoardA
+ * @relates ABoard
  */
 inline constexpr void vertical_others(const int INDEX, int &other1,
                                       int &other2) {
@@ -201,7 +201,7 @@ inline constexpr void vertical_others(const int INDEX, int &other1,
  *
  * @see diagonal_twos_others()
  *
- * @relates BoardA
+ * @relates ABoard
  */
 inline constexpr void diagonal_fours_others(const int INDEX, int &other1,
                                             int &other2) {
@@ -233,7 +233,7 @@ inline constexpr void diagonal_fours_others(const int INDEX, int &other1,
  *
  * @see diagonal_twos_others()
  *
- * @relates BoardA
+ * @relates ABoard
  */
 inline constexpr void diagonal_twos_others(const int INDEX, int &other1,
                                            int &other2) {

@@ -1,53 +1,53 @@
-#include "lib/graphical_board/GraphicalBoardA.h"
+#include "lib/graphical_board/AGraphicalBoard.h"
 
 #include "gsl/assert"
 #include "gsl/narrow"
 #include "lib/NcHandler.h"
-#include "lib/interfaces/GraphicalAreaI.h"
-#include "lib/interfaces/NcPlaneWrapperI.h"
+#include "lib/interfaces/IGraphicalArea.h"
+#include "lib/interfaces/INcPlaneWrapper.h"
 #include "lib/wrappers/NcPlaneWrapper.h"
 
 #include <array>
 #include <notcurses/notcurses.h>
 #include <unistd.h>
 
-GraphicalBoardA::GraphicalBoardA(NcHandlerI *const P_ncHandler, int const Y,
-                                 int const X, int const ROWS, int const COLS)
+AGraphicalBoard::AGraphicalBoard(INcHandler *const P_ncHandler, const int Y,
+                                 const int X, const int ROWS, const int COLS)
     : mncHandler{P_ncHandler},
       mprimaryPlane{new NcPlaneWrapper{P_ncHandler, Y, X, ROWS, COLS}},
       mrows{ROWS + 1}, mcols{COLS + 1} {
     Expects(ROWS >= 0 && COLS >= 0);
 }
 
-GraphicalBoardA::GraphicalBoardA(NcHandlerI *const P_ncHandler,
-                                 ncplane_options const NOPTS)
-    : GraphicalBoardA::GraphicalBoardA{P_ncHandler,
+AGraphicalBoard::AGraphicalBoard(INcHandler *const P_ncHandler,
+                                 const ncplane_options NOPTS)
+    : AGraphicalBoard::AGraphicalBoard{P_ncHandler,
                                        new NcPlaneWrapper(P_ncHandler, NOPTS)} {
 }
 
-GraphicalBoardA::GraphicalBoardA(NcHandlerI *const P_ncHandler,
-                                 NcPlaneWrapperI *const P_plane)
+AGraphicalBoard::AGraphicalBoard(INcHandler *const P_ncHandler,
+                                 INcPlaneWrapper *const P_plane)
     : mncHandler{P_ncHandler}, mprimaryPlane{P_plane},
       mrows{mprimaryPlane->get_rows() + 1},
       mcols{mprimaryPlane->get_cols() + 1} {
     Expects(mrows >= 0 && mcols >= 0);
 }
 
-void GraphicalBoardA::draw_board(
-    std::array<char const *, SYMBOL_COUNT> const SYMBOLS,
-    uint64_t const CELL_CHANNELS) {
-    int const ROWS_PER_BCELL = (mrows - 2) / 3;
-    int const COLS_PER_BCELL = (mcols - 2) / 3;
+void AGraphicalBoard::draw_board(
+    const std::array<const char *, SYMBOL_COUNT> SYMBOLS,
+    const uint64_t CELL_CHANNELS) {
+    const int ROWS_PER_BCELL = (mrows - 2) / 3;
+    const int COLS_PER_BCELL = (mcols - 2) / 3;
 
     // calculate lines positions and lengths
-    int const H_IDX_1 = ROWS_PER_BCELL;
-    int const H_IDX_2 = 2 * ROWS_PER_BCELL;
+    const int H_IDX_1 = ROWS_PER_BCELL;
+    const int H_IDX_2 = 2 * ROWS_PER_BCELL;
 
-    int const V_IDX_1 = COLS_PER_BCELL;
-    int const V_IDX_2 = 2 * COLS_PER_BCELL;
+    const int V_IDX_1 = COLS_PER_BCELL;
+    const int V_IDX_2 = 2 * COLS_PER_BCELL;
 
-    auto const H_LINE_LEN = gsl::narrow<unsigned int>((3 * COLS_PER_BCELL) + 1);
-    auto const V_LINE_LEN = gsl::narrow<unsigned int>((3 * ROWS_PER_BCELL) + 1);
+    const auto H_LINE_LEN = gsl::narrow<unsigned int>((3 * COLS_PER_BCELL) + 1);
+    const auto V_LINE_LEN = gsl::narrow<unsigned int>((3 * ROWS_PER_BCELL) + 1);
 
     // define cells
     nccell horiCell, vertCell, juncCell;
@@ -85,15 +85,15 @@ void GraphicalBoardA::draw_board(
     mncHandler->render();
 }
 
-void GraphicalBoardA::draw_x(int const INDEX) {
+void AGraphicalBoard::draw_x(const int INDEX) {
     Expects(INDEX >= 0 && INDEX <= 9);
 
-    GraphicalAreaI *const P_plane =
+    IGraphicalArea *const P_plane =
         mchildren.at(gsl::narrow<unsigned int>(INDEX)).get();
-    nccell const RED = NCCELL_INITIALIZER(
+    const nccell RED = NCCELL_INITIALIZER(
         '\0', 0,
-        NcHandler::combine_channels(NcHandler::RED_CHANNEL,
-                                    mncHandler->get_default_fg_channel()));
+        NcHandler::combineChannels(NcHandler::RED_CHANNEL,
+                                   mncHandler->get_default_fg_channel()));
 
     P_plane->erase();
     P_plane->set_base_cell(&RED);
@@ -102,15 +102,15 @@ void GraphicalBoardA::draw_x(int const INDEX) {
     mncHandler->render();
 }
 
-void GraphicalBoardA::draw_o(int const INDEX) {
+void AGraphicalBoard::draw_o(const int INDEX) {
     Expects(INDEX >= 0 && INDEX <= 9);
 
-    GraphicalAreaI *const P_plane =
+    IGraphicalArea *const P_plane =
         mchildren.at(gsl::narrow<unsigned int>(INDEX)).get();
-    nccell const BLUE = NCCELL_INITIALIZER(
+    const nccell BLUE = NCCELL_INITIALIZER(
         '\0', 0,
-        NcHandler::combine_channels(NcHandler::BLUE_CHANNEL,
-                                    mncHandler->get_default_fg_channel()));
+        NcHandler::combineChannels(NcHandler::BLUE_CHANNEL,
+                                   mncHandler->get_default_fg_channel()));
 
     P_plane->erase();
     P_plane->set_base_cell(&BLUE);
@@ -119,8 +119,8 @@ void GraphicalBoardA::draw_o(int const INDEX) {
     mncHandler->render();
 }
 
-std::array<GraphicalAreaI *, CELL_COUNT> GraphicalBoardA::get_children() {
-    std::array<GraphicalAreaI *, CELL_COUNT> arr{};
+std::array<IGraphicalArea *, CELL_COUNT> AGraphicalBoard::get_children() {
+    std::array<IGraphicalArea *, CELL_COUNT> arr{};
 
     for (unsigned int i = 0; i < CELL_COUNT; i++) {
         arr.at(i) = mchildren.at(i).get();
@@ -129,42 +129,42 @@ std::array<GraphicalAreaI *, CELL_COUNT> GraphicalBoardA::get_children() {
     return arr;
 }
 
-// Inherited methods of NcPlaneWrapperI
-void GraphicalBoardA::dim_yx(int &ROWS, int &COLS) const {
+// Inherited methods of INcPlaneWrapper
+void AGraphicalBoard::dim_yx(int &ROWS, int &COLS) const {
     mprimaryPlane->dim_yx(ROWS, COLS);
 }
-int GraphicalBoardA::get_rows() const {
+int AGraphicalBoard::get_rows() const {
     return mprimaryPlane->get_rows();
 }
-int GraphicalBoardA::get_cols() const {
+int AGraphicalBoard::get_cols() const {
     return mprimaryPlane->get_cols();
 }
 
-GraphicalAreaI *GraphicalBoardA::create_child(ncplane_options const *nopts) {
+IGraphicalArea *AGraphicalBoard::create_child(const ncplane_options *nopts) {
     return mprimaryPlane->create_child(nopts);
 }
 
-int GraphicalBoardA::load_nccell(nccell *const P_c, char const *gcluster) {
+int AGraphicalBoard::load_nccell(nccell *const P_c, const char *gcluster) {
     return mprimaryPlane->load_nccell(P_c, gcluster);
 }
-int GraphicalBoardA::set_base_cell(nccell const *const P_c) {
+int AGraphicalBoard::set_base_cell(const nccell *const P_c) {
     return mprimaryPlane->set_base_cell(P_c);
 }
 
-int GraphicalBoardA::cursor_move_yx(int const X, int const Y) {
+int AGraphicalBoard::cursor_move_yx(const int X, const int Y) {
     return mprimaryPlane->cursor_move_yx(X, Y);
 }
-int GraphicalBoardA::hline(nccell const *const P_c, unsigned const LEN) {
+int AGraphicalBoard::hline(const nccell *const P_c, const unsigned LEN) {
     return mprimaryPlane->hline(P_c, LEN);
 }
-int GraphicalBoardA::vline(nccell const *const P_c, unsigned const LEN) {
+int AGraphicalBoard::vline(const nccell *const P_c, const unsigned LEN) {
     return mprimaryPlane->vline(P_c, LEN);
 }
-int GraphicalBoardA::putc_yx(int const Y, int const X,
-                             nccell const *const P_c) {
+int AGraphicalBoard::putc_yx(const int Y, const int X,
+                             const nccell *const P_c) {
     return mprimaryPlane->putc_yx(Y, X, P_c);
 }
-void GraphicalBoardA::erase() {
+void AGraphicalBoard::erase() {
     mprimaryPlane->erase();
 
     for (unsigned int i = 0; i < CELL_COUNT; i++) {

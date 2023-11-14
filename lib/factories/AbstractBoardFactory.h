@@ -3,9 +3,9 @@
 
 #include "lib/board/LeafBoard.h"
 #include "lib/board/PrimaryBoard.h"
-#include "lib/interfaces/GraphicalAreaI.h"
-#include "lib/interfaces/NcHandlerI.h"
-#include "lib/interfaces/NcPlaneWrapperI.h"
+#include "lib/interfaces/IGraphicalArea.h"
+#include "lib/interfaces/INcHandler.h"
+#include "lib/interfaces/INcPlaneWrapper.h"
 
 /**
  * @class AbstractBoardFactory
@@ -19,7 +19,7 @@ public:
     /**
      * Getter for NcHandler instance.
      */
-    virtual NcHandlerI *getNcHandler() = 0;
+    virtual INcHandler *getNcHandler() = 0;
 
     /**
      * Getter for PrimaryBoard instance.
@@ -29,7 +29,7 @@ public:
     /**
      * Getter for Primary GraphicalBoard instance.
      */
-    virtual GraphicalAreaI *getPrimaryGraphicalBoard() = 0;
+    virtual IGraphicalArea *getPrimaryGraphicalBoard() = 0;
 
     /**
      * Getter for LeafBoard instance of a certain index.
@@ -43,7 +43,7 @@ public:
      *
      * @param INDEX The index of the LeafBoard within the PrimaryBoard.
      */
-    virtual GraphicalAreaI *getLeafGraphicalBoard(const int INDEX) = 0;
+    virtual IGraphicalArea *getLeafGraphicalBoard(const int INDEX) = 0;
 };
 
 #endif // !ABSTRACT_BOARD_FACTORY
