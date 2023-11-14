@@ -3,7 +3,8 @@
 #include "gsl/assert"
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
-#include "lib/board/Board.h"
+#include "lib/board/BoardA.h"
+#include "lib/interfaces/GraphicalBoardI.h"
 
 #include <array>
 #include <cstdint>
@@ -13,13 +14,12 @@
 std::array<const char *, SYMBOL_COUNT> LeafBoard::_symbols =
     std::array<const char *, SYMBOL_COUNT>{"\u2500", "\u2502", "\u253C"};
 
-LeafBoard::LeafBoard(std::shared_ptr<NcHandlerI> ncHandler,
-                     std::unique_ptr<GraphicalBoardI> gBoard)
-    : Board::Board{ncHandler, std::move(gBoard)}, _cells{}, _winner{None} {}
+LeafBoard::LeafBoard(NcHandlerI *ncHandler, GraphicalBoardI *gBoard)
+    : BoardA::BoardA{ncHandler}, _gBoard{gBoard}, _cells{}, _winner{None} {}
 
-LeafBoard::LeafBoard(std::shared_ptr<NcHandlerI> ncHandler,
-                     std::unique_ptr<NcPlaneWrapperI> plane)
-    : Board::Board{ncHandler, std::move(plane)}, _cells{}, _winner{None} {}
+GraphicalBoardI *LeafBoard::getGraphicalBoard() const {
+    return _gBoard;
+}
 
 CellOwner LeafBoard::get_cell_owner(const int INDEX) const {
     Expects(INDEX >= 0 && INDEX <= 9);
@@ -43,19 +43,6 @@ void LeafBoard::set_cell_owner(const int INDEX, const CellOwner OWNER) {
 
 CellOwner LeafBoard::get_winner() const {
     return _winner;
-}
-
-void LeafBoard::mark_fill(const CellOwner OWNER) {
-    switch (OWNER) {
-    case X:
-        getGraphicalBoard()->fill_x();
-        break;
-    case O:
-        getGraphicalBoard()->fill_o();
-        break;
-    default:
-        break;
-    }
 }
 
 void LeafBoard::draw() {

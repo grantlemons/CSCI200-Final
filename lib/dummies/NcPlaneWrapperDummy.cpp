@@ -1,11 +1,7 @@
 #include "lib/dummies/NcPlaneWrapperDummy.h"
 
-#include <iostream>
-
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-
-// NcPlaneWrapperDummy::
 
 NcPlaneWrapperDummy::NcPlaneWrapperDummy() {}
 

@@ -8,6 +8,11 @@
 #include <memory>
 #include <notcurses/notcurses.h>
 
+/**
+ * @class NcPlaneWrapperDummy
+ * Dummy class used as a substitute for NcPlaneWrapperI classes for testing
+ * purposes.
+ */
 class NcPlaneWrapperDummy : public NcPlaneWrapperI {
 public:
     NcPlaneWrapperDummy();

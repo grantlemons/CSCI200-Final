@@ -1,17 +1,20 @@
 #include "doctest.h"
-#include "lib/board/Board.h"
+#include "lib/board/BoardA.h"
 #include "lib/board/LeafBoard.h"
 #include "lib/dummies/GraphicalBoardDummy.h"
 #include "lib/dummies/NcHandlerDummy.h"
+#include "lib/dummies/NcPlaneWrapperDummy.h"
 #include "lib/interfaces/GraphicalBoardI.h"
 #include "lib/interfaces/NcHandlerI.h"
+#include "lib/interfaces/NcPlaneWrapperI.h"
 
 LeafBoard create_board();
 LeafBoard create_board() {
-    std::shared_ptr<NcHandlerI> handler{new NcHandlerDummy()};
-    std::unique_ptr<GraphicalBoardI> gBoardDummy{new GraphicalBoardDummy()};
+    std::unique_ptr<NcHandlerI> handler{new NcHandlerDummy{}};
+    NcPlaneWrapperI *plane{new NcPlaneWrapperDummy{}};
+    GraphicalBoardI *gBoardDummy = new GraphicalBoardDummy{plane};
 
-    return LeafBoard{handler, std::move(gBoardDummy)};
+    return LeafBoard{handler.get(), gBoardDummy};
 }
 
 TEST_SUITE("Board CheckWin Tests") {

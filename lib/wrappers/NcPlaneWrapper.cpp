@@ -2,11 +2,11 @@
 
 #include "gsl/assert"
 #include "gsl/narrow"
+#include "lib/interfaces/GraphicalAreaI.h"
 #include "lib/interfaces/NcHandlerI.h"
 
 #include <cstdint>
 #include <cstdlib>
-#include <memory>
 #include <notcurses/notcurses.h>
 
 NcPlaneWrapper::NcPlaneWrapper(NcHandlerI *ncHandler, const int Y, const int X,
@@ -55,7 +55,7 @@ int NcPlaneWrapper::get_cols() const {
     return res;
 }
 
-NcPlaneWrapperI *NcPlaneWrapper::create_child(const ncplane_options *nopts) {
+GraphicalAreaI *NcPlaneWrapper::create_child(const ncplane_options *nopts) {
     return new NcPlaneWrapper{ncplane_create(_pPlane, nopts), false};
 }
 
@@ -82,9 +82,9 @@ void NcPlaneWrapper::erase() {
     return ncplane_erase(_pPlane);
 }
 
-// Helper functions
-ncplane_options create_nopts(const int Y, const int X, const unsigned int ROWS,
-                             const unsigned int COLS) {
+ncplane_options NcPlaneWrapper::create_nopts(const int Y, const int X,
+                                             const unsigned int ROWS,
+                                             const unsigned int COLS) {
     ncplane_options nopts = {
         Y, X, ROWS, COLS, nullptr, nullptr, nullptr, 0, 0, 0,
     };
@@ -92,7 +92,7 @@ ncplane_options create_nopts(const int Y, const int X, const unsigned int ROWS,
     return nopts;
 }
 
-ncplane_options extract_nopts(ncplane *PLANE) {
+ncplane_options NcPlaneWrapper::extract_nopts(ncplane *PLANE) {
     unsigned int rows, cols;
     ncplane_dim_yx(PLANE, &rows, &cols);
 

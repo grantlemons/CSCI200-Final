@@ -3,13 +3,20 @@
 
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
+#include "lib/interfaces/GraphicalAreaI.h"
 #include "lib/interfaces/NcPlaneWrapperI.h"
 
 #include <array>
 #include <cstdint>
-#include <memory>
 
-class GraphicalBoardI {
+/**
+ * @class GraphicalBoardI
+ * Interface for graphical board classes.
+ *
+ * @see GraphicalBoardA
+ * @see GraphicalBoardDummy
+ */
+class GraphicalBoardI : virtual public GraphicalAreaI {
 public:
     virtual ~GraphicalBoardI() = default;
 
@@ -44,16 +51,6 @@ public:
     virtual void draw_o(const int INDEX) = 0;
 
     /**
-     * Marks all cells as belonging to the X player.
-     */
-    virtual void fill_x() = 0;
-
-    /**
-     * Marks all cells as belonging to the O player.
-     */
-    virtual void fill_o() = 0;
-
-    /**
      * Getter for the board's child planes.
      *
      * Child planes contain the planes for the cells in order from left to
@@ -64,14 +61,6 @@ public:
      * 3|4|5
      * 6|7|8
      */
-    virtual std::array<NcPlaneWrapperI *, CELL_COUNT> *get_child_planes() = 0;
-
-    /**
-     * Initializes a new GraphicalBoard for each child plane.
-     *
-     * @return An array of unique pointers to GraphicalBoards.
-     */
-    virtual std::array<std::unique_ptr<GraphicalBoardI>, CELL_COUNT>
-    create_child_boards() const = 0;
+    virtual std::array<GraphicalAreaI *, CELL_COUNT> get_children() = 0;
 };
 #endif

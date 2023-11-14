@@ -7,20 +7,37 @@
 // Forward declaration to avoid recursive includes
 class NcPlaneWrapperI;
 
+/**
+ * @class NcHandlerI
+ * Interface for NcHandler classes.
+ *
+ * @see NcHandler
+ * @see NcHandlerDummy
+ */
 class NcHandlerI {
 public:
     virtual ~NcHandlerI() = default;
 
     /**
      * Getter for notcurses stdplane.
-     * Should not be used explicitly.
+     * Should not be used explicitly, prefer `get_stdplane_wrapper()`.
      *
      * @return The stdplane for the notcurses instance.
+     *
+     * @see get_stdplane_wrapper()
      */
     virtual ncplane *get_stdplane() const = 0;
+
+    /**
+     * Getter for wrapper object of stdplane.
+     *
+     * @return Wrapper around notcurses instance stdplane.
+     *
+     * @see get_stdplane()
+     */
     virtual NcPlaneWrapperI *get_stdplane_wrapper() const = 0;
 
-    /*
+    /**
      * Gets default background color channel from the stdplane.
      *
      * @return The default background color channel.

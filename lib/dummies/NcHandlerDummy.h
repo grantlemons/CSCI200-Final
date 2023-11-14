@@ -6,6 +6,11 @@
 #include <cstdint>
 #include <notcurses/notcurses.h>
 
+/**
+ * @class NcHandlerDummy
+ * Dummy class used as a substitute for NcHandlerI classes for testing
+ * purposes.
+ */
 class NcHandlerDummy : public NcHandlerI {
 public:
     NcHandlerDummy();

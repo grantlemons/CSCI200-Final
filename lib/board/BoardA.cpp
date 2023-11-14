@@ -1,41 +1,26 @@
-#include "lib/board/Board.h"
+#include "lib/board/BoardA.h"
 
 #include "gsl/assert"
 #include "gsl/narrow"
-#include "lib/GraphicalBoard.h"
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
+#include "lib/graphical_board/GraphicalBoardA.h"
+#include "lib/interfaces/GraphicalAreaI.h"
+#include "lib/interfaces/GraphicalBoardI.h"
 #include "lib/interfaces/NcPlaneWrapperI.h"
 
 #include <array>
 #include <cmath>
-#include <iostream>
-#include <memory>
 #include <notcurses/notcurses.h>
 #include <ostream>
 
-Board::Board(std::shared_ptr<NcHandlerI> ncHandler,
-             std::unique_ptr<GraphicalBoardI> gBoard)
-    : _ncHandler{ncHandler}, _gBoard{std::move(gBoard)} {}
+BoardA::BoardA(NcHandlerI *ncHandler) : _ncHandler{ncHandler} {}
 
-Board::Board(std::shared_ptr<NcHandlerI> ncHandler,
-             std::unique_ptr<NcPlaneWrapperI> plane)
-    : _ncHandler{ncHandler},
-      _gBoard{new GraphicalBoard{ncHandler.get(), std::move(plane)}} {}
-
-Board::Board(std::shared_ptr<NcHandlerI> ncHandler, const ncplane_options NOPTS)
-    : _ncHandler{ncHandler},
-      _gBoard{new GraphicalBoard{ncHandler.get(), NOPTS}} {}
-
-GraphicalBoardI *Board::getGraphicalBoard() const {
-    return _gBoard.get();
-}
-
-std::shared_ptr<NcHandlerI> Board::getNcHandler() const {
+NcHandlerI *BoardA::getNcHandler() const {
     return _ncHandler;
 }
 
-bool Board::check_win(const int INDEX, const CellOwner OWNER) const {
+bool BoardA::check_win(const int INDEX, const CellOwner OWNER) const {
     Expects(INDEX >= 0 && INDEX <= 9);
 
     int horizontal_other1, horizontal_other2, vertical_other1, vertical_other2;
@@ -83,22 +68,22 @@ bool Board::check_win(const int INDEX, const CellOwner OWNER) const {
     return res;
 }
 
-void Board::mark_cell(const int INDEX, const CellOwner OWNER) {
+void BoardA::mark_cell(const int INDEX, const CellOwner OWNER) {
     Expects(INDEX >= 0 && INDEX <= 9);
 
     switch (OWNER) {
     case X:
-        _gBoard->draw_x(INDEX);
+        getGraphicalBoard()->draw_x(INDEX);
         break;
     case O:
-        _gBoard->draw_o(INDEX);
+        getGraphicalBoard()->draw_o(INDEX);
         break;
     default:
         break;
     }
 }
 
-std::ostream &operator<<(std::ostream &out, const Board &BRD) {
+std::ostream &operator<<(std::ostream &out, const BoardA &BRD) {
     out << "[";
     for (int i = 0; i < gsl::narrow<int>(CELL_COUNT - 1); i++) {
         out << BRD.get_cell_owner(i) << ", ";

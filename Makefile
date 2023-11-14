@@ -2,7 +2,7 @@ TARGET = FINAL
 TEST_TARGET = TEST
 DOCS_DIR = docs
 
-LIB_FILES = lib/Shared.cpp lib/board/Board.cpp lib/board/LeafBoard.cpp lib/board/PrimaryBoard.cpp lib/GraphicalBoard.cpp lib/NcHandler.cpp lib/wrappers/NcPlaneWrapper.cpp
+LIB_FILES = lib/Shared.cpp lib/board/BoardA.cpp lib/board/LeafBoard.cpp lib/board/PrimaryBoard.cpp lib/graphical_board/GraphicalBoardA.cpp lib/graphical_board/PrimaryGraphicalBoard.cpp lib/graphical_board/LeafGraphicalBoard.cpp lib/NcHandler.cpp lib/wrappers/NcPlaneWrapper.cpp
 DUMMY_FILES = lib/dummies/GraphicalBoardDummy.cpp lib/dummies/NcHandlerDummy.cpp lib/dummies/NcPlaneWrapperDummy.cpp
 TEST_FILES = lib/board/tests/BoardWinTests.cpp lib/board/tests/BoardHelperTests.cpp lib/board/tests/PrimaryBoardTests.cpp lib/board/tests/LeafBoardTests.cpp
 
@@ -40,7 +40,7 @@ else
 	Q="
 endif
 
-all: $(TARGET) $(TEST_TARGET) docs
+all: $(TARGET) docs
 
 $(TARGET): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $(CXXVERSION) $(CXXFLAGS_DEBUG) -o $@ $^

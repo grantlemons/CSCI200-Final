@@ -3,34 +3,28 @@
 
 #include "gsl/assert"
 #include "gsl/narrow"
-#include "lib/GraphicalBoard.h"
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
+#include "lib/interfaces/GraphicalAreaI.h"
+#include "lib/interfaces/GraphicalBoardI.h"
 #include "lib/interfaces/NcPlaneWrapperI.h"
 
 #include <array>
 #include <cmath>
 #include <cstdint>
-#include <memory>
 #include <optional>
 #include <ostream>
 
 /**
- * @class Board
+ * @class BoardA
  * Abstract class representation of a logical board.
  */
-class Board {
+class BoardA {
 private:
     /** The handler object used to access the underlying
      * notcurses instance.
      */
-    std::shared_ptr<NcHandlerI> _ncHandler;
-
-    /**
-     * Component graphical board used to represent actions on the logical board
-     * graphically.
-     */
-    std::unique_ptr<GraphicalBoardI> _gBoard;
+    NcHandlerI *_ncHandler;
 
 protected:
     /**
@@ -38,52 +32,27 @@ protected:
      *
      * @param ncHandler The handler object used to access the underlying
      * notcurses instance.
-     * @param gBoard The associated graphical board to construct with.
      */
-    Board(std::shared_ptr<NcHandlerI> ncHandler,
-          std::unique_ptr<GraphicalBoardI> gBoard);
-
-    /**
-     * A constructor that takes a plane to use for the underlying graphical
-     * board.
-     *
-     * @param ncHandler The handler object used to access the underlying
-     * notcurses instance.
-     * @param PLANE The plane used as the primary plane of the new
-     * _gBoard.
-     */
-    Board(std::shared_ptr<NcHandlerI> ncHandler,
-          std::unique_ptr<NcPlaneWrapperI> PLANE);
-
-    /**
-     * A constructor that takes raw info for the underlying graphical board.
-     *
-     * @param ncHandler The handler object used to access the underlying
-     * notcurses instance.
-     * @param NOPTS The configuration used to form the primary plane.
-     *
-     * @see ncplane_create()
-     */
-    Board(std::shared_ptr<NcHandlerI> ncHandler, const ncplane_options NOPTS);
+    BoardA(NcHandlerI *ncHandler);
 
     /**
      * Getter for the associated GraphicalBoard instance.
      *
      * @return A pointer to the private GraphicalBoard.
      */
-    GraphicalBoardI *getGraphicalBoard() const;
+    virtual GraphicalBoardI *getGraphicalBoard() const = 0;
 
     /**
      * Getter for the associated NcHandler instance.
      *
      * @return A pointer to the private NcHandler.
      */
-    std::shared_ptr<NcHandlerI> getNcHandler() const;
+    NcHandlerI *getNcHandler() const;
 
-    virtual ~Board() = default;
+    virtual ~BoardA() = default;
 
-    Board(Board &) = delete;
-    void operator=(const Board &) = delete;
+    BoardA(BoardA &) = delete;
+    void operator=(const BoardA &) = delete;
 
 public:
     /**
@@ -99,7 +68,7 @@ public:
      *
      * @see get_cell_owner()
      */
-    virtual bool check_win(const int INDEX, const CellOwner OWNER) const;
+    bool check_win(const int INDEX, const CellOwner OWNER) const;
 
     /**
      * Gets the owner of a given index.
@@ -113,7 +82,6 @@ public:
      * Uses the component GraphicalBoard to draw a Tic-Tac-Toe board.
      *
      * @see _gBoard
-     * @see GraphicalBoard::draw_board()
      */
     virtual void draw() = 0;
 
@@ -125,15 +93,13 @@ public:
      * @param OWNER The user for whom to mark the cell.
      *
      * @see _gBoard
-     * @see GraphicalBoard::draw_x()
-     * @see GraphicalBoard::draw_o()
      */
-    virtual void mark_cell(const int INDEX, const CellOwner OWNER);
+    void mark_cell(const int INDEX, const CellOwner OWNER);
 
     /**
      * Defines the way Board types are outputted to streams.
      */
-    friend std::ostream &operator<<(std::ostream &out, const Board &BRD);
+    friend std::ostream &operator<<(std::ostream &out, const BoardA &BRD);
 };
 
 // Helper functions
@@ -153,7 +119,7 @@ public:
  * @param B The divisor of the modulus operation.
  * @return The result of the modulus operation.
  *
- * @relates Board
+ * @relates BoardA
  */
 inline constexpr int negative_mod(const int A, const int B) {
     return A - (B * gsl::narrow<int>(std::floor(static_cast<double>(A) / B)));
@@ -173,7 +139,7 @@ inline constexpr int negative_mod(const int A, const int B) {
  *
  * @see vertical_others()
  *
- * @relates Board
+ * @relates BoardA
  */
 inline constexpr void horizontal_others(const int INDEX, int &other1,
                                         int &other2) {
@@ -203,7 +169,7 @@ inline constexpr void horizontal_others(const int INDEX, int &other1,
  *
  * @see horizontal_others()
  *
- * @relates Board
+ * @relates BoardA
  */
 inline constexpr void vertical_others(const int INDEX, int &other1,
                                       int &other2) {
@@ -235,7 +201,7 @@ inline constexpr void vertical_others(const int INDEX, int &other1,
  *
  * @see diagonal_twos_others()
  *
- * @relates Board
+ * @relates BoardA
  */
 inline constexpr void diagonal_fours_others(const int INDEX, int &other1,
                                             int &other2) {
@@ -267,7 +233,7 @@ inline constexpr void diagonal_fours_others(const int INDEX, int &other1,
  *
  * @see diagonal_twos_others()
  *
- * @relates Board
+ * @relates BoardA
  */
 inline constexpr void diagonal_twos_others(const int INDEX, int &other1,
                                            int &other2) {

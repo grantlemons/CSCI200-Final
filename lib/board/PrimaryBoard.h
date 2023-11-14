@@ -3,8 +3,11 @@
 
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
-#include "lib/board/Board.h"
+#include "lib/board/BoardA.h"
 #include "lib/board/LeafBoard.h"
+#include "lib/graphical_board/PrimaryGraphicalBoard.h"
+#include "lib/interfaces/GraphicalAreaI.h"
+#include "lib/interfaces/GraphicalBoardI.h"
 
 #include <array>
 #include <memory>
@@ -20,7 +23,7 @@
  * @see LeafBoard
  * @see Board
  */
-class PrimaryBoard : virtual public Board {
+class PrimaryBoard : virtual public BoardA {
 private:
     /**
      * The unicode characters used when drawing the graphical representation of
@@ -29,6 +32,12 @@ private:
      * Shared between all instances.
      */
     static std::array<const char *, SYMBOL_COUNT> _symbols;
+
+    /**
+     * Component graphical board used to represent actions on the logical board
+     * graphically.
+     */
+    std::unique_ptr<GraphicalBoardI> _gBoard;
 
     /**
      * Array storing ownership of its component LeafBoards.
@@ -44,6 +53,8 @@ private:
      */
     void init_cells();
 
+    GraphicalBoardI *getGraphicalBoard() const override final;
+
 public:
     /**
      * A constructor for PrimaryBoard using dependency injection.
@@ -54,7 +65,7 @@ public:
      *
      * @see NcHandler::combine_channels()
      */
-    PrimaryBoard(std::shared_ptr<NcHandlerI> ncHandler,
+    PrimaryBoard(NcHandlerI *ncHandler,
                  std::unique_ptr<GraphicalBoardI> gBoard);
 
     /**
@@ -68,7 +79,7 @@ public:
      * @see _cells
      * @see def_primary_nopts()
      */
-    PrimaryBoard(std::shared_ptr<NcHandlerI> ncHandler);
+    PrimaryBoard(NcHandlerI *ncHandler);
 
     ~PrimaryBoard() = default;
     PrimaryBoard(PrimaryBoard &) = delete;
@@ -89,7 +100,6 @@ public:
     CellOwner get_cell_owner(const int INDEX) const override final;
 
     void draw() override final;
-    void mark_cell(const int INDEX, const CellOwner OWNER) override final;
 };
 
 // Helper functions
@@ -104,6 +114,6 @@ public:
  * underlying notcurses instance.
  * @return An ncplane_options struct describing the configuration options.
  */
-ncplane_options def_primary_nopts(std::shared_ptr<NcHandlerI> ncHandler);
+ncplane_options def_primary_nopts(NcHandlerI *ncHandler);
 
 #endif // !PRIMARYBOARD
