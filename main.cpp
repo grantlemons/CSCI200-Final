@@ -3,12 +3,10 @@
 #include "lib/board/BoardA.h"
 #include "lib/board/LeafBoard.h"
 #include "lib/board/PrimaryBoard.h"
-#include "lib/dummies/GraphicalBoardDummy.h"
-#include "lib/dummies/NcHandlerDummy.h"
-#include "lib/dummies/NcPlaneWrapperDummy.h"
 #include "lib/graphical_board/GraphicalBoardA.h"
 #include "lib/graphical_board/PrimaryGraphicalBoard.h"
 #include "lib/interfaces/GraphicalBoardI.h"
+#include "lib/wrappers/NcPlaneWrapper.h"
 
 #include <cstdint>
 #include <iostream>
@@ -16,11 +14,10 @@
 #include <optional>
 
 int main() {
-    std::unique_ptr<NcHandlerI> ncHandler{new NcHandlerDummy{}};
-    NcPlaneWrapperI *stdPlane{new NcPlaneWrapperDummy{}};
-    std::unique_ptr<GraphicalBoardI> gBoard{new GraphicalBoardDummy{stdPlane}};
-    // std::unique_ptr<GraphicalBoardI> gBoard{
-    //     new PrimaryGraphicalBoard{ncHandler.get(), stdPlane}};
+    std::unique_ptr<NcHandlerI> ncHandler{new NcHandler{}};
+    NcPlaneWrapperI *stdPlane{ncHandler->get_stdplane_wrapper()};
+    std::unique_ptr<GraphicalBoardI> gBoard{
+        new PrimaryGraphicalBoard{ncHandler.get(), stdPlane}};
 
     PrimaryBoard pBoard{ncHandler.get(), std::move(gBoard)};
     pBoard.draw();
