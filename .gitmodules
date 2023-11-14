@@ -2,3 +2,7 @@
 	path = doxygen-awesome-css
 	url = https://github.com/jothepro/doxygen-awesome-css.git
 	branch = v2.2.1
+[submodule "GSL"]
+	path = GSL
+	url = https://github.com/microsoft/GSL.git
+	branch = v4.0.0

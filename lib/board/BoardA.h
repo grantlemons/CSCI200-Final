@@ -1,32 +1,30 @@
 #ifndef BOARD
 #define BOARD
 
-#include "lib/GraphicalBoard.h"
+#include "gsl/assert"
+#include "gsl/narrow"
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
+#include "lib/interfaces/GraphicalAreaI.h"
+#include "lib/interfaces/GraphicalBoardI.h"
+#include "lib/interfaces/NcPlaneWrapperI.h"
 
 #include <array>
+#include <cmath>
 #include <cstdint>
-#include <memory>
 #include <optional>
 #include <ostream>
 
 /**
- * @class Board
+ * @class BoardA
  * Abstract class representation of a logical board.
  */
-class Board {
+class BoardA {
 private:
     /** The handler object used to access the underlying
      * notcurses instance.
      */
-    std::shared_ptr<NcHandler> _ncHandler;
-
-    /**
-     * Component graphical board used to represent actions on the logical board
-     * graphically.
-     */
-    std::unique_ptr<GraphicalBoard> _gBoard;
+    NcHandlerI *_ncHandler;
 
 protected:
     /**
@@ -34,51 +32,28 @@ protected:
      *
      * @param ncHandler The handler object used to access the underlying
      * notcurses instance.
-     * @param gBoard The associated graphical board to construct with.
      */
-    Board(std::shared_ptr<NcHandler> ncHandler,
-          std::unique_ptr<GraphicalBoard> gBoard);
-
-    /**
-     * A constructor that takes a plane to use for the underlying graphical
-     * board.
-     *
-     * @param ncHandler The handler object used to access the underlying
-     * notcurses instance.
-     * @param PLANE The plane used as the primary plane of the new
-     * _gBoard.
-     */
-    Board(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE);
-
-    /**
-     * A constructor that takes raw info for the underlying graphical board.
-     *
-     * @param ncHandler The handler object used to access the underlying
-     * notcurses instance.
-     * @param NOPTS The configuration used to form the primary plane.
-     *
-     * @see ncplane_create()
-     */
-    Board(std::shared_ptr<NcHandler> ncHandler, const ncplane_options NOPTS);
-
-    /**
-     * Getter for the associated GraphicalBoard instance.
-     *
-     * @return A pointer to the private GraphicalBoard.
-     */
-    GraphicalBoard *getGraphicalBoard() const;
+    BoardA(NcHandlerI *ncHandler);
 
     /**
      * Getter for the associated NcHandler instance.
      *
      * @return A pointer to the private NcHandler.
      */
-    std::shared_ptr<NcHandler> getNcHandler() const;
+    NcHandlerI *getNcHandler() const;
 
-    virtual ~Board() = default;
+    virtual ~BoardA() = default;
 
-    Board(Board &) = delete;
-    void operator=(const Board &) = delete;
+    BoardA(BoardA &) = delete;
+    void operator=(const BoardA &) = delete;
+
+public:
+    /**
+     * Getter for the associated GraphicalBoard instance.
+     *
+     * @return A pointer to the private GraphicalBoard.
+     */
+    virtual GraphicalBoardI *getGraphicalBoard() const = 0;
 
     /**
      * Checks if the given player has won the current board.
@@ -93,8 +68,7 @@ protected:
      *
      * @see get_cell_owner()
      */
-    virtual bool check_win(const unsigned int INDEX,
-                           const CellOwner OWNER) const;
+    bool check_win(const int INDEX, const CellOwner OWNER) const;
 
     /**
      * Gets the owner of a given index.
@@ -102,36 +76,30 @@ protected:
      * @param INDEX the index of the cell to check ownership.
      * @return The owner of the cell (Can be NONE variant).
      */
-    virtual CellOwner get_cell_owner(const unsigned int INDEX) const = 0;
+    virtual CellOwner get_cell_owner(const int INDEX) const = 0;
 
     /**
      * Uses the component GraphicalBoard to draw a Tic-Tac-Toe board.
      *
      * @see _gBoard
-     * @see GraphicalBoard::draw_board()
      */
     virtual void draw() = 0;
 
     /**
-     * Uses the component GraphicalBoard to mark the owner of a cell as X.
+     * Uses the component GraphicalBoard to mark the owner of a cell
+     * appropriately.
+     *
+     * @param INDEX The index of the cell to mark.
+     * @param OWNER The user for whom to mark the cell.
      *
      * @see _gBoard
-     * @see GraphicalBoard::draw_x()
      */
-    virtual void draw_x(const unsigned int INDEX);
-
-    /**
-     * Uses the component GraphicalBoard to mark the owner of a cell as O.
-     *
-     * @see _gBoard
-     * @see GraphicalBoard::draw_o()
-     */
-    virtual void draw_o(const unsigned int INDEX);
+    void mark_cell(const int INDEX, const CellOwner OWNER);
 
     /**
      * Defines the way Board types are outputted to streams.
      */
-    friend std::ostream &operator<<(std::ostream &out, const Board &BRD);
+    friend std::ostream &operator<<(std::ostream &out, const BoardA &BRD);
 };
 
 // Helper functions
@@ -151,9 +119,11 @@ protected:
  * @param B The divisor of the modulus operation.
  * @return The result of the modulus operation.
  *
- * @relates Board
+ * @relates BoardA
  */
-constexpr unsigned int negative_mod(const int A, const int B);
+inline constexpr int negative_mod(const int A, const int B) {
+    return A - (B * gsl::narrow<int>(std::floor(static_cast<double>(A) / B)));
+}
 
 /**
  * Gets the other indicies on a certain row of a 3x3 grid.
@@ -169,10 +139,21 @@ constexpr unsigned int negative_mod(const int A, const int B);
  *
  * @see vertical_others()
  *
- * @relates Board
+ * @relates BoardA
  */
-constexpr void horizontal_others(const unsigned int INDEX, unsigned int &other1,
-                                 unsigned int &other2);
+inline constexpr void horizontal_others(const int INDEX, int &other1,
+                                        int &other2) {
+    Expects(INDEX >= 0 && INDEX <= 9);
+
+    const int ROW_LEN = 3;
+    other1 = negative_mod(INDEX - 1, ROW_LEN) + (INDEX / ROW_LEN) * ROW_LEN;
+    other2 = negative_mod(INDEX + 1, ROW_LEN) + (INDEX / ROW_LEN) * ROW_LEN;
+
+    Ensures(other1 != other2);
+    Ensures(other1 != INDEX && other2 != INDEX);
+    Ensures(other1 >= 0 && other1 <= 9);
+    Ensures(other2 >= 0 && other2 <= 9);
+}
 
 /**
  * Gets the other indicies on a certain column of a 3x3 grid.
@@ -188,10 +169,21 @@ constexpr void horizontal_others(const unsigned int INDEX, unsigned int &other1,
  *
  * @see horizontal_others()
  *
- * @relates Board
+ * @relates BoardA
  */
-constexpr void vertical_others(const unsigned int INDEX, unsigned int &other1,
-                               unsigned int &other2);
+inline constexpr void vertical_others(const int INDEX, int &other1,
+                                      int &other2) {
+    Expects(INDEX >= 0 && INDEX <= 9);
+
+    const int ROW_LEN = 3;
+    other1 = negative_mod(INDEX - ROW_LEN, CELL_COUNT);
+    other2 = negative_mod(INDEX + ROW_LEN, CELL_COUNT);
+
+    Ensures(other1 != other2);
+    Ensures(other1 != INDEX && other2 != INDEX);
+    Ensures(other1 >= 0 && other1 <= 9);
+    Ensures(other2 >= 0 && other2 <= 9);
+}
 
 /**
  * Gets the other indicies of a diagonal line on a 3x3 grid.
@@ -209,11 +201,20 @@ constexpr void vertical_others(const unsigned int INDEX, unsigned int &other1,
  *
  * @see diagonal_twos_others()
  *
- * @relates Board
+ * @relates BoardA
  */
-constexpr void diagonal_fours_others(const unsigned int INDEX,
-                                     unsigned int &other1,
-                                     unsigned int &other2);
+inline constexpr void diagonal_fours_others(const int INDEX, int &other1,
+                                            int &other2) {
+    Expects(INDEX == 0 || INDEX == 4 || INDEX == 8);
+
+    other1 = negative_mod(INDEX - 4, CELL_COUNT + 3);
+    other2 = negative_mod(INDEX + 4, CELL_COUNT + 3);
+
+    Ensures(other1 != other2);
+    Ensures(other1 != INDEX && other2 != INDEX);
+    Ensures(other1 == 0 || other1 == 4 || other1 == 8);
+    Ensures(other2 == 0 || other2 == 4 || other2 == 8);
+}
 
 /**
  * Gets the other indicies of a diagonal line on a 3x3 grid.
@@ -232,9 +233,19 @@ constexpr void diagonal_fours_others(const unsigned int INDEX,
  *
  * @see diagonal_twos_others()
  *
- * @relates Board
+ * @relates BoardA
  */
-constexpr void diagonal_twos_others(const unsigned int INDEX,
-                                    unsigned int &other1, unsigned int &other2);
+inline constexpr void diagonal_twos_others(const int INDEX, int &other1,
+                                           int &other2) {
+    Expects(INDEX == 2 || INDEX == 4 || INDEX == 6);
+
+    other1 = negative_mod(INDEX, 6) + 2;
+    other2 = negative_mod(INDEX + 2, 6) + 2;
+
+    Ensures(other1 != other2);
+    Ensures(other1 != INDEX && other2 != INDEX);
+    Ensures(other1 == 2 || other1 == 4 || other1 == 6);
+    Ensures(other2 == 2 || other2 == 4 || other2 == 6);
+}
 
 #endif // !BOARD

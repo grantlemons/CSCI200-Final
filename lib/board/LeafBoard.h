@@ -3,10 +3,12 @@
 
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
-#include "lib/board/Board.h"
+#include "lib/board/BoardA.h"
+#include "lib/interfaces/GraphicalAreaI.h"
+#include "lib/interfaces/GraphicalBoardI.h"
+#include "lib/interfaces/NcPlaneWrapperI.h"
 
 #include <array>
-#include <memory>
 #include <notcurses/notcurses.h>
 
 /**
@@ -23,7 +25,7 @@
  * @see PrimaryBoard
  * @see Board
  */
-class LeafBoard : virtual public Board {
+class LeafBoard : virtual public BoardA {
 private:
     /**
      * The unicode characters used when drawing the graphical representation of
@@ -32,6 +34,12 @@ private:
      * Shared between all instances.
      */
     static std::array<const char *, SYMBOL_COUNT> _symbols;
+
+    /**
+     * Component graphical board used to represent actions on the logical board
+     * graphically.
+     */
+    GraphicalBoardI *_gBoard;
 
     /**
      * Array storing ownership of its component cells.
@@ -43,7 +51,6 @@ private:
      *
      * @see get_winner()
      * @see set_cell_owner()
-     * @see Board::check_win()
      */
     CellOwner _winner;
 
@@ -57,26 +64,15 @@ public:
      *
      * @see NcHandler::combine_channels()
      */
-    LeafBoard(std::shared_ptr<NcHandler> ncHandler,
-              std::unique_ptr<GraphicalBoard> gBoard);
-
-    /**
-     * A constructor for LeafBoard.
-     *
-     * @param ncHandler The handler object used to access the underlying
-     * notcurses instance.
-     * @param PLANE The plane used as the primary plane of the board's new
-     * GraphicalBoard.
-     *
-     * @see NcHandler::combine_channels()
-     */
-    LeafBoard(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE);
+    LeafBoard(NcHandlerI *ncHandler, GraphicalBoardI *gBoard);
 
     ~LeafBoard() = default;
     LeafBoard(LeafBoard &) = delete;
     void operator=(const LeafBoard &) = delete;
 
-    CellOwner get_cell_owner(const unsigned int INDEX) const override final;
+    GraphicalBoardI *getGraphicalBoard() const override final;
+
+    CellOwner get_cell_owner(const int INDEX) const override final;
 
     /**
      * Attempts to set the owner of the given index.
@@ -86,12 +82,11 @@ public:
      *
      * @param INDEX The index of the cell to set the owner of.
      * @param OWNER The player to set the owner of the cell to.
-     * @return Success or failure.
      *
      * @see _cells
      * @see _winner
      */
-    bool set_cell_owner(const unsigned int INDEX, const CellOwner OWNER);
+    void set_cell_owner(const int INDEX, const CellOwner OWNER);
 
     /**
      * Gets the winner of the entire board.
@@ -101,22 +96,6 @@ public:
     CellOwner get_winner() const;
 
     void draw() override final;
-
-    /**
-     * Marks primary plane and all child planes of component GraphicalBoard as
-     * owned by X.
-     *
-     * Used when the leaf board is won.
-     */
-    void fill_x();
-
-    /**
-     * Marks primary plane and all child planes of component GraphicalBoard as
-     * owned by O.
-     *
-     * Used when the leaf board is won.
-     */
-    void fill_o();
 };
 
 #endif // !LEAFBOARD

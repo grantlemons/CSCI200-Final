@@ -1,5 +1,8 @@
 #include "lib/NcHandler.h"
 
+#include "interfaces/NcPlaneWrapperI.h"
+#include "wrappers/NcPlaneWrapper.h"
+
 #include <clocale>
 #include <cstdint>
 #include <notcurses/notcurses.h>
@@ -12,7 +15,7 @@ const uint32_t NcHandler::WHITE_CHANNEL =
 const uint32_t NcHandler::GREY_CHANNEL =
     NCCHANNEL_INITIALIZER(0x77, 0x77, 0x77);
 
-const notcurses_options opts = {NULL,
+const notcurses_options opts = {nullptr,
                                 NCLOGLEVEL_SILENT,
                                 0,
                                 0,
@@ -23,7 +26,7 @@ const notcurses_options opts = {NULL,
 
 NcHandler::NcHandler() {
     setlocale(LC_ALL, "");
-    nc = notcurses_init(&opts, NULL);
+    nc = notcurses_init(&opts, nullptr);
 }
 
 NcHandler::~NcHandler() {
@@ -32,13 +35,13 @@ NcHandler::~NcHandler() {
 }
 
 uint32_t NcHandler::get_default_bg_channel() const {
-    return ncplane_bchannel(get_stdplane());
+    return ncplane_bchannel(notcurses_stdplane(nc));
 }
 uint32_t NcHandler::get_default_fg_channel() const {
-    return ncplane_fchannel(get_stdplane());
+    return ncplane_fchannel(notcurses_stdplane(nc));
 }
 uint64_t NcHandler::get_default_channels() const {
-    return ncplane_channels(get_stdplane());
+    return ncplane_channels(notcurses_stdplane(nc));
 }
 
 uint64_t NcHandler::combine_channels(const uint32_t BG_CHANNEL,
@@ -47,12 +50,12 @@ uint64_t NcHandler::combine_channels(const uint32_t BG_CHANNEL,
     return (static_cast<uint64_t>(FG_CHANNEL) << 32ull) + BG_CHANNEL;
 }
 
-notcurses *NcHandler::get_nc() const {
-    return nc;
-}
-
 ncplane *NcHandler::get_stdplane() const {
     return notcurses_stdplane(nc);
+}
+
+NcPlaneWrapperI *NcHandler::get_stdplane_wrapper() const {
+    return new NcPlaneWrapper(notcurses_stdplane(nc), true);
 }
 
 void NcHandler::render() {

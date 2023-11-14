@@ -1,7 +1,10 @@
-*.o
 FINAL
-TUI
+TEST
+
+*.o
 *.tar.gz
+*.log
+vg.*
 compile_commands.json
 .cache
 docs

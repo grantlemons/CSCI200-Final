@@ -1,32 +1,57 @@
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
-#include "lib/board/Board.h"
 #include "lib/board/LeafBoard.h"
 #include "lib/board/PrimaryBoard.h"
+#include "lib/factories/AbstractBoardFactory.h"
+#include "lib/factories/BoardFactory.h"
+#include "lib/factories/DummyBoardFactory.h"
 
-#include <cstdint>
 #include <memory>
 #include <optional>
 
 int main() {
-    std::shared_ptr<NcHandler> ncHandler(new NcHandler());
+    std::unique_ptr<AbstractBoardFactory> factory{new BoardFactory()};
+    PrimaryBoard *pBoard = factory->getPrimaryBoard();
 
-    PrimaryBoard pBoard(ncHandler);
-    pBoard.draw();
+    pBoard->draw();
 
+    CellOwner victor = None;
     LeafBoard *selected = nullptr;
-    std::optional<LeafBoard *> opt = pBoard.select_board(2u);
+    std::optional<LeafBoard *> opt = nullptr;
+
+    opt = pBoard->select_board(2);
     if (opt != std::nullopt) {
         selected = opt.value();
-        selected->draw_x(1);
-        selected->draw_o(4);
+        selected->set_cell_owner(0, X);
     }
-    pBoard.draw_o(0);
-    pBoard.draw_x(3);
-    ncHandler->render();
+    opt = pBoard->select_board(0);
+    if (opt != std::nullopt) {
+        selected = opt.value();
+        selected->set_cell_owner(2, O);
+    }
+    opt = pBoard->select_board(2);
+    if (opt != std::nullopt) {
+        selected = opt.value();
+        selected->set_cell_owner(1, X);
+    }
+    opt = pBoard->select_board(1);
+    if (opt != std::nullopt) {
+        selected = opt.value();
+        selected->set_cell_owner(2, O);
+    }
+    opt = pBoard->select_board(2);
+    if (opt != std::nullopt) {
+        selected = opt.value();
+        selected->set_cell_owner(2, X);
+    }
+    pBoard->mark_cell(2, pBoard->get_cell_owner(2));
+    if (pBoard->check_win(2, X)) {
+        victor = X;
+    }
+    factory->getNcHandler()->render();
 
-    while (1)
-        ;
+    // while (victor == None) {
+    // }
 
     return EXIT_SUCCESS;
 }

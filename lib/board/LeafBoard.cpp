@@ -1,8 +1,10 @@
 #include "lib/board/LeafBoard.h"
 
+#include "gsl/assert"
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
-#include "lib/board/Board.h"
+#include "lib/board/BoardA.h"
+#include "lib/interfaces/GraphicalBoardI.h"
 
 #include <array>
 #include <cstdint>
@@ -10,45 +12,37 @@
 #include <notcurses/notcurses.h>
 
 std::array<const char *, SYMBOL_COUNT> LeafBoard::_symbols =
-    std::array<const char *, SYMBOL_COUNT>({"\u2500", "\u2502", "\u253C"});
+    std::array<const char *, SYMBOL_COUNT>{"\u2500", "\u2502", "\u253C"};
 
-LeafBoard::LeafBoard(std::shared_ptr<NcHandler> ncHandler,
-                     std::unique_ptr<GraphicalBoard> gBoard)
-    : Board::Board(ncHandler, std::move(gBoard)) {}
+LeafBoard::LeafBoard(NcHandlerI *ncHandler, GraphicalBoardI *gBoard)
+    : BoardA::BoardA{ncHandler}, _gBoard{gBoard}, _cells{}, _winner{None} {}
 
-LeafBoard::LeafBoard(std::shared_ptr<NcHandler> ncHandler, ncplane *const PLANE)
-    : Board::Board(ncHandler, PLANE) {
-    _cells = std::array<LLCell, CELL_COUNT>();
-    _winner = None;
+GraphicalBoardI *LeafBoard::getGraphicalBoard() const {
+    return _gBoard;
 }
 
-CellOwner LeafBoard::get_cell_owner(const unsigned int INDEX) const {
-    return _cells.at(INDEX);
+CellOwner LeafBoard::get_cell_owner(const int INDEX) const {
+    Expects(INDEX >= 0 && INDEX <= 9);
+
+    return _cells.at(gsl::narrow<unsigned int>(INDEX));
 }
 
-bool LeafBoard::set_cell_owner(const unsigned int INDEX,
-                               const CellOwner OWNER) {
-    if (_cells.at(INDEX) == None) {
-        _cells.at(INDEX) = OWNER;
+void LeafBoard::set_cell_owner(const int INDEX, const CellOwner OWNER) {
+    Expects(INDEX >= 0 && INDEX <= 9);
+    Expects(_cells.at(gsl::narrow<unsigned int>(INDEX)) == None);
 
-        if (check_win(INDEX, OWNER)) {
-            _winner = OWNER;
-        }
-        return true;
+    _cells.at(gsl::narrow<unsigned int>(INDEX)) = OWNER;
+    mark_cell(INDEX, OWNER);
+
+    if (check_win(INDEX, OWNER)) {
+        _winner = OWNER;
     }
-    return false;
+
+    Ensures(_cells.at(gsl::narrow<unsigned int>(INDEX)) == OWNER);
 }
 
 CellOwner LeafBoard::get_winner() const {
     return _winner;
-}
-
-void LeafBoard::fill_x() {
-    getGraphicalBoard()->fill_x();
-}
-
-void LeafBoard::fill_o() {
-    getGraphicalBoard()->fill_o();
 }
 
 void LeafBoard::draw() {

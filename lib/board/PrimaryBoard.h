@@ -3,8 +3,11 @@
 
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
-#include "lib/board/Board.h"
+#include "lib/board/BoardA.h"
 #include "lib/board/LeafBoard.h"
+#include "lib/graphical_board/PrimaryGraphicalBoard.h"
+#include "lib/interfaces/GraphicalAreaI.h"
+#include "lib/interfaces/GraphicalBoardI.h"
 
 #include <array>
 #include <memory>
@@ -20,7 +23,7 @@
  * @see LeafBoard
  * @see Board
  */
-class PrimaryBoard : virtual public Board {
+class PrimaryBoard : virtual public BoardA {
 private:
     /**
      * The unicode characters used when drawing the graphical representation of
@@ -31,11 +34,24 @@ private:
     static std::array<const char *, SYMBOL_COUNT> _symbols;
 
     /**
+     * Component graphical board used to represent actions on the logical board
+     * graphically.
+     */
+    std::unique_ptr<GraphicalBoardI> _gBoard;
+
+    /**
      * Array storing ownership of its component LeafBoards.
      */
-    std::array<LeafBoard *, CELL_COUNT> _cells;
+    std::array<std::unique_ptr<LeafBoard>, CELL_COUNT> _cells;
 
-    void create_cells();
+    /**
+     * Helper function to abstract out of the two different constructors.
+     *
+     * Creates LeafBoards for each cell and places them in the _cells array.
+     *
+     * @see _cells
+     */
+    void init_cells();
 
 public:
     /**
@@ -47,8 +63,8 @@ public:
      *
      * @see NcHandler::combine_channels()
      */
-    PrimaryBoard(std::shared_ptr<NcHandler> ncHandler,
-                 std::unique_ptr<GraphicalBoard> gBoard);
+    PrimaryBoard(NcHandlerI *ncHandler,
+                 std::unique_ptr<GraphicalBoardI> gBoard);
 
     /**
      * The constructor for PrimaryBoard.
@@ -61,13 +77,11 @@ public:
      * @see _cells
      * @see def_primary_nopts()
      */
-    PrimaryBoard(std::shared_ptr<NcHandler> ncHandler);
+    PrimaryBoard(NcHandlerI *ncHandler);
 
-    ~PrimaryBoard();
+    ~PrimaryBoard() = default;
     PrimaryBoard(PrimaryBoard &) = delete;
     void operator=(const PrimaryBoard &) = delete;
-
-    CellOwner get_cell_owner(const unsigned int INDEX) const override final;
 
     /**
      * Gets a pointer to one of the constituant LeafBoards.
@@ -79,11 +93,19 @@ public:
      *
      * If the selected LeafBoard is already owned, the function returns nullopt.
      */
-    std::optional<LeafBoard *> select_board(const unsigned int INDEX);
+    std::optional<LeafBoard *> select_board(const int INDEX);
+
+    /**
+     * Getter for a cell of the PrimaryBoard.
+     *
+     * @param INDEX The index of the cell within the PrimaryBoard.
+     */
+    LeafBoard *getLeafBoard(const int INDEX) const;
+    GraphicalBoardI *getGraphicalBoard() const override final;
+
+    CellOwner get_cell_owner(const int INDEX) const override final;
 
     void draw() override final;
-    void draw_x(const unsigned int INDEX) override final;
-    void draw_o(const unsigned int INDEX) override final;
 };
 
 // Helper functions
@@ -98,6 +120,6 @@ public:
  * underlying notcurses instance.
  * @return An ncplane_options struct describing the configuration options.
  */
-ncplane_options def_primary_nopts(std::shared_ptr<NcHandler> ncHandler);
+ncplane_options def_primary_nopts(NcHandlerI *ncHandler);
 
 #endif // !PRIMARYBOARD
