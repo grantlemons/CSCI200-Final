@@ -54,8 +54,6 @@ private:
      */
     CellOwner _winner;
 
-    GraphicalBoardI *getGraphicalBoard() const override final;
-
 public:
     /**
      * A constructor for LeafBoard using dependency injection.
@@ -71,6 +69,8 @@ public:
     ~LeafBoard() = default;
     LeafBoard(LeafBoard &) = delete;
     void operator=(const LeafBoard &) = delete;
+
+    GraphicalBoardI *getGraphicalBoard() const override final;
 
     CellOwner get_cell_owner(const int INDEX) const override final;
 

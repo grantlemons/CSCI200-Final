@@ -53,8 +53,6 @@ private:
      */
     void init_cells();
 
-    GraphicalBoardI *getGraphicalBoard() const override final;
-
 public:
     /**
      * A constructor for PrimaryBoard using dependency injection.
@@ -96,6 +94,14 @@ public:
      * If the selected LeafBoard is already owned, the function returns nullopt.
      */
     std::optional<LeafBoard *> select_board(const int INDEX);
+
+    /**
+     * Getter for a cell of the PrimaryBoard.
+     *
+     * @param INDEX The index of the cell within the PrimaryBoard.
+     */
+    LeafBoard *getLeafBoard(const int INDEX) const;
+    GraphicalBoardI *getGraphicalBoard() const override final;
 
     CellOwner get_cell_owner(const int INDEX) const override final;
 

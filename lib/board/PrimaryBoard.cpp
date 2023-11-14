@@ -32,6 +32,10 @@ PrimaryBoard::PrimaryBoard(NcHandlerI *ncHandler)
     init_cells();
 }
 
+LeafBoard *PrimaryBoard::getLeafBoard(const int INDEX) const {
+    return _cells.at(gsl::narrow<unsigned int>(INDEX)).get();
+}
+
 GraphicalBoardI *PrimaryBoard::getGraphicalBoard() const {
     return _gBoard.get();
 }

@@ -2,9 +2,9 @@ TARGET = FINAL
 TEST_TARGET = TEST
 DOCS_DIR = docs
 
-LIB_FILES = lib/Shared.cpp lib/board/BoardA.cpp lib/board/LeafBoard.cpp lib/board/PrimaryBoard.cpp lib/graphical_board/GraphicalBoardA.cpp lib/graphical_board/PrimaryGraphicalBoard.cpp lib/graphical_board/LeafGraphicalBoard.cpp lib/NcHandler.cpp lib/wrappers/NcPlaneWrapper.cpp
-DUMMY_FILES = lib/dummies/GraphicalBoardDummy.cpp lib/dummies/NcHandlerDummy.cpp lib/dummies/NcPlaneWrapperDummy.cpp
-TEST_FILES = lib/board/tests/BoardWinTests.cpp lib/board/tests/BoardHelperTests.cpp lib/board/tests/PrimaryBoardTests.cpp lib/board/tests/LeafBoardTests.cpp
+LIB_FILES = lib/Shared.cpp lib/board/BoardA.cpp lib/board/LeafBoard.cpp lib/board/PrimaryBoard.cpp lib/graphical_board/GraphicalBoardA.cpp lib/graphical_board/PrimaryGraphicalBoard.cpp lib/graphical_board/LeafGraphicalBoard.cpp lib/NcHandler.cpp lib/wrappers/NcPlaneWrapper.cpp lib/factories/BoardFactory.cpp
+DUMMY_FILES = lib/dummies/GraphicalBoardDummy.cpp lib/dummies/NcHandlerDummy.cpp lib/dummies/NcPlaneWrapperDummy.cpp lib/factories/DummyBoardFactory.cpp
+TEST_FILES = lib/tests/BoardWinTests.cpp lib/tests/BoardHelperTests.cpp lib/tests/PrimaryBoardTests.cpp lib/tests/LeafBoardTests.cpp
 
 SRC_FILES = main.cpp $(LIB_FILES) $(DUMMY_FILES)
 TEST_SRC_FILES = test.cpp $(LIB_FILES) $(DUMMY_FILES) $(TEST_FILES)
