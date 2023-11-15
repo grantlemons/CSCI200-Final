@@ -19,8 +19,6 @@ private:
     void init_child_planes() override final;
 
 public:
-    ~PrimaryGraphicalBoard() override;
-
     /**
      * A constructor that takes in the raw info for a plane and forms its
      * primary plane from those options.

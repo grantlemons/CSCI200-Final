@@ -9,7 +9,6 @@
 #include "lib/interfaces/INcPlaneWrapper.h"
 
 #include <array>
-#include <notcurses/notcurses.h>
 
 /**
  * @class LeafBoard

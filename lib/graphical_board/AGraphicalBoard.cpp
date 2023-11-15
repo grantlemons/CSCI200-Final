@@ -33,6 +33,10 @@ AGraphicalBoard::AGraphicalBoard(INcHandler *const P_ncHandler,
     Expects(mrows >= 0 && mcols >= 0);
 }
 
+AGraphicalBoard::~AGraphicalBoard() {
+    delete mprimaryPlane;
+}
+
 void AGraphicalBoard::draw_board(
     const std::array<const char *, SYMBOL_COUNT> SYMBOLS,
     const uint64_t CELL_CHANNELS) {

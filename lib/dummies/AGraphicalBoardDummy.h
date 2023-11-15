@@ -5,36 +5,32 @@
 #include "lib/Shared.h"
 #include "lib/interfaces/IGraphicalArea.h"
 #include "lib/interfaces/IGraphicalBoard.h"
+#include "lib/interfaces/INcPlaneWrapper.h"
 
 #include <array>
-#include <cstdint>
 #include <memory>
 
 /**
- * @class GraphicalBoardDummy
- * Dummy class used as a substitute for GraphicalBoardI classes for testing
- * purposes.
+ * @class AGraphicalBoardDummy
+ * Abstract class for dummies used as a substitute for GraphicalBoardI classes
+ * for testing purposes.
  */
-class GraphicalBoardDummy : virtual public IGraphicalBoard {
+class AGraphicalBoardDummy : virtual public IGraphicalBoard {
 private:
     std::shared_ptr<INcPlaneWrapper> _primaryPlane;
     std::array<std::unique_ptr<IGraphicalArea>, CELL_COUNT> _children;
 
-    void init_child_planes();
-
-    GraphicalBoardDummy(std::shared_ptr<INcPlaneWrapper> plane);
+protected:
+    std::shared_ptr<INcPlaneWrapper> get_primary_plane();
+    void set_children(std::array<std::unique_ptr<IGraphicalArea>, CELL_COUNT>);
 
 public:
-    /**
-     * Constructor for GraphicalBoard dummy.
-     *
-     * @param plane The primary plane used by the methods of the class.
-     *
-     * This is needed to create child planes.
-     *
-     * @see init_child_planes()
-     */
-    GraphicalBoardDummy(INcPlaneWrapper *const P_plane);
+    virtual std::array<std::unique_ptr<IGraphicalArea>, CELL_COUNT>
+    create_children() = 0;
+
+    AGraphicalBoardDummy(std::shared_ptr<INcPlaneWrapper> plane);
+
+    ~AGraphicalBoardDummy() override = default;
 
     void draw_board(const std::array<const char *, SYMBOL_COUNT> SYMBOLS,
                     const uint64_t CELL_CHANNELS) override final;

@@ -30,10 +30,6 @@ PrimaryGraphicalBoard::PrimaryGraphicalBoard(INcHandler *const P_ncHandler,
     init_child_planes();
 }
 
-PrimaryGraphicalBoard::~PrimaryGraphicalBoard() {
-    delete mprimaryPlane;
-}
-
 void PrimaryGraphicalBoard::init_child_planes() {
     const unsigned int ROWS_PER_BCELL =
         (gsl::narrow<unsigned int>(mrows) - 2u) / 3u;

@@ -11,7 +11,6 @@
 
 #include <array>
 #include <cmath>
-#include <notcurses/notcurses.h>
 #include <ostream>
 
 ABoard::ABoard(INcHandler *ncHandler) : _ncHandler{ncHandler} {}

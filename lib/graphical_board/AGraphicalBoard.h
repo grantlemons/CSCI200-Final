@@ -108,7 +108,7 @@ protected:
 public:
     AGraphicalBoard(AGraphicalBoard &) = delete;
     void operator=(const AGraphicalBoard &) = delete;
-    ~AGraphicalBoard() override = default;
+    ~AGraphicalBoard() override;
 
     void draw_board(const std::array<const char *, SYMBOL_COUNT> SYMBOLS,
                     const uint64_t CELL_CHANNELS) override final;

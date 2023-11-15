@@ -1,5 +1,7 @@
 #include "lib/dummies/NcPlaneWrapperDummy.h"
 
+#include <notcurses/notcurses.h>
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 

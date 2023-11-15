@@ -9,7 +9,6 @@
 #include <array>
 #include <cstdint>
 #include <memory>
-#include <notcurses/notcurses.h>
 
 const std::array<const char *, SYMBOL_COUNT> LeafBoard::_symbols =
     std::array<const char *, SYMBOL_COUNT>{"\u2500", "\u2502", "\u253C"};

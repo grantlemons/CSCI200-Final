@@ -4,8 +4,6 @@
 #include "lib/graphical_board/AGraphicalBoard.h"
 #include "lib/interfaces/INcHandler.h"
 
-#include <notcurses/notcurses.h>
-
 /**
  * @class LeafGraphicalBoard
  * GraphicalBoard class with NcPlaneWrappers for cells.
@@ -40,7 +38,7 @@ public:
      * A constructor that takes in an ncplane_options struct for a plane and
      * forms its primary plane from those options.
      *
-     * Calls the constructor that takes an ncplane pointer.
+     * Calls the constructor that takes an ncplane wrapper.
      *
      * @param ncHandler The handler object used to access the underlying
      * notcurses instance.
