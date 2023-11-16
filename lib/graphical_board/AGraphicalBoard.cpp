@@ -21,20 +21,15 @@ AGraphicalBoard::AGraphicalBoard(INcHandler *const P_ncHandler, const int Y,
 
 AGraphicalBoard::AGraphicalBoard(INcHandler *const P_ncHandler,
                                  const ncplane_options NOPTS)
-    : AGraphicalBoard::AGraphicalBoard{P_ncHandler,
-                                       new NcPlaneWrapper(P_ncHandler, NOPTS)} {
-}
+    : AGraphicalBoard::AGraphicalBoard{
+          P_ncHandler, std::make_unique<NcPlaneWrapper>(P_ncHandler, NOPTS)} {}
 
 AGraphicalBoard::AGraphicalBoard(INcHandler *const P_ncHandler,
-                                 INcPlaneWrapper *const P_plane)
-    : mncHandler{P_ncHandler}, mprimaryPlane{P_plane},
+                                 std::unique_ptr<INcPlaneWrapper> P_plane)
+    : mncHandler{P_ncHandler}, mprimaryPlane{std::move(P_plane)},
       mrows{mprimaryPlane->get_rows() + 1},
       mcols{mprimaryPlane->get_cols() + 1} {
     Expects(mrows >= 0 && mcols >= 0);
-}
-
-AGraphicalBoard::~AGraphicalBoard() {
-    delete mprimaryPlane;
 }
 
 void AGraphicalBoard::draw_board(

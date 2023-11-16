@@ -63,7 +63,7 @@ public:
      * @param PLANE The plane used as the primary plane.
      */
     PrimaryGraphicalBoard(INcHandler *const P_ncHandler,
-                          INcPlaneWrapper *const P_plane);
+                          std::unique_ptr<INcPlaneWrapper> P_plane);
 
     void draw_x(const int INDEX) override final;
     void draw_o(const int INDEX) override final;

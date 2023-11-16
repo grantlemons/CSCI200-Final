@@ -60,7 +60,7 @@ public:
      * @param PLANE The plane used as the primary plane.
      */
     LeafGraphicalBoard(INcHandler *const P_ncHandler,
-                       INcPlaneWrapper *const P_plane);
+                       std::unique_ptr<INcPlaneWrapper> P_plane);
 };
 
 #endif

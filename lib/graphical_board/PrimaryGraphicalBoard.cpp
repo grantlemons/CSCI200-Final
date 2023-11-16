@@ -24,9 +24,9 @@ PrimaryGraphicalBoard::PrimaryGraphicalBoard(INcHandler *const P_ncHandler,
     init_child_planes();
 }
 
-PrimaryGraphicalBoard::PrimaryGraphicalBoard(INcHandler *const P_ncHandler,
-                                             INcPlaneWrapper *const P_plane)
-    : AGraphicalBoard::AGraphicalBoard{P_ncHandler, P_plane} {
+PrimaryGraphicalBoard::PrimaryGraphicalBoard(
+    INcHandler *const P_ncHandler, std::unique_ptr<INcPlaneWrapper> P_plane)
+    : AGraphicalBoard::AGraphicalBoard{P_ncHandler, std::move(P_plane)} {
     init_child_planes();
 }
 
@@ -45,10 +45,10 @@ void PrimaryGraphicalBoard::init_child_planes() {
 
         const ncplane_options CHILD_NOPTS = NcPlaneWrapper::createNopts(
             NEW_Y, NEW_X, ROWS_PER_BCELL - 1u, COLS_PER_BCELL - 1u);
-        auto *const P_newPlane =
-            dynamic_cast<INcPlaneWrapper *>(create_child(&CHILD_NOPTS));
+        auto newPlane = std::unique_ptr<INcPlaneWrapper>{
+            dynamic_cast<INcPlaneWrapper *>(create_child(&CHILD_NOPTS))};
         IGraphicalArea *const P_tmp =
-            new LeafGraphicalBoard{mncHandler, P_newPlane};
+            new LeafGraphicalBoard{mncHandler, std::move(newPlane)};
 
         mchildren.at(i) = std::unique_ptr<IGraphicalArea>{P_tmp};
     }

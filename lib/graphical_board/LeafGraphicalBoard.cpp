@@ -25,8 +25,8 @@ LeafGraphicalBoard::LeafGraphicalBoard(INcHandler *const P_ncHandler,
 }
 
 LeafGraphicalBoard::LeafGraphicalBoard(INcHandler *const P_ncHandler,
-                                       INcPlaneWrapper *const P_plane)
-    : AGraphicalBoard::AGraphicalBoard{P_ncHandler, P_plane} {
+                                       std::unique_ptr<INcPlaneWrapper> P_plane)
+    : AGraphicalBoard::AGraphicalBoard{P_ncHandler, std::move(P_plane)} {
     init_child_planes();
 }
 

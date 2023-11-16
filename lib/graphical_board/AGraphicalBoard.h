@@ -27,7 +27,7 @@ protected:
     INcHandler *mncHandler;
 
     /** The primary plane used as a canvas for drawing the board. */
-    INcPlaneWrapper *mprimaryPlane;
+    std::unique_ptr<INcPlaneWrapper> mprimaryPlane;
 
     /** The child planes used to represent the cells of the board
      *
@@ -96,7 +96,7 @@ protected:
      * @see _childPlanes
      */
     AGraphicalBoard(INcHandler *const P_ncHandler,
-                    INcPlaneWrapper *const P_plane);
+                    std::unique_ptr<INcPlaneWrapper> P_plane);
 
     /**
      * Virtual function for initializing child planes.
@@ -108,7 +108,7 @@ protected:
 public:
     AGraphicalBoard(AGraphicalBoard &) = delete;
     void operator=(const AGraphicalBoard &) = delete;
-    ~AGraphicalBoard() override;
+    ~AGraphicalBoard() override = default;
 
     void draw_board(const std::array<const char *, SYMBOL_COUNT> SYMBOLS,
                     const uint64_t CELL_CHANNELS) override final;
