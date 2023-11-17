@@ -58,10 +58,6 @@ protected:
      * @param X The X coordinate of the new plane's top left corner.
      * @param ROWS The number of rows composing the new plane. (Height)
      * @param COLS The number of columns composing the new plane. (Width)
-     *
-     * @see create_nopts()
-     * @see _primaryPlane
-     * @see _childPlanes
      */
     AGraphicalBoard(INcHandler *const P_ncHandler, const int Y, const int X,
                     const int ROWS, const int COLS);
@@ -75,10 +71,6 @@ protected:
      * @param ncHandler The handler object used to access the underlying
      * notcurses instance.
      * @param NOPTS The configuration used to form the primary plane.
-     *
-     * @see ncplane_create()
-     * @see _primaryPlane
-     * @see _childPlanes
      */
     AGraphicalBoard(INcHandler *const P_ncHandler, const ncplane_options NOPTS);
 
@@ -91,9 +83,6 @@ protected:
      * @param ncHandler The handler object used to access the underlying
      * notcurses instance.
      * @param PLANE The plane used as the primary plane.
-     *
-     * @see _primaryPlane
-     * @see _childPlanes
      */
     AGraphicalBoard(INcHandler *const P_ncHandler,
                     std::unique_ptr<INcPlaneWrapper> P_plane);

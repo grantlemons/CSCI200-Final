@@ -18,8 +18,6 @@ public:
      * @param plane The primary plane used by the methods of the class.
      *
      * This is needed to create child planes.
-     *
-     * @see init_child_planes()
      */
     LeafGraphicalBoardDummy(std::shared_ptr<INcPlaneWrapper> P_plane);
 

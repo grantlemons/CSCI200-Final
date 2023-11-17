@@ -20,9 +20,6 @@
  *
  * Used to represent the logical state of the board.
  * Constituant cells are of the type LLCell (a typedef).
- *
- * @see PrimaryBoard
- * @see Board
  */
 class LeafBoard : virtual public ABoard {
 private:
@@ -47,9 +44,6 @@ private:
 
     /**
      * Variable storing the winner of the instance.
-     *
-     * @see get_winner()
-     * @see set_cell_owner()
      */
     CellOwner _winner;
 
@@ -60,8 +54,6 @@ public:
      * @param ncHandler The handler object used to access the underlying
      * notcurses instance.
      * @param gBoard The graphical board object of the parent Board class.
-     *
-     * @see NcHandler::combine_channels()
      */
     LeafBoard(INcHandler *ncHandler, IGraphicalBoard *gBoard);
 
@@ -82,16 +74,11 @@ public:
      *
      * @param INDEX The index of the cell to set the owner of.
      * @param OWNER The player to set the owner of the cell to.
-     *
-     * @see _cells
-     * @see _winner
      */
     void set_cell_owner(const int INDEX, const CellOwner OWNER);
 
     /**
      * Gets the winner of the entire board.
-     *
-     * @see _winner
      */
     [[nodiscard]] CellOwner get_winner() const;
 

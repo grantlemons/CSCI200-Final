@@ -19,35 +19,31 @@ private:
 
 public:
     /** Default red color channel value */
-    static uint32_t const RED_CHANNEL;
+    static const uint32_t RED_CHANNEL;
 
     /** Default blue color channel value */
-    static uint32_t const BLUE_CHANNEL;
+    static const uint32_t BLUE_CHANNEL;
 
     /** Default white color channel value */
-    static uint32_t const WHITE_CHANNEL;
+    static const uint32_t WHITE_CHANNEL;
 
     /** Default grey color channel value */
-    static uint32_t const GREY_CHANNEL;
+    static const uint32_t GREY_CHANNEL;
 
     /**
      * Constructor used to instantiate a notcurses instance.
      *
      * Also sets locale.
-     *
-     * @see notcurses_init()
      */
     NcHandler();
 
     /**
      * Destructor used to stop notcurses instance.
-     *
-     * @see notcurses_stop()
      */
     ~NcHandler() override;
 
     NcHandler(NcHandler &other) = delete;
-    void operator=(NcHandler const &) = delete;
+    void operator=(const NcHandler &) = delete;
 
     [[nodiscard]] ncplane *get_stdplane() const override final;
     [[nodiscard]] INcPlaneWrapper *get_stdplane_wrapper() const override final;
@@ -61,8 +57,8 @@ public:
      *
      * @return The combined channels.
      */
-    static uint64_t combineChannels(uint32_t const BG_CHANNEL,
-                                    uint32_t const FG_CHANNEL);
+    static uint64_t combineChannels(const uint32_t BG_CHANNEL,
+                                    const uint32_t FG_CHANNEL);
     void render() override final;
 };
 

@@ -6,9 +6,6 @@
 /**
  * @class INcPlaneWrapper
  * Interface for NcPlaneWrapper.
- *
- * @see NcPlaneWrapper
- * @see NcPlaneWrapperDummy
  */
 class INcPlaneWrapper : virtual public IGraphicalArea {
 public:

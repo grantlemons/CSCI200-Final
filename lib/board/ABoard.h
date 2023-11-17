@@ -65,8 +65,6 @@ public:
      * @param INDEX The index of a cell known to be owned by the given player.
      * @param OWNER The player to check the victory of.
      * @return If the given player won or not.
-     *
-     * @see get_cell_owner()
      */
     [[nodiscard]] bool check_win(const int INDEX, const CellOwner OWNER) const;
 
@@ -80,8 +78,6 @@ public:
 
     /**
      * Uses the component GraphicalBoard to draw a Tic-Tac-Toe board.
-     *
-     * @see _gBoard
      */
     virtual void draw() = 0;
 
@@ -91,8 +87,6 @@ public:
      *
      * @param INDEX The index of the cell to mark.
      * @param OWNER The user for whom to mark the cell.
-     *
-     * @see _gBoard
      */
     void mark_cell(const int INDEX, const CellOwner OWNER);
 

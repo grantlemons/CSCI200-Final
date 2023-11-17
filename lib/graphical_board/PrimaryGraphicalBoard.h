@@ -10,9 +10,6 @@
 /**
  * @class PrimaryGraphicalBoard
  * GraphicalBoard class with LeafGraphicalBoards for cells.
- *
- * @see PrimaryBoard
- * @see LeafGraphicalBoard
  */
 class PrimaryGraphicalBoard : virtual public AGraphicalBoard {
 private:
@@ -31,8 +28,6 @@ public:
      * @param X The X coordinate of the new plane's top left corner.
      * @param ROWS The number of rows composing the new plane. (Height)
      * @param COLS The number of columns composing the new plane. (Width)
-     *
-     * @see create_nopts()
      */
     PrimaryGraphicalBoard(INcHandler *const P_ncHandler, const int Y,
                           const int X, const int ROWS, const int COLS);
@@ -46,8 +41,6 @@ public:
      * @param ncHandler The handler object used to access the underlying
      * notcurses instance.
      * @param NOPTS The configuration used to form the primary plane.
-     *
-     * @see ncplane_create()
      */
     PrimaryGraphicalBoard(INcHandler *const P_ncHandler,
                           const ncplane_options NOPTS);

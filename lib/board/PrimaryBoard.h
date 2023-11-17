@@ -20,9 +20,6 @@
  *
  * Used to represent the logical state of the board.
  * Constituant cells are LeafBoards.
- *
- * @see LeafBoard
- * @see Board
  */
 class PrimaryBoard : virtual public ABoard {
 private:
@@ -49,8 +46,6 @@ private:
      * Helper function to abstract out of the two different constructors.
      *
      * Creates LeafBoards for each cell and places them in the _cells array.
-     *
-     * @see _cells
      */
     void init_cells();
 
@@ -61,8 +56,6 @@ public:
      * @param ncHandler The handler object used to access the underlying
      * notcurses instance.
      * @param gBoard The graphical board object of the parent Board class.
-     *
-     * @see NcHandler::combine_channels()
      */
     PrimaryBoard(INcHandler *const P_ncHandler,
                  std::unique_ptr<IGraphicalBoard> gBoard);
@@ -74,9 +67,6 @@ public:
      *
      * @param ncHandler The handler object used to access the underlying
      * notcurses instance.
-     *
-     * @see _cells
-     * @see def_primary_nopts()
      */
     PrimaryBoard(INcHandler *const P_ncHandler);
 

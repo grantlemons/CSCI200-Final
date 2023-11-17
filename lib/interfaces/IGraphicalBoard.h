@@ -12,9 +12,6 @@
 /**
  * @class IGraphicalBoard
  * Interface for graphical board classes.
- *
- * @see AGraphicalBoard
- * @see GraphicalBoardDummy
  */
 class IGraphicalBoard : virtual public IGraphicalArea {
 public:
@@ -28,27 +25,24 @@ public:
      * vertical lines, and junctions between lines.
      * @param CELL_CHANNELS The default forground and background channels for
      * the board.
-     *
-     * @see ncplane_hline()
-     * @see ncplane_vline()
      */
     virtual void
-    draw_board(std::array<char const *, SYMBOL_COUNT> const SYMBOLS,
-               uint64_t const CELL_CHANNELS) = 0;
+    draw_board(const std::array<const char *, SYMBOL_COUNT> SYMBOLS,
+               const uint64_t CELL_CHANNELS) = 0;
 
     /**
      * Marks a cell at an index as belonging to the X player.
      *
      * @param INDEX The index of the cell to mark.
      */
-    virtual void draw_x(int const INDEX) = 0;
+    virtual void draw_x(const int INDEX) = 0;
 
     /**
      * Marks a cell at an index as belonging to the O player.
      *
      * @param INDEX The index of the cell to mark.
      */
-    virtual void draw_o(int const INDEX) = 0;
+    virtual void draw_o(const int INDEX) = 0;
 
     /**
      * Getter for the board's child planes.

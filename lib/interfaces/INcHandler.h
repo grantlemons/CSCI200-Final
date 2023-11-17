@@ -10,9 +10,6 @@ class INcPlaneWrapper;
 /**
  * @class INcHandler
  * Interface for NcHandler classes.
- *
- * @see NcHandler
- * @see NcHandlerDummy
  */
 class INcHandler {
 public:
@@ -23,8 +20,6 @@ public:
      * Should not be used explicitly, prefer `get_stdplane_wrapper()`.
      *
      * @return The stdplane for the notcurses instance.
-     *
-     * @see get_stdplane_wrapper()
      */
     [[nodiscard]] virtual ncplane *get_stdplane() const = 0;
 
@@ -32,8 +27,6 @@ public:
      * Getter for wrapper object of stdplane.
      *
      * @return Wrapper around notcurses instance stdplane.
-     *
-     * @see get_stdplane()
      */
     [[nodiscard]] virtual INcPlaneWrapper *get_stdplane_wrapper() const = 0;
 
