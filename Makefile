@@ -29,7 +29,9 @@ CXXFLAGS_DEBUG = -g
 CXXVERSION = -std=c++17
 
 OBJECTS = $(SRC_FILES:.cpp=.o)
+HEADERS = $(LIB_FILES:.cpp=.h) $(DUMMY_FILES:.cpp=.h)
 TEST_OBJECTS = $(TEST_SRC_FILES:.cpp=.o)
+TEST_HEADERS = $(LIB_FILES:.cpp=.h) $(DUMMY_FILES:.cpp=.h) $(TEST_FILES:.cpp=.h)
 
 ifeq ($(shell echo "Windows"), "Windows")
 	TARGET := $(TARGET).exe
@@ -63,7 +65,7 @@ depend:
 test: $(TEST_TARGET)
 	@./$(TEST_TARGET)
 
-docs: Doxyfile README.md $(SRC_FILES)
+docs: Doxyfile README.md
 	@$(DOXYGEN)
 
 memcheck:

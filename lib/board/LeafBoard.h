@@ -51,11 +51,11 @@ public:
     /**
      * A constructor for LeafBoard using dependency injection.
      *
-     * @param ncHandler The handler object used to access the underlying
+     * @param P_ncHandler The handler object used to access the underlying
      * notcurses instance.
-     * @param gBoard The graphical board object of the parent Board class.
+     * @param P_gBoard The graphical board object of the parent Board class.
      */
-    LeafBoard(INcHandler *ncHandler, IGraphicalBoard *gBoard);
+    LeafBoard(INcHandler *const P_ncHandler, IGraphicalBoard *const P_gBoard);
 
     ~LeafBoard() override = default;
     LeafBoard(LeafBoard &) = delete;

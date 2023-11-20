@@ -53,7 +53,7 @@ public:
     /**
      * A constructor for PrimaryBoard using dependency injection.
      *
-     * @param ncHandler The handler object used to access the underlying
+     * @param P_ncHandler The handler object used to access the underlying
      * notcurses instance.
      * @param gBoard The graphical board object of the parent Board class.
      */
@@ -65,7 +65,7 @@ public:
      *
      * Creates constituant LeafBoards to fill _cells.
      *
-     * @param ncHandler The handler object used to access the underlying
+     * @param P_ncHandler The handler object used to access the underlying
      * notcurses instance.
      */
     PrimaryBoard(INcHandler *const P_ncHandler);
@@ -105,7 +105,7 @@ public:
      * @todo Replace with something more dynamic.
      * @todo Allow for resizes.
      *
-     * @param ncHandler A shared pointer to the handler object used to access
+     * @param P_ncHandler A shared pointer to the handler object used to access
      * the underlying notcurses instance.
      * @return An ncplane_options struct describing the configuration options.
      */

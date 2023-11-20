@@ -19,14 +19,14 @@ public:
      *
      * Calls the constructor that takes an ncplane_options struct.
      *
-     * @param ncHandler The handler object used to access the underlying
+     * @param P_ncHandler The handler object used to access the underlying
      * notcurses instance.
      * @param Y The Y coordinate of the new plane's top left corner.
      * @param X The X coordinate of the new plane's top left corner.
      * @param ROWS The number of rows composing the new plane. (Height)
      * @param COLS The number of columns composing the new plane. (Width)
      */
-    LeafGraphicalBoard(INcHandler *ncHandler, const int Y, const int X,
+    LeafGraphicalBoard(INcHandler *const P_ncHandler, const int Y, const int X,
                        const int ROWS, const int COLS);
 
     /**
@@ -35,7 +35,7 @@ public:
      *
      * Calls the constructor that takes an ncplane wrapper.
      *
-     * @param ncHandler The handler object used to access the underlying
+     * @param P_ncHandler The handler object used to access the underlying
      * notcurses instance.
      * @param NOPTS The configuration used to form the primary plane.
      */
@@ -48,9 +48,9 @@ public:
      *
      * Creates child planes used for the cells of the board.
      *
-     * @param ncHandler The handler object used to access the underlying
+     * @param P_ncHandler The handler object used to access the underlying
      * notcurses instance.
-     * @param PLANE The plane used as the primary plane.
+     * @param P_plane The plane used as the primary plane.
      */
     LeafGraphicalBoard(INcHandler *const P_ncHandler,
                        std::unique_ptr<INcPlaneWrapper> P_plane);

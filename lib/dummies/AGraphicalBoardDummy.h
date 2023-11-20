@@ -25,6 +25,9 @@ protected:
     void set_children(std::array<std::unique_ptr<IGraphicalArea>, CELL_COUNT>);
 
 public:
+    /**
+     * Initializes component cells for the graphical board.
+     */
     virtual std::array<std::unique_ptr<IGraphicalArea>, CELL_COUNT>
     create_children() = 0;
 

@@ -22,21 +22,21 @@ public:
      * Constructor using the raw dimensions and location of the plane to
      * construct.
      *
-     * @param ncHandler The handler object used to access the underlying
+     * @param P_ncHandler The handler object used to access the underlying
      * notcurses instance.
      * @param Y The Y coordinate of the new plane's top left corner.
      * @param X The X coordinate of the new plane's top left corner.
      * @param ROWS The number of rows composing the new plane. (Height)
      * @param COLS The number of columns composing the new plane. (Width)
      */
-    NcPlaneWrapper(INcHandler *P_cHandler, const int Y, const int X,
+    NcPlaneWrapper(INcHandler *P_ncHandler, const int Y, const int X,
                    const int ROWS, const int COLS);
 
     /**
      * Constructor using dependency injection that takes the plane to wrap.
      *
-     * @param PLANE The plane to wrap.
-     * @param isStdPlane If the given plane is the stdplane.
+     * @param P_plane The plane to wrap.
+     * @param IS_STD_PLANE If the given plane is the stdplane.
      *
      * Changes destruction behavior.
      */
@@ -70,12 +70,12 @@ public:
     int cursor_move_yx(const int X, const int Y) override final;
 
     /**
-     * @copydoc GraphicalAreaI::hline()
+     * @copydoc IGraphicalArea::hline()
      */
     int hline(const nccell *const P_c, const unsigned int LEN) override final;
 
     /**
-     * @copydoc GraphicalAreaI::vline()
+     * @copydoc IGraphicalArea::vline()
      */
     int vline(const nccell *const P_c, const unsigned int LEN) override final;
     int putc_yx(const int Y, const int X,

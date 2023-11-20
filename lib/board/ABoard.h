@@ -30,10 +30,10 @@ protected:
     /**
      * A constructor that uses dependency injection.
      *
-     * @param ncHandler The handler object used to access the underlying
+     * @param P_ncHandler The handler object used to access the underlying
      * notcurses instance.
      */
-    ABoard(INcHandler *ncHandler);
+    ABoard(INcHandler *const P_ncHandler);
 
     /**
      * Getter for the associated NcHandler instance.

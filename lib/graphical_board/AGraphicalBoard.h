@@ -52,7 +52,7 @@ protected:
      *
      * Calls the constructor that takes an ncplane_options struct.
      *
-     * @param ncHandler The handler object used to access the underlying
+     * @param P_ncHandler The handler object used to access the underlying
      * notcurses instance.
      * @param Y The Y coordinate of the new plane's top left corner.
      * @param X The X coordinate of the new plane's top left corner.
@@ -68,7 +68,7 @@ protected:
      *
      * Calls the constructor that takes an ncplane pointer.
      *
-     * @param ncHandler The handler object used to access the underlying
+     * @param P_ncHandler The handler object used to access the underlying
      * notcurses instance.
      * @param NOPTS The configuration used to form the primary plane.
      */
@@ -80,9 +80,9 @@ protected:
      *
      * Creates child planes used for the cells of the board.
      *
-     * @param ncHandler The handler object used to access the underlying
+     * @param P_ncHandler The handler object used to access the underlying
      * notcurses instance.
-     * @param PLANE The plane used as the primary plane.
+     * @param P_plane The plane used as the primary plane.
      */
     AGraphicalBoard(INcHandler *const P_ncHandler,
                     std::unique_ptr<INcPlaneWrapper> P_plane);
