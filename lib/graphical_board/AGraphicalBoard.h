@@ -24,10 +24,10 @@ protected:
     /** The handler object used to access the underlying
      * notcurses instance.
      */
-    INcHandler *mncHandler;
+    INcHandler *mNcHandler;
 
     /** The primary plane used as a canvas for drawing the board. */
-    std::unique_ptr<INcPlaneWrapper> mprimaryPlane;
+    std::unique_ptr<INcPlaneWrapper> mPrimaryPlane;
 
     /** The child planes used to represent the cells of the board
      *
@@ -39,12 +39,12 @@ protected:
      * 3|4|5
      * 6|7|8
      */
-    std::array<std::unique_ptr<IGraphicalArea>, CELL_COUNT> mchildren;
+    std::array<std::unique_ptr<IGraphicalArea>, CELL_COUNT> mChildren;
 
     /** The height of the primary plane */
-    int mrows;
+    int mRows;
     /** The width of the primary plane */
-    int mcols;
+    int mCols;
 
     /**
      * A constructor that takes in the raw info for a plane and forms its

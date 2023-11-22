@@ -14,7 +14,7 @@
  */
 class NcPlaneWrapper : virtual public INcPlaneWrapper {
 private:
-    ncplane *const _P_plane;
+    ncplane *const P_PLANE;
     bool _isStdPlane;
 
 public:

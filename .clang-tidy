@@ -9,6 +9,7 @@ Checks: "-*,
         misc-non-private-member-variables-in-classes,
         misc-const-correctness,
         readability-identifier-naming,
+        readability-const-return-type,
 "
 WarningsAsErrors: ''
 HeaderFilterRegex: ''
@@ -63,10 +64,10 @@ CheckOptions:
   - key: readability-identifier-naming.GlobalConstantPointerPrefix
     value: P_
 
-  - key: readability-identifier-naming.AbstractClassIgnoredRegex
-    value: (I.*)
-  - key: readability-identifier-naming.AbstractClassPrefix
-    value: A
+  # - key: readability-identifier-naming.AbstractClassIgnoredRegex
+  #   value: (I.*)
+  # - key: readability-identifier-naming.AbstractClassPrefix
+  #   value: A
 
   - key: cppcoreguidelines-explicit-virtual-functions.AllowOverrideAndFinal
     value: true
