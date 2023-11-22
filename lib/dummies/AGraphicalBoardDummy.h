@@ -21,7 +21,14 @@ private:
     std::array<std::unique_ptr<IGraphicalArea>, CELL_COUNT> _children;
 
 protected:
+    /**
+     * Getter for the primary plane member of the abstract class.
+     */
     std::shared_ptr<INcPlaneWrapper> get_primary_plane();
+
+    /**
+     * Setter for the children member of the abstract class.
+     */
     void set_children(std::array<std::unique_ptr<IGraphicalArea>, CELL_COUNT>);
 
 public:
@@ -31,6 +38,11 @@ public:
     virtual std::array<std::unique_ptr<IGraphicalArea>, CELL_COUNT>
     create_children() = 0;
 
+    /**
+     * Constructor for abstract type AGraphicalBoardDummy.
+     *
+     * @param plane Shared pointer to an NcPlaneWrapper.
+     */
     AGraphicalBoardDummy(std::shared_ptr<INcPlaneWrapper> plane);
 
     ~AGraphicalBoardDummy() override = default;

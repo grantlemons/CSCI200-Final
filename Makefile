@@ -65,7 +65,7 @@ depend:
 test: $(TEST_TARGET)
 	@./$(TEST_TARGET)
 
-docs: Doxyfile README.md
+docs:
 	@$(DOXYGEN)
 
 memcheck:
@@ -80,4 +80,4 @@ lint-fix: .clang-tidy $(SRC_FILES)
 zip:
 	@tar czf $(TARGET).tar.gz --exclude-ignore=.gitignore --exclude=".git" --exclude=".gitignore" .
 
-.PHONY: all clean depend
+.PHONY: all clean depend docs memcheck lint lint-fix zip
