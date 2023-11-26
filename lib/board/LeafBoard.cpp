@@ -22,13 +22,13 @@ IGraphicalBoard *LeafBoard::getGraphicalBoard() const {
     return _pGBoard;
 }
 
-CellOwner LeafBoard::get_cell_owner(const int INDEX) const {
+CELL_OWNER LeafBoard::get_cell_owner(const int INDEX) const {
     Expects(INDEX >= 0 && INDEX <= 9);
 
     return _cells.at(gsl::narrow<unsigned int>(INDEX));
 }
 
-void LeafBoard::set_cell_owner(const int INDEX, const CellOwner OWNER) {
+void LeafBoard::set_cell_owner(const int INDEX, const CELL_OWNER OWNER) {
     Expects(INDEX >= 0 && INDEX <= 9);
     Expects(_cells.at(gsl::narrow<unsigned int>(INDEX)) == NONE);
 
@@ -42,7 +42,7 @@ void LeafBoard::set_cell_owner(const int INDEX, const CellOwner OWNER) {
     Ensures(_cells.at(gsl::narrow<unsigned int>(INDEX)) == OWNER);
 }
 
-CellOwner LeafBoard::get_winner() const {
+CELL_OWNER LeafBoard::get_winner() const {
     return _winner;
 }
 

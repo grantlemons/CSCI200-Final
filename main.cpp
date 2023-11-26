@@ -15,7 +15,7 @@ int main() {
 
     pBoard->draw();
 
-    CellOwner victor = NONE;
+    CELL_OWNER victor = NONE;
     LeafBoard *pSelected = nullptr;
     std::optional<LeafBoard *> opt = nullptr;
 

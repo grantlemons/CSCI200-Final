@@ -51,7 +51,7 @@ void PrimaryBoard::init_cells() {
     }
 }
 
-CellOwner PrimaryBoard::get_cell_owner(const int INDEX) const {
+CELL_OWNER PrimaryBoard::get_cell_owner(const int INDEX) const {
     Expects(INDEX >= 0 && INDEX <= 9);
 
     return _cells.at(gsl::narrow<unsigned int>(INDEX))->get_winner();

@@ -45,7 +45,7 @@ private:
     /**
      * Variable storing the winner of the instance.
      */
-    CellOwner _winner;
+    CELL_OWNER _winner;
 
 public:
     /**
@@ -63,7 +63,7 @@ public:
 
     [[nodiscard]] IGraphicalBoard *getGraphicalBoard() const override final;
 
-    [[nodiscard]] CellOwner
+    [[nodiscard]] CELL_OWNER
     get_cell_owner(const int INDEX) const override final;
 
     /**
@@ -75,12 +75,12 @@ public:
      * @param INDEX The index of the cell to set the owner of.
      * @param OWNER The player to set the owner of the cell to.
      */
-    void set_cell_owner(const int INDEX, const CellOwner OWNER);
+    void set_cell_owner(const int INDEX, const CELL_OWNER OWNER);
 
     /**
      * Gets the winner of the entire board.
      */
-    [[nodiscard]] CellOwner get_winner() const;
+    [[nodiscard]] CELL_OWNER get_winner() const;
 
     void draw() override final;
 };

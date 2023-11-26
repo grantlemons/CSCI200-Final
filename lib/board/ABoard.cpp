@@ -19,7 +19,7 @@ INcHandler *ABoard::getNcHandler() const {
     return _ncHandler;
 }
 
-bool ABoard::check_win(const int INDEX, const CellOwner OWNER) const {
+bool ABoard::check_win(const int INDEX, const CELL_OWNER OWNER) const {
     Expects(INDEX >= 0 && INDEX <= 9);
 
     int horizontalOther1{0}, horizontalOther2{0}, verticalOther1{0},
@@ -65,7 +65,7 @@ bool ABoard::check_win(const int INDEX, const CellOwner OWNER) const {
            (WON_HORI || WON_VERT || WON_DIAGONAL_TWOS || WON_DIAGONALS_FOURS);
 }
 
-void ABoard::mark_cell(const int INDEX, const CellOwner OWNER) {
+void ABoard::mark_cell(const int INDEX, const CELL_OWNER OWNER) {
     Expects(INDEX >= 0 && INDEX <= 9);
 
     switch (OWNER) {

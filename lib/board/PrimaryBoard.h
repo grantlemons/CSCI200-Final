@@ -94,7 +94,7 @@ public:
     [[nodiscard]] LeafBoard *getLeafBoard(const int INDEX) const;
     [[nodiscard]] IGraphicalBoard *getGraphicalBoard() const override final;
 
-    [[nodiscard]] CellOwner
+    [[nodiscard]] CELL_OWNER
     get_cell_owner(const int INDEX) const override final;
 
     void draw() override final;
