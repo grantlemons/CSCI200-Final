@@ -32,9 +32,9 @@ PrimaryGraphicalBoard::PrimaryGraphicalBoard(
 
 void PrimaryGraphicalBoard::init_child_planes() {
     const unsigned int ROWS_PER_BCELL =
-        (gsl::narrow<unsigned int>(mrows) - 2u) / 3u;
+        (gsl::narrow<unsigned int>(mRows) - 2u) / 3u;
     const unsigned int COLS_PER_BCELL =
-        (gsl::narrow<unsigned int>(mcols) - 2u) / 3u;
+        (gsl::narrow<unsigned int>(mCols) - 2u) / 3u;
 
     for (unsigned int i = 0; i < CELL_COUNT; i++) {
         const unsigned int COLUMN = i % 3u;
@@ -48,9 +48,9 @@ void PrimaryGraphicalBoard::init_child_planes() {
         auto newPlane = std::unique_ptr<INcPlaneWrapper>{
             dynamic_cast<INcPlaneWrapper *>(create_child(&CHILD_NOPTS))};
         IGraphicalArea *const P_tmp =
-            new LeafGraphicalBoard{mncHandler, std::move(newPlane)};
+            new LeafGraphicalBoard{mNcHandler, std::move(newPlane)};
 
-        mchildren.at(i) = std::unique_ptr<IGraphicalArea>{P_tmp};
+        mChildren.at(i) = std::unique_ptr<IGraphicalArea>{P_tmp};
     }
 }
 
@@ -66,38 +66,38 @@ void PrimaryGraphicalBoard::draw_o(const int INDEX) {
 
 void PrimaryGraphicalBoard::fill_x(const int INDEX) {
     auto *const P_target{dynamic_cast<AGraphicalBoard *>(
-        mchildren.at(gsl::narrow<unsigned int>(INDEX)).get())};
+        mChildren.at(gsl::narrow<unsigned int>(INDEX)).get())};
 
     for (unsigned int i = 0; i < CELL_COUNT; i++) {
         IGraphicalArea *const P_child = P_target->get_children().at(i);
         const nccell RED = NCCELL_INITIALIZER(
             '\0', 0,
             NcHandler::combineChannels(NcHandler::RED_CHANNEL,
-                                       mncHandler->get_default_fg_channel()));
+                                       mNcHandler->get_default_fg_channel()));
 
         P_child->erase();
         P_child->set_base_cell(&RED);
     }
 
     // update the screen with the new changes
-    mncHandler->render();
+    mNcHandler->render();
 }
 
 void PrimaryGraphicalBoard::fill_o(const int INDEX) {
     AGraphicalBoard *const P_target{dynamic_cast<AGraphicalBoard *>(
-        mchildren.at(gsl::narrow<unsigned int>(INDEX)).get())};
+        mChildren.at(gsl::narrow<unsigned int>(INDEX)).get())};
 
     for (unsigned int i = 0; i < CELL_COUNT; i++) {
         IGraphicalArea *const P_child = P_target->get_children().at(i);
         const nccell RED = NCCELL_INITIALIZER(
             '\0', 0,
             NcHandler::combineChannels(NcHandler::RED_CHANNEL,
-                                       mncHandler->get_default_fg_channel()));
+                                       mNcHandler->get_default_fg_channel()));
 
         P_child->erase();
         P_child->set_base_cell(&RED);
     }
 
     // update the screen with the new changes
-    mncHandler->render();
+    mNcHandler->render();
 }

@@ -32,9 +32,9 @@ LeafGraphicalBoard::LeafGraphicalBoard(INcHandler *const P_ncHandler,
 
 void LeafGraphicalBoard::init_child_planes() {
     const unsigned int ROWS_PER_BCELL =
-        (gsl::narrow<unsigned int>(mrows) - 2u) / 3u;
+        (gsl::narrow<unsigned int>(mRows) - 2u) / 3u;
     const unsigned int COLS_PER_BCELL =
-        (gsl::narrow<unsigned int>(mcols) - 2u) / 3u;
+        (gsl::narrow<unsigned int>(mCols) - 2u) / 3u;
 
     for (unsigned int i = 0; i < CELL_COUNT; i++) {
         const unsigned int COLUMN = i % 3u;
@@ -47,6 +47,6 @@ void LeafGraphicalBoard::init_child_planes() {
             NEW_Y, NEW_X, ROWS_PER_BCELL - 1u, COLS_PER_BCELL - 1u);
         IGraphicalArea *const P_tmp = create_child(&CHILD_NOPTS);
 
-        mchildren.at(i) = std::unique_ptr<IGraphicalArea>{P_tmp};
+        mChildren.at(i) = std::unique_ptr<IGraphicalArea>{P_tmp};
     }
 }

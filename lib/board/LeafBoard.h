@@ -29,7 +29,7 @@ private:
      *
      * Shared between all instances.
      */
-    static const std::array<const char *, SYMBOL_COUNT> _symbols;
+    static const std::array<const char *, SYMBOL_COUNT> _SYMBOLS;
 
     /**
      * Component graphical board used to represent actions on the logical board

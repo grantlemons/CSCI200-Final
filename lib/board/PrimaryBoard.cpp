@@ -16,7 +16,7 @@
 #include <notcurses/notcurses.h>
 #include <optional>
 
-const std::array<const char *, SYMBOL_COUNT> PrimaryBoard::_symbols =
+const std::array<const char *, SYMBOL_COUNT> PrimaryBoard::_SYMBOLS =
     std::array<const char *, SYMBOL_COUNT>({"\u2501", "\u2503", "\u254B"});
 
 PrimaryBoard::PrimaryBoard(INcHandler *const P_ncHandler,
@@ -58,7 +58,7 @@ CELL_OWNER PrimaryBoard::get_cell_owner(const int INDEX) const {
 }
 
 void PrimaryBoard::draw() {
-    getGraphicalBoard()->draw_board(_symbols,
+    getGraphicalBoard()->draw_board(_SYMBOLS,
                                     getNcHandler()->get_default_channels());
 
     for (unsigned int i = 0; i < CELL_COUNT; i++) {

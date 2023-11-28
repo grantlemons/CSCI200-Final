@@ -10,7 +10,7 @@
 #include <cstdint>
 #include <memory>
 
-const std::array<const char *, SYMBOL_COUNT> LeafBoard::_symbols =
+const std::array<const char *, SYMBOL_COUNT> LeafBoard::_SYMBOLS =
     std::array<const char *, SYMBOL_COUNT>{"\u2500", "\u2502", "\u253C"};
 
 LeafBoard::LeafBoard(INcHandler *const P_ncHandler,
@@ -48,7 +48,7 @@ CELL_OWNER LeafBoard::get_winner() const {
 
 void LeafBoard::draw() {
     getGraphicalBoard()->draw_board(
-        _symbols,
+        _SYMBOLS,
         NcHandler::combineChannels(getNcHandler()->get_default_bg_channel(),
                                    NcHandler::GREY_CHANNEL));
 }
