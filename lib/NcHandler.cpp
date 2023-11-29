@@ -7,15 +7,15 @@
 #include <cstdint>
 #include <notcurses/notcurses.h>
 
-uint32_t const NcHandler::RED_CHANNEL = NCCHANNEL_INITIALIZER(0xc3, 0x40, 0x43);
-uint32_t const NcHandler::BLUE_CHANNEL =
+const uint32_t NcHandler::RED_CHANNEL = NCCHANNEL_INITIALIZER(0xc3, 0x40, 0x43);
+const uint32_t NcHandler::BLUE_CHANNEL =
     NCCHANNEL_INITIALIZER(0x7e, 0x9c, 0xd8);
-uint32_t const NcHandler::WHITE_CHANNEL =
+const uint32_t NcHandler::WHITE_CHANNEL =
     NCCHANNEL_INITIALIZER(0xff, 0xff, 0xff);
-uint32_t const NcHandler::GREY_CHANNEL =
+const uint32_t NcHandler::GREY_CHANNEL =
     NCCHANNEL_INITIALIZER(0x77, 0x77, 0x77);
 
-notcurses_options const NOPTS = {nullptr,
+const notcurses_options NOPTS = {nullptr,
                                  NCLOGLEVEL_SILENT,
                                  0,
                                  0,
@@ -43,9 +43,9 @@ uint64_t NcHandler::get_default_channels() const {
     return ncplane_channels(notcurses_stdplane(_nc));
 }
 
-uint64_t NcHandler::combineChannels(uint32_t const BG_CHANNEL,
-                                    uint32_t const FG_CHANNEL) {
-    unsigned long long int const CHANNEL_SIZE_BITS = 32;
+uint64_t NcHandler::combineChannels(const uint32_t BG_CHANNEL,
+                                    const uint32_t FG_CHANNEL) {
+    const unsigned long long int CHANNEL_SIZE_BITS = 32;
     return (static_cast<uint64_t>(FG_CHANNEL) << CHANNEL_SIZE_BITS) +
            BG_CHANNEL;
 }
