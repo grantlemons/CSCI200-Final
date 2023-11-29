@@ -3,22 +3,19 @@
 
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
-#include "lib/interfaces/GraphicalAreaI.h"
-#include "lib/interfaces/NcPlaneWrapperI.h"
+#include "lib/interfaces/IGraphicalArea.h"
+#include "lib/interfaces/INcPlaneWrapper.h"
 
 #include <array>
 #include <cstdint>
 
 /**
- * @class GraphicalBoardI
+ * @class IGraphicalBoard
  * Interface for graphical board classes.
- *
- * @see GraphicalBoardA
- * @see GraphicalBoardDummy
  */
-class GraphicalBoardI : virtual public GraphicalAreaI {
+class IGraphicalBoard : virtual public IGraphicalArea {
 public:
-    virtual ~GraphicalBoardI() = default;
+    ~IGraphicalBoard() override = default;
 
     /**
      * Draws a Tic-Tac-Toe board on the primary plane.
@@ -28,9 +25,6 @@ public:
      * vertical lines, and junctions between lines.
      * @param CELL_CHANNELS The default forground and background channels for
      * the board.
-     *
-     * @see ncplane_hline()
-     * @see ncplane_vline()
      */
     virtual void
     draw_board(const std::array<const char *, SYMBOL_COUNT> SYMBOLS,
@@ -61,6 +55,6 @@ public:
      * 3|4|5
      * 6|7|8
      */
-    virtual std::array<GraphicalAreaI *, CELL_COUNT> get_children() = 0;
+    virtual std::array<IGraphicalArea *, CELL_COUNT> get_children() = 0;
 };
 #endif

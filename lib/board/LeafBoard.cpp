@@ -3,33 +3,34 @@
 #include "gsl/assert"
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
-#include "lib/board/BoardA.h"
-#include "lib/interfaces/GraphicalBoardI.h"
+#include "lib/board/ABoard.h"
+#include "lib/interfaces/IGraphicalBoard.h"
 
 #include <array>
 #include <cstdint>
 #include <memory>
-#include <notcurses/notcurses.h>
 
-std::array<const char *, SYMBOL_COUNT> LeafBoard::_symbols =
+const std::array<const char *, SYMBOL_COUNT> LeafBoard::_SYMBOLS =
     std::array<const char *, SYMBOL_COUNT>{"\u2500", "\u2502", "\u253C"};
 
-LeafBoard::LeafBoard(NcHandlerI *ncHandler, GraphicalBoardI *gBoard)
-    : BoardA::BoardA{ncHandler}, _gBoard{gBoard}, _cells{}, _winner{None} {}
-
-GraphicalBoardI *LeafBoard::getGraphicalBoard() const {
-    return _gBoard;
+LeafBoard::LeafBoard(INcHandler *const P_ncHandler,
+                     IGraphicalBoard *const P_gBoard)
+    : ABoard::ABoard{P_ncHandler}, _pGBoard{P_gBoard}, _cells{}, _winner{NONE} {
 }
 
-CellOwner LeafBoard::get_cell_owner(const int INDEX) const {
+IGraphicalBoard *LeafBoard::getGraphicalBoard() const {
+    return _pGBoard;
+}
+
+CELL_OWNER LeafBoard::get_cell_owner(const int INDEX) const {
     Expects(INDEX >= 0 && INDEX <= 9);
 
     return _cells.at(gsl::narrow<unsigned int>(INDEX));
 }
 
-void LeafBoard::set_cell_owner(const int INDEX, const CellOwner OWNER) {
+void LeafBoard::set_cell_owner(const int INDEX, const CELL_OWNER OWNER) {
     Expects(INDEX >= 0 && INDEX <= 9);
-    Expects(_cells.at(gsl::narrow<unsigned int>(INDEX)) == None);
+    Expects(_cells.at(gsl::narrow<unsigned int>(INDEX)) == NONE);
 
     _cells.at(gsl::narrow<unsigned int>(INDEX)) = OWNER;
     mark_cell(INDEX, OWNER);
@@ -41,13 +42,13 @@ void LeafBoard::set_cell_owner(const int INDEX, const CellOwner OWNER) {
     Ensures(_cells.at(gsl::narrow<unsigned int>(INDEX)) == OWNER);
 }
 
-CellOwner LeafBoard::get_winner() const {
+CELL_OWNER LeafBoard::get_winner() const {
     return _winner;
 }
 
 void LeafBoard::draw() {
     getGraphicalBoard()->draw_board(
-        _symbols,
-        NcHandler::combine_channels(getNcHandler()->get_default_bg_channel(),
-                                    NcHandler::GREY_CHANNEL));
+        _SYMBOLS,
+        NcHandler::combineChannels(getNcHandler()->get_default_bg_channel(),
+                                   NcHandler::GREY_CHANNEL));
 }

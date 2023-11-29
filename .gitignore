@@ -5,6 +5,7 @@ TEST
 *.tar.gz
 *.log
 vg.*
+perf.*
 compile_commands.json
 .cache
 docs

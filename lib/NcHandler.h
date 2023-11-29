@@ -1,8 +1,8 @@
 #ifndef NC_HANDLER
 #define NC_HANDLER
 
-#include "lib/interfaces/NcHandlerI.h"
-#include "lib/interfaces/NcPlaneWrapperI.h"
+#include "lib/interfaces/INcHandler.h"
+#include "lib/interfaces/INcPlaneWrapper.h"
 #include "wrappers/NcPlaneWrapper.h"
 
 #include <cstdint>
@@ -12,10 +12,10 @@
  * @class NcHandler
  * RAII Handler for a notcurses instance.
  */
-class NcHandler : virtual public NcHandlerI {
+class NcHandler : virtual public INcHandler {
 private:
     /** The underlying notcurses instance. */
-    notcurses *nc;
+    notcurses *_nc;
 
 public:
     /** Default red color channel value */
@@ -34,35 +34,31 @@ public:
      * Constructor used to instantiate a notcurses instance.
      *
      * Also sets locale.
-     *
-     * @see notcurses_init()
      */
     NcHandler();
 
     /**
      * Destructor used to stop notcurses instance.
-     *
-     * @see notcurses_stop()
      */
-    ~NcHandler();
+    ~NcHandler() override;
 
     NcHandler(NcHandler &other) = delete;
     void operator=(const NcHandler &) = delete;
 
-    ncplane *get_stdplane() const override final;
-    NcPlaneWrapperI *get_stdplane_wrapper() const override final;
+    [[nodiscard]] ncplane *get_stdplane() const override final;
+    [[nodiscard]] INcPlaneWrapper *get_stdplane_wrapper() const override final;
 
-    uint32_t get_default_bg_channel() const override final;
-    uint32_t get_default_fg_channel() const override final;
-    uint64_t get_default_channels() const override final;
+    [[nodiscard]] uint32_t get_default_bg_channel() const override final;
+    [[nodiscard]] uint32_t get_default_fg_channel() const override final;
+    [[nodiscard]] uint64_t get_default_channels() const override final;
 
     /**
      * Utilitiy function to combine a foreground and background channel.
      *
      * @return The combined channels.
      */
-    static uint64_t combine_channels(const uint32_t BG_CHANNEL,
-                                     const uint32_t FG_CHANNEL);
+    static uint64_t combineChannels(const uint32_t BG_CHANNEL,
+                                    const uint32_t FG_CHANNEL);
     void render() override final;
 };
 

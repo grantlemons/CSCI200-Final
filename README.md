@@ -1,6 +1,6 @@
 # Ultimate Tic-Tac-Toe
 
-Ultimate Tic-Tac-Toe is a project that takes Tic-Tac-Toe too far.
+> A project that takes Tic-Tac-Toe too far.
 
 ## Gameplay
 

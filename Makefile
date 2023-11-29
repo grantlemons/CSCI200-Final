@@ -2,8 +2,8 @@ TARGET = FINAL
 TEST_TARGET = TEST
 DOCS_DIR = docs
 
-LIB_FILES = lib/Shared.cpp lib/board/BoardA.cpp lib/board/LeafBoard.cpp lib/board/PrimaryBoard.cpp lib/graphical_board/GraphicalBoardA.cpp lib/graphical_board/PrimaryGraphicalBoard.cpp lib/graphical_board/LeafGraphicalBoard.cpp lib/NcHandler.cpp lib/wrappers/NcPlaneWrapper.cpp lib/factories/BoardFactory.cpp
-DUMMY_FILES = lib/dummies/GraphicalBoardDummy.cpp lib/dummies/NcHandlerDummy.cpp lib/dummies/NcPlaneWrapperDummy.cpp lib/factories/DummyBoardFactory.cpp
+LIB_FILES = lib/Shared.cpp lib/board/ABoard.cpp lib/board/LeafBoard.cpp lib/board/PrimaryBoard.cpp lib/graphical_board/AGraphicalBoard.cpp lib/graphical_board/PrimaryGraphicalBoard.cpp lib/graphical_board/LeafGraphicalBoard.cpp lib/NcHandler.cpp lib/wrappers/NcPlaneWrapper.cpp lib/factories/BoardFactory.cpp
+DUMMY_FILES = lib/dummies/AGraphicalBoardDummy.cpp lib/dummies/PrimaryGraphicalBoardDummy.cpp lib/dummies/LeafGraphicalBoardDummy.cpp lib/dummies/NcHandlerDummy.cpp lib/dummies/NcPlaneWrapperDummy.cpp lib/factories/DummyBoardFactory.cpp
 TEST_FILES = lib/tests/BoardWinTests.cpp lib/tests/BoardHelperTests.cpp lib/tests/PrimaryBoardTests.cpp lib/tests/LeafBoardTests.cpp
 
 SRC_FILES = main.cpp $(LIB_FILES) $(DUMMY_FILES)
@@ -29,7 +29,9 @@ CXXFLAGS_DEBUG = -g
 CXXVERSION = -std=c++17
 
 OBJECTS = $(SRC_FILES:.cpp=.o)
+HEADERS = $(LIB_FILES:.cpp=.h) $(DUMMY_FILES:.cpp=.h)
 TEST_OBJECTS = $(TEST_SRC_FILES:.cpp=.o)
+TEST_HEADERS = $(LIB_FILES:.cpp=.h) $(DUMMY_FILES:.cpp=.h) $(TEST_FILES:.cpp=.h)
 
 ifeq ($(shell echo "Windows"), "Windows")
 	TARGET := $(TARGET).exe
@@ -63,13 +65,19 @@ depend:
 test: $(TEST_TARGET)
 	@./$(TEST_TARGET)
 
-docs: Doxyfile README.md
+docs:
 	@$(DOXYGEN)
 
 memcheck:
 	@valgrind --leak-check=full ./$(TARGET)
 
+lint: .clang-tidy $(SRC_FILES)
+	@find lib *.cpp -regex '.*\.[(cpp)(h)]' -not -path '*/tests/*' | xargs -I{} clang-tidy -p compile-commands.json {}
+
+lint-fix: .clang-tidy $(SRC_FILES)
+	@find lib *.cpp -regex '.*\.[(cpp)(h)]' -not -path '*/tests/*' | xargs -I{} clang-tidy -p compile-commands.json {} -fix
+
 zip:
 	@tar czf $(TARGET).tar.gz --exclude-ignore=.gitignore --exclude=".git" --exclude=".gitignore" .
 
-.PHONY: all clean depend
+.PHONY: all clean depend docs memcheck lint lint-fix zip

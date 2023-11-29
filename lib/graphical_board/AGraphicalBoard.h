@@ -3,9 +3,9 @@
 
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
-#include "lib/interfaces/GraphicalAreaI.h"
-#include "lib/interfaces/GraphicalBoardI.h"
-#include "lib/interfaces/NcPlaneWrapperI.h"
+#include "lib/interfaces/IGraphicalArea.h"
+#include "lib/interfaces/IGraphicalBoard.h"
+#include "lib/interfaces/INcPlaneWrapper.h"
 
 #include <array>
 #include <cstdint>
@@ -13,21 +13,21 @@
 #include <notcurses/notcurses.h>
 
 /**
- * @class GraphicalBoardA
+ * @class AGraphicalBoard
  * Abstract class representation of a Tic-Tac-Toe board's graphical elements.
  *
  * Contains functionality for drawing Tic-Tac-Toe boards as well as marking
  * their cells.
  */
-class GraphicalBoardA : virtual public GraphicalBoardI {
+class AGraphicalBoard : virtual public IGraphicalBoard {
 protected:
     /** The handler object used to access the underlying
      * notcurses instance.
      */
-    NcHandlerI *_ncHandler;
+    INcHandler *mNcHandler;
 
     /** The primary plane used as a canvas for drawing the board. */
-    NcPlaneWrapperI *_primaryPlane;
+    std::unique_ptr<INcPlaneWrapper> mPrimaryPlane;
 
     /** The child planes used to represent the cells of the board
      *
@@ -39,12 +39,12 @@ protected:
      * 3|4|5
      * 6|7|8
      */
-    std::array<std::unique_ptr<GraphicalAreaI>, CELL_COUNT> _children;
+    std::array<std::unique_ptr<IGraphicalArea>, CELL_COUNT> mChildren;
 
     /** The height of the primary plane */
-    int _rows;
+    int mRows;
     /** The width of the primary plane */
-    int _cols;
+    int mCols;
 
     /**
      * A constructor that takes in the raw info for a plane and forms its
@@ -52,18 +52,14 @@ protected:
      *
      * Calls the constructor that takes an ncplane_options struct.
      *
-     * @param ncHandler The handler object used to access the underlying
+     * @param P_ncHandler The handler object used to access the underlying
      * notcurses instance.
      * @param Y The Y coordinate of the new plane's top left corner.
      * @param X The X coordinate of the new plane's top left corner.
      * @param ROWS The number of rows composing the new plane. (Height)
      * @param COLS The number of columns composing the new plane. (Width)
-     *
-     * @see create_nopts()
-     * @see _primaryPlane
-     * @see _childPlanes
      */
-    GraphicalBoardA(NcHandlerI *const ncHandler, const int Y, const int X,
+    AGraphicalBoard(INcHandler *const P_ncHandler, const int Y, const int X,
                     const int ROWS, const int COLS);
 
     /**
@@ -72,15 +68,11 @@ protected:
      *
      * Calls the constructor that takes an ncplane pointer.
      *
-     * @param ncHandler The handler object used to access the underlying
+     * @param P_ncHandler The handler object used to access the underlying
      * notcurses instance.
      * @param NOPTS The configuration used to form the primary plane.
-     *
-     * @see ncplane_create()
-     * @see _primaryPlane
-     * @see _childPlanes
      */
-    GraphicalBoardA(NcHandlerI *const ncHandler, const ncplane_options NOPTS);
+    AGraphicalBoard(INcHandler *const P_ncHandler, const ncplane_options NOPTS);
 
     /**
      * A constructor that takes in an notcurses plane and uses it as its primary
@@ -88,14 +80,12 @@ protected:
      *
      * Creates child planes used for the cells of the board.
      *
-     * @param ncHandler The handler object used to access the underlying
+     * @param P_ncHandler The handler object used to access the underlying
      * notcurses instance.
-     * @param PLANE The plane used as the primary plane.
-     *
-     * @see _primaryPlane
-     * @see _childPlanes
+     * @param P_plane The plane used as the primary plane.
      */
-    GraphicalBoardA(NcHandlerI *const ncHandler, NcPlaneWrapperI *const PLANE);
+    AGraphicalBoard(INcHandler *const P_ncHandler,
+                    std::unique_ptr<INcPlaneWrapper> P_plane);
 
     /**
      * Virtual function for initializing child planes.
@@ -105,30 +95,31 @@ protected:
     virtual void init_child_planes() = 0;
 
 public:
-    GraphicalBoardA(GraphicalBoardA &) = delete;
-    void operator=(const GraphicalBoardA &) = delete;
-    ~GraphicalBoardA() = default;
+    AGraphicalBoard(AGraphicalBoard &) = delete;
+    void operator=(const AGraphicalBoard &) = delete;
+    ~AGraphicalBoard() override = default;
 
     void draw_board(const std::array<const char *, SYMBOL_COUNT> SYMBOLS,
                     const uint64_t CELL_CHANNELS) override final;
-    virtual void draw_x(const int INDEX) override;
-    virtual void draw_o(const int INDEX) override;
-    std::array<GraphicalAreaI *, CELL_COUNT> get_children() override final;
+    void draw_x(const int INDEX) override;
+    void draw_o(const int INDEX) override;
+    std::array<IGraphicalArea *, CELL_COUNT> get_children() override final;
 
     // Inherited methods of NcPlaneWrapperI
     void dim_yx(int &ROWS, int &COLS) const override final;
-    int get_rows() const override final;
-    int get_cols() const override final;
+    [[nodiscard]] int get_rows() const override final;
+    [[nodiscard]] int get_cols() const override final;
 
-    GraphicalAreaI *create_child(const ncplane_options *nopts) override final;
+    IGraphicalArea *create_child(const ncplane_options *nopts) override final;
 
-    int load_nccell(nccell *const c, const char *gcluster) override final;
-    int set_base_cell(const nccell *const c) override final;
+    int load_nccell(nccell *const P_c, const char *gcluster) override final;
+    int set_base_cell(const nccell *const P_c) override final;
 
     int cursor_move_yx(const int X, const int Y) override final;
-    int hline(const nccell *const c, const unsigned LEN) override final;
-    int vline(const nccell *const c, const unsigned LEN) override final;
-    int putc_yx(const int Y, const int X, const nccell *const c) override final;
+    int hline(const nccell *const P_c, const unsigned LEN) override final;
+    int vline(const nccell *const P_c, const unsigned LEN) override final;
+    int putc_yx(const int Y, const int X,
+                const nccell *const P_c) override final;
     void erase() override final;
 };
 

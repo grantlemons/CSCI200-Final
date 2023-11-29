@@ -3,14 +3,15 @@
 
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
-#include "lib/board/BoardA.h"
+#include "lib/board/ABoard.h"
 #include "lib/board/LeafBoard.h"
 #include "lib/graphical_board/PrimaryGraphicalBoard.h"
-#include "lib/interfaces/GraphicalAreaI.h"
-#include "lib/interfaces/GraphicalBoardI.h"
+#include "lib/interfaces/IGraphicalArea.h"
+#include "lib/interfaces/IGraphicalBoard.h"
 
 #include <array>
 #include <memory>
+#include <notcurses/notcurses.h>
 #include <optional>
 
 /**
@@ -19,11 +20,8 @@
  *
  * Used to represent the logical state of the board.
  * Constituant cells are LeafBoards.
- *
- * @see LeafBoard
- * @see Board
  */
-class PrimaryBoard : virtual public BoardA {
+class PrimaryBoard : virtual public ABoard {
 private:
     /**
      * The unicode characters used when drawing the graphical representation of
@@ -31,13 +29,13 @@ private:
      *
      * Shared between all instances.
      */
-    static std::array<const char *, SYMBOL_COUNT> _symbols;
+    const static std::array<const char *, SYMBOL_COUNT> _SYMBOLS;
 
     /**
      * Component graphical board used to represent actions on the logical board
      * graphically.
      */
-    std::unique_ptr<GraphicalBoardI> _gBoard;
+    std::unique_ptr<IGraphicalBoard> _gBoard;
 
     /**
      * Array storing ownership of its component LeafBoards.
@@ -48,8 +46,6 @@ private:
      * Helper function to abstract out of the two different constructors.
      *
      * Creates LeafBoards for each cell and places them in the _cells array.
-     *
-     * @see _cells
      */
     void init_cells();
 
@@ -57,29 +53,24 @@ public:
     /**
      * A constructor for PrimaryBoard using dependency injection.
      *
-     * @param ncHandler The handler object used to access the underlying
+     * @param P_ncHandler The handler object used to access the underlying
      * notcurses instance.
      * @param gBoard The graphical board object of the parent Board class.
-     *
-     * @see NcHandler::combine_channels()
      */
-    PrimaryBoard(NcHandlerI *ncHandler,
-                 std::unique_ptr<GraphicalBoardI> gBoard);
+    PrimaryBoard(INcHandler *const P_ncHandler,
+                 std::unique_ptr<IGraphicalBoard> gBoard);
 
     /**
      * The constructor for PrimaryBoard.
      *
      * Creates constituant LeafBoards to fill _cells.
      *
-     * @param ncHandler The handler object used to access the underlying
+     * @param P_ncHandler The handler object used to access the underlying
      * notcurses instance.
-     *
-     * @see _cells
-     * @see def_primary_nopts()
      */
-    PrimaryBoard(NcHandlerI *ncHandler);
+    PrimaryBoard(INcHandler *const P_ncHandler);
 
-    ~PrimaryBoard() = default;
+    ~PrimaryBoard() override = default;
     PrimaryBoard(PrimaryBoard &) = delete;
     void operator=(const PrimaryBoard &) = delete;
 
@@ -100,26 +91,25 @@ public:
      *
      * @param INDEX The index of the cell within the PrimaryBoard.
      */
-    LeafBoard *getLeafBoard(const int INDEX) const;
-    GraphicalBoardI *getGraphicalBoard() const override final;
+    [[nodiscard]] LeafBoard *getLeafBoard(const int INDEX) const;
+    [[nodiscard]] IGraphicalBoard *getGraphicalBoard() const override final;
 
-    CellOwner get_cell_owner(const int INDEX) const override final;
+    [[nodiscard]] CELL_OWNER
+    get_cell_owner(const int INDEX) const override final;
 
     void draw() override final;
+
+    /**
+     * Returns the options for the plane used in the constituant GraphicalBoard.
+     *
+     * @todo Replace with something more dynamic.
+     * @todo Allow for resizes.
+     *
+     * @param P_ncHandler A shared pointer to the handler object used to access
+     * the underlying notcurses instance.
+     * @return An ncplane_options struct describing the configuration options.
+     */
+    static ncplane_options defPrimaryNopts(INcHandler *const P_ncHandler);
 };
-
-// Helper functions
-
-/**
- * Returns the options for the plane used in the constituant GraphicalBoard.
- *
- * @todo Replace with something more dynamic.
- * @todo Allow for resizes.
- *
- * @param ncHandler A shared pointer to the handler object used to access the
- * underlying notcurses instance.
- * @return An ncplane_options struct describing the configuration options.
- */
-ncplane_options def_primary_nopts(NcHandlerI *ncHandler);
 
 #endif // !PRIMARYBOARD

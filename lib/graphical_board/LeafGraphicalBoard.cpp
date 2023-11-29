@@ -1,51 +1,52 @@
 #include "lib/graphical_board/LeafGraphicalBoard.h"
 
 #include "gsl/narrow"
-#include "lib/graphical_board/GraphicalBoardA.h"
-#include "lib/interfaces/GraphicalAreaI.h"
-#include "lib/interfaces/NcHandlerI.h"
-#include "lib/interfaces/NcPlaneWrapperI.h"
+#include "lib/Shared.h"
+#include "lib/graphical_board/AGraphicalBoard.h"
+#include "lib/interfaces/IGraphicalArea.h"
+#include "lib/interfaces/INcHandler.h"
+#include "lib/interfaces/INcPlaneWrapper.h"
 #include "lib/wrappers/NcPlaneWrapper.h"
 
 #include <memory>
 #include <notcurses/notcurses.h>
 
-LeafGraphicalBoard::LeafGraphicalBoard(NcHandlerI *const ncHandler, const int Y,
-                                       const int X, const int ROWS,
+LeafGraphicalBoard::LeafGraphicalBoard(INcHandler *const P_ncHandler,
+                                       const int Y, const int X, const int ROWS,
                                        const int COLS)
-    : GraphicalBoardA::GraphicalBoardA{ncHandler, Y, X, ROWS, COLS} {
+    : AGraphicalBoard::AGraphicalBoard{P_ncHandler, Y, X, ROWS, COLS} {
     init_child_planes();
 }
 
-LeafGraphicalBoard::LeafGraphicalBoard(NcHandlerI *const ncHandler,
+LeafGraphicalBoard::LeafGraphicalBoard(INcHandler *const P_ncHandler,
                                        const ncplane_options NOPTS)
-    : GraphicalBoardA::GraphicalBoardA{ncHandler, NOPTS} {
+    : AGraphicalBoard::AGraphicalBoard{P_ncHandler, NOPTS} {
     init_child_planes();
 }
 
-LeafGraphicalBoard::LeafGraphicalBoard(NcHandlerI *const ncHandler,
-                                       NcPlaneWrapperI *const PLANE)
-    : GraphicalBoardA::GraphicalBoardA{ncHandler, PLANE} {
+LeafGraphicalBoard::LeafGraphicalBoard(INcHandler *const P_ncHandler,
+                                       std::unique_ptr<INcPlaneWrapper> P_plane)
+    : AGraphicalBoard::AGraphicalBoard{P_ncHandler, std::move(P_plane)} {
     init_child_planes();
 }
 
 void LeafGraphicalBoard::init_child_planes() {
     const unsigned int ROWS_PER_BCELL =
-        (gsl::narrow<unsigned int>(_rows) - 2u) / 3u;
+        (gsl::narrow<unsigned int>(mRows) - 2u) / 3u;
     const unsigned int COLS_PER_BCELL =
-        (gsl::narrow<unsigned int>(_cols) - 2u) / 3u;
+        (gsl::narrow<unsigned int>(mCols) - 2u) / 3u;
 
-    for (unsigned int i = 0; i < 9; i++) {
+    for (unsigned int i = 0; i < CELL_COUNT; i++) {
         const unsigned int COLUMN = i % 3u;
         const unsigned int ROW = (i - COLUMN) / 3u;
 
-        int newY = 1 + gsl::narrow<int>((ROWS_PER_BCELL * ROW));
-        int newX = 1 + gsl::narrow<int>((COLS_PER_BCELL * COLUMN));
+        const int NEW_Y = 1 + gsl::narrow<int>((ROWS_PER_BCELL * ROW));
+        const int NEW_X = 1 + gsl::narrow<int>((COLS_PER_BCELL * COLUMN));
 
-        ncplane_options child_nopts = NcPlaneWrapper::create_nopts(
-            newY, newX, ROWS_PER_BCELL - 1u, COLS_PER_BCELL - 1u);
-        GraphicalAreaI *tmp = create_child(&child_nopts);
+        const ncplane_options CHILD_NOPTS = NcPlaneWrapper::createNopts(
+            NEW_Y, NEW_X, ROWS_PER_BCELL - 1u, COLS_PER_BCELL - 1u);
+        IGraphicalArea *const P_tmp = create_child(&CHILD_NOPTS);
 
-        _children.at(i) = std::unique_ptr<GraphicalAreaI>{tmp};
+        mChildren.at(i) = std::unique_ptr<IGraphicalArea>{P_tmp};
     }
 }

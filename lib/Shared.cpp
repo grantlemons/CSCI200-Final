@@ -2,9 +2,9 @@
 
 #include <ostream>
 
-std::ostream &operator<<(std::ostream &out, const CellOwner OWNER) {
+std::ostream &operator<<(std::ostream &out, const CELL_OWNER OWNER) {
     switch (OWNER) {
-    case None:
+    case NONE:
         out << "N";
         break;
     case X:
@@ -14,7 +14,7 @@ std::ostream &operator<<(std::ostream &out, const CellOwner OWNER) {
         out << "O";
         break;
     default:
-        out << "Unknown CellOwner Variant";
+        out << "Unknown CELL_OWNER Variant";
     }
     return out;
 }

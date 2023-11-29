@@ -4,20 +4,20 @@
 #include <ostream>
 
 /**
- * @enum CellOwner
+ * @enum CELL_OWNER
  * Options for cell ownership.
  */
-enum CellOwner {
-    None,
+enum CELL_OWNER {
+    NONE,
     X,
     O,
 };
 
-typedef CellOwner LLCell;
+using LLCell = CELL_OWNER;
 
 const unsigned int CELL_COUNT = 9;
 const unsigned int SYMBOL_COUNT = 3;
 
-std::ostream &operator<<(std::ostream &out, const CellOwner OWNER);
+std::ostream &operator<<(std::ostream &out, const CELL_OWNER OWNER);
 
 #endif // !SHARED

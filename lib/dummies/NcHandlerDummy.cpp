@@ -1,15 +1,14 @@
 #include "lib/dummies/NcHandlerDummy.h"
 
 #include "lib/dummies/NcPlaneWrapperDummy.h"
+#include "lib/interfaces/INcPlaneWrapper.h"
 
 #include <notcurses/notcurses.h>
-
-NcHandlerDummy::NcHandlerDummy() {}
 
 ncplane *NcHandlerDummy::get_stdplane() const {
     return nullptr;
 }
-NcPlaneWrapperI *NcHandlerDummy::get_stdplane_wrapper() const {
+INcPlaneWrapper *NcHandlerDummy::get_stdplane_wrapper() const {
     return new NcPlaneWrapperDummy();
 }
 

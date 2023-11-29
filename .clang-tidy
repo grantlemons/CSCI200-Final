@@ -1,0 +1,75 @@
+---
+Checks: "-*,
+        modernize-*,
+        cppcoreguidelines-*,
+        -modernize-use-trailing-return-type,
+        readability-else-after-return,
+        readability-static-accessed-through-instance,
+        cppcoreguidelines-non-private-member-variables-in-classes,
+        misc-non-private-member-variables-in-classes,
+        misc-const-correctness,
+        readability-identifier-naming,
+        readability-const-return-type,
+"
+WarningsAsErrors: ''
+HeaderFilterRegex: ''
+FormatStyle:     none
+HeaderFilterRegex: '^lib/.*$'
+
+CheckOptions:
+  - key: misc-const-correctness.WarnPointersAsValues
+    value: true
+  - key: misc-const-correctness.TransformPointersAsValues
+    value: true
+  - key: readability-identifier-naming.AggressiveDependentMemberLookup
+    value: true
+
+  - key: readability-identifier-naming.ClassCase
+    value: CamelCase
+  - key: readability-identifier-naming.ClassMethodCase
+    value: camelBack
+  - key: readability-identifier-naming.EnumCase
+    value: UPPER_CASE
+  - key: readability-identifier-naming.VariableCase
+    value: camelBack
+  - key: readability-identifier-naming.ConstantCase
+    value: UPPER_CASE
+  - key: readability-identifier-naming.ProtectedMemberCase
+    value: CamelCase
+
+  - key: readability-identifier-naming.ProtectedMemberPrefix
+    value: m
+  - key: readability-identifier-naming.PrivateMemberPrefix
+    value: _
+
+  - key: readability-identifier-naming.LocalPointerCase
+    value: CamelCase
+  - key: readability-identifier-naming.GlobalPointerCase
+    value: CamelCase
+  - key: readability-identifier-naming.LocalPointerPrefix
+    value: p
+  - key: readability-identifier-naming.GlobalPointerPrefix
+    value: p
+
+  - key: readability-identifier-naming.ConstantPointerParameterCase
+    value: camelBack
+  - key: readability-identifier-naming.ConstantPointerParameterPrefix
+    value: P_
+  - key: readability-identifier-naming.LocalConstantPointerCase
+    value: camelBack
+  - key: readability-identifier-naming.GlobalConstantPointerCase
+    value: camelBack
+  - key: readability-identifier-naming.LocalConstantPointerPrefix
+    value: P_
+  - key: readability-identifier-naming.GlobalConstantPointerPrefix
+    value: P_
+
+  # - key: readability-identifier-naming.AbstractClassIgnoredRegex
+  #   value: (I.*)
+  # - key: readability-identifier-naming.AbstractClassPrefix
+  #   value: A
+
+  - key: cppcoreguidelines-explicit-virtual-functions.AllowOverrideAndFinal
+    value: true
+  - key: modernize-use-override.AllowOverrideAndFinal
+    value: true
