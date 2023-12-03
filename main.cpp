@@ -9,6 +9,9 @@
 #include <memory>
 #include <optional>
 
+void gameloop(const CELL_OWNER PLAYER, PrimaryBoard *const pBoard,
+              LeafBoard *pSelected);
+
 int main() {
     std::unique_ptr<AbstractBoardFactory> factory{new BoardFactory()};
     PrimaryBoard *pBoard = factory->getPrimaryBoard();
@@ -19,39 +22,44 @@ int main() {
     LeafBoard *pSelected = nullptr;
     std::optional<LeafBoard *> opt = nullptr;
 
-    opt = pBoard->select_board(2);
-    if (opt != std::nullopt) {
-        pSelected = opt.value();
-        pSelected->set_cell_owner(0, X);
-    }
-    opt = pBoard->select_board(0);
-    if (opt != std::nullopt) {
-        pSelected = opt.value();
-        pSelected->set_cell_owner(2, O);
-    }
-    opt = pBoard->select_board(2);
-    if (opt != std::nullopt) {
-        pSelected = opt.value();
-        pSelected->set_cell_owner(1, X);
-    }
-    opt = pBoard->select_board(1);
-    if (opt != std::nullopt) {
-        pSelected = opt.value();
-        pSelected->set_cell_owner(2, O);
-    }
-    opt = pBoard->select_board(2);
-    if (opt != std::nullopt) {
-        pSelected = opt.value();
-        pSelected->set_cell_owner(2, X);
-    }
-    pBoard->mark_cell(2, pBoard->get_cell_owner(2));
-    if (pBoard->check_win(2, X)) {
-        victor = X;
-    }
-    factory->getNcHandler()->render();
+    CELL_OWNER player = X;
+    while (victor == NONE) {
+        gameloop(player, pBoard, pSelected);
+        factory->getNcHandler()->render();
 
-    // while (victor == None) {
-    // }
+        player = get_other_player(player);
+    }
 
     return EXIT_SUCCESS;
+}
+
+void gameloop(const CELL_OWNER PLAYER, PrimaryBoard *const pBoard,
+              LeafBoard *pSelected) {
+    // select leaf board if needed
+    while (pSelected == nullptr) {
+        const int SELECTION = 0; // TODO take input for selection instead
+        // see notcurses_get_nblock(struct notcurses* n, ncinput* ni)
+
+        std::optional<LeafBoard *> opt = pBoard->select_board(SELECTION);
+
+        if (opt != std::nullopt) {
+            pSelected = opt.value();
+        }
+    }
+
+    // select cell of leafboard
+    int selection = 0;
+    bool selected = false;
+    while (!selected) {
+        // TODO take input for selection here
+        // see notcurses_get_nblock(struct notcurses* n, ncinput* ni)
+
+        selected = pSelected->get_cell_owner(selection) == NONE;
+    }
+    pSelected->set_cell_owner(selection, PLAYER);
+
+    // exit leaf board if won
+    if (pSelected->get_winner() != NONE) {
+        pSelected = nullptr;
+    }
 }

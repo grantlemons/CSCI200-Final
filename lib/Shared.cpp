@@ -18,3 +18,13 @@ std::ostream &operator<<(std::ostream &out, const CELL_OWNER OWNER) {
     }
     return out;
 }
+
+CELL_OWNER get_other_player(const CELL_OWNER PLAYER) {
+    if (PLAYER == X) {
+        return O;
+    } else if (PLAYER == O) {
+        return X;
+    } else {
+        throw;
+    }
+}
