@@ -5,6 +5,7 @@
 #include "lib/interfaces/INcPlaneWrapper.h"
 #include "wrappers/NcPlaneWrapper.h"
 
+#include <bits/types/FILE.h>
 #include <cstdint>
 #include <notcurses/notcurses.h>
 
@@ -51,6 +52,9 @@ public:
     [[nodiscard]] uint32_t get_default_bg_channel() const override final;
     [[nodiscard]] uint32_t get_default_fg_channel() const override final;
     [[nodiscard]] uint64_t get_default_channels() const override final;
+
+    uint32_t get_nblock(ncinput *ni) const override final;
+    uint32_t get_blocking(ncinput *ni) const override final;
 
     /**
      * Utilitiy function to combine a foreground and background channel.

@@ -25,6 +25,9 @@ public:
     [[nodiscard]] uint32_t get_default_fg_channel() const override final;
     [[nodiscard]] uint64_t get_default_channels() const override final;
 
+    uint32_t get_nblock(ncinput *ni) const override final;
+    uint32_t get_blocking(ncinput *ni) const override final;
+
     void render() override final;
 };
 

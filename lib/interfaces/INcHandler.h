@@ -51,6 +51,9 @@ public:
      */
     [[nodiscard]] virtual uint64_t get_default_channels() const = 0;
 
+    virtual uint32_t get_nblock(ncinput *ni) const = 0;
+    virtual uint32_t get_blocking(ncinput *ni) const = 0;
+
     /**
      * Draws all actions on the screen.
      */

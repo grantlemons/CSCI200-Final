@@ -1,3 +1,4 @@
+#include "gsl/narrow"
 #include "lib/NcHandler.h"
 #include "lib/Shared.h"
 #include "lib/board/LeafBoard.h"
@@ -6,11 +7,14 @@
 #include "lib/factories/BoardFactory.h"
 #include "lib/factories/DummyBoardFactory.h"
 
+#include <cstdint>
 #include <memory>
+#include <notcurses/notcurses.h>
 #include <optional>
 
-void gameloop(const CELL_OWNER PLAYER, PrimaryBoard *const pBoard,
-              LeafBoard *pSelected);
+int get_selection_blocking(INcHandler *const P_nchandler);
+void gameloop(INcHandler *const P_nchandler, const CELL_OWNER PLAYER,
+              PrimaryBoard *const P_board, LeafBoard *&pSelected);
 
 int main() {
     std::unique_ptr<AbstractBoardFactory> factory{new BoardFactory()};
@@ -24,7 +28,7 @@ int main() {
 
     CELL_OWNER player = X;
     while (victor == NONE) {
-        gameloop(player, pBoard, pSelected);
+        gameloop(factory->getNcHandler(), player, pBoard, pSelected);
         factory->getNcHandler()->render();
 
         player = get_other_player(player);
@@ -33,14 +37,26 @@ int main() {
     return EXIT_SUCCESS;
 }
 
-void gameloop(const CELL_OWNER PLAYER, PrimaryBoard *const pBoard,
-              LeafBoard *pSelected) {
+int get_selection_blocking(INcHandler *const P_nchandler) {
+    const int MAX_IN = '8';
+    const int MIN_IN = '0';
+
+    uint32_t res{0};
+    ncinput in;
+    while (in.evtype != NCTYPE_PRESS || !(res <= MAX_IN && res >= MIN_IN)) {
+        res = P_nchandler->get_blocking(&in);
+    }
+
+    int number = gsl::narrow<int>(res - MIN_IN);
+    return number;
+}
+
+void gameloop(INcHandler *const P_nchandler, const CELL_OWNER PLAYER,
+              PrimaryBoard *const P_board, LeafBoard *&pSelected) {
     // select leaf board if needed
     while (pSelected == nullptr) {
-        const int SELECTION = 0; // TODO take input for selection instead
-        // see notcurses_get_nblock(struct notcurses* n, ncinput* ni)
-
-        std::optional<LeafBoard *> opt = pBoard->select_board(SELECTION);
+        const int SELECTION{get_selection_blocking(P_nchandler)};
+        std::optional<LeafBoard *> opt{P_board->select_board(SELECTION)};
 
         if (opt != std::nullopt) {
             pSelected = opt.value();
@@ -48,18 +64,16 @@ void gameloop(const CELL_OWNER PLAYER, PrimaryBoard *const pBoard,
     }
 
     // select cell of leafboard
-    int selection = 0;
-    bool selected = false;
+    int selection{0};
+    bool selected{false};
     while (!selected) {
-        // TODO take input for selection here
-        // see notcurses_get_nblock(struct notcurses* n, ncinput* ni)
-
+        selection = get_selection_blocking(P_nchandler);
         selected = pSelected->get_cell_owner(selection) == NONE;
     }
     pSelected->set_cell_owner(selection, PLAYER);
 
-    // exit leaf board if won
+    // select next board if valid
     if (pSelected->get_winner() != NONE) {
-        pSelected = nullptr;
+        pSelected = P_board->select_board(selection).value_or(nullptr);
     }
 }

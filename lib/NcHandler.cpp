@@ -1,5 +1,6 @@
 #include "lib/NcHandler.h"
 
+#include "gsl/assert"
 #include "interfaces/INcPlaneWrapper.h"
 #include "wrappers/NcPlaneWrapper.h"
 
@@ -15,17 +16,13 @@ const uint32_t NcHandler::WHITE_CHANNEL =
 const uint32_t NcHandler::GREY_CHANNEL =
     NCCHANNEL_INITIALIZER(0x77, 0x77, 0x77);
 
-const notcurses_options NOPTS = {nullptr,
-                                 NCLOGLEVEL_SILENT,
-                                 0,
-                                 0,
-                                 0,
-                                 0,
-                                 NCOPTION_SUPPRESS_BANNERS +
-                                     NCOPTION_DRAIN_INPUT};
+const notcurses_options NOPTS = {nullptr, NCLOGLEVEL_SILENT,        0, 0, 0,
+                                 0,       NCOPTION_SUPPRESS_BANNERS};
 
 NcHandler::NcHandler() : _nc{notcurses_init(&NOPTS, nullptr)} {
     setlocale(LC_ALL, "");
+
+    Ensures(_nc != nullptr);
 }
 
 NcHandler::~NcHandler() {
@@ -41,6 +38,13 @@ uint32_t NcHandler::get_default_fg_channel() const {
 }
 uint64_t NcHandler::get_default_channels() const {
     return ncplane_channels(notcurses_stdplane(_nc));
+}
+
+uint32_t NcHandler::get_nblock(ncinput *ni) const {
+    return notcurses_get_nblock(_nc, ni);
+}
+uint32_t NcHandler::get_blocking(ncinput *ni) const {
+    return notcurses_get_blocking(_nc, ni);
 }
 
 uint64_t NcHandler::combineChannels(const uint32_t BG_CHANNEL,
