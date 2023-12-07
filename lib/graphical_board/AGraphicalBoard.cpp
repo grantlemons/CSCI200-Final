@@ -118,6 +118,21 @@ void AGraphicalBoard::draw_o(const int INDEX) {
     mNcHandler->render();
 }
 
+void AGraphicalBoard::draw_tie(const int INDEX) {
+    IGraphicalArea *const P_plane =
+        mChildren.at(gsl::narrow<unsigned int>(INDEX)).get();
+    const nccell GREY = NCCELL_INITIALIZER(
+        '\0', 0,
+        NcHandler::combineChannels(NcHandler::GREY_CHANNEL,
+                                   mNcHandler->get_default_fg_channel()));
+
+    P_plane->erase();
+    P_plane->set_base_cell(&GREY);
+
+    // update the screen with the new changes
+    mNcHandler->render();
+}
+
 std::array<IGraphicalArea *, CELL_COUNT> AGraphicalBoard::get_children() {
     std::array<IGraphicalArea *, CELL_COUNT> arr{};
 

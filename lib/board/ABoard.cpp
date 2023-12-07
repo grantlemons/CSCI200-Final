@@ -75,6 +75,9 @@ void ABoard::mark_cell(const int INDEX, const CELL_OWNER OWNER) {
     case O:
         getGraphicalBoard()->draw_o(INDEX);
         break;
+    case TIE:
+        getGraphicalBoard()->draw_tie(INDEX);
+        break;
     default:
         break;
     }

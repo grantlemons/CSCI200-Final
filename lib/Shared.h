@@ -10,6 +10,7 @@
  */
 enum CELL_OWNER {
     NONE,
+    TIE,
     X,
     O,
 };

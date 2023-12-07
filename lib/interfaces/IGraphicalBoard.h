@@ -44,6 +44,8 @@ public:
      */
     virtual void draw_o(const int INDEX) = 0;
 
+    virtual void draw_tie(const int INDEX) = 0;
+
     /**
      * Getter for the board's child planes.
      *

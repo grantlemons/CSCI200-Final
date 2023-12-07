@@ -6,6 +6,7 @@
 #include "lib/board/ABoard.h"
 #include "lib/interfaces/IGraphicalBoard.h"
 
+#include <algorithm>
 #include <array>
 #include <cstdint>
 #include <memory>
@@ -28,6 +29,11 @@ CELL_OWNER LeafBoard::get_cell_owner(const int INDEX) const {
     return _cells.at(gsl::narrow<unsigned int>(INDEX));
 }
 
+bool LeafBoard::isTie() const {
+    return _winner == NONE &&
+           std::find(_cells.begin(), _cells.end(), NONE) == _cells.end();
+}
+
 void LeafBoard::set_cell_owner(const int INDEX, const CELL_OWNER OWNER) {
     Expects(INDEX >= 0 && INDEX <= 9);
     Expects(_cells.at(gsl::narrow<unsigned int>(INDEX)) == NONE);
@@ -37,6 +43,8 @@ void LeafBoard::set_cell_owner(const int INDEX, const CELL_OWNER OWNER) {
 
     if (check_win(INDEX, OWNER)) {
         _winner = OWNER;
+    } else if (isTie()) {
+        _winner = TIE;
     }
 
     Ensures(_cells.at(gsl::narrow<unsigned int>(INDEX)) == OWNER);

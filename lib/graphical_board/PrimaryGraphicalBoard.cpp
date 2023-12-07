@@ -64,6 +64,11 @@ void PrimaryGraphicalBoard::draw_o(const int INDEX) {
     fill_o(INDEX);
 }
 
+void PrimaryGraphicalBoard::draw_tie(const int INDEX) {
+    AGraphicalBoard::draw_tie(INDEX);
+    fill_tie(INDEX);
+}
+
 void PrimaryGraphicalBoard::fill_x(const int INDEX) {
     auto *const P_target{dynamic_cast<AGraphicalBoard *>(
         mChildren.at(gsl::narrow<unsigned int>(INDEX)).get())};
@@ -89,13 +94,32 @@ void PrimaryGraphicalBoard::fill_o(const int INDEX) {
 
     for (unsigned int i = 0; i < CELL_COUNT; i++) {
         IGraphicalArea *const P_child = P_target->get_children().at(i);
-        const nccell RED = NCCELL_INITIALIZER(
+        const nccell BLUE = NCCELL_INITIALIZER(
             '\0', 0,
-            NcHandler::combineChannels(NcHandler::RED_CHANNEL,
+            NcHandler::combineChannels(NcHandler::BLUE_CHANNEL,
                                        mNcHandler->get_default_fg_channel()));
 
         P_child->erase();
-        P_child->set_base_cell(&RED);
+        P_child->set_base_cell(&BLUE);
+    }
+
+    // update the screen with the new changes
+    mNcHandler->render();
+}
+
+void PrimaryGraphicalBoard::fill_tie(const int INDEX) {
+    AGraphicalBoard *const P_target{dynamic_cast<AGraphicalBoard *>(
+        mChildren.at(gsl::narrow<unsigned int>(INDEX)).get())};
+
+    for (unsigned int i = 0; i < CELL_COUNT; i++) {
+        IGraphicalArea *const P_child = P_target->get_children().at(i);
+        const nccell GREY = NCCELL_INITIALIZER(
+            '\0', 0,
+            NcHandler::combineChannels(NcHandler::GREY_CHANNEL,
+                                       mNcHandler->get_default_fg_channel()));
+
+        P_child->erase();
+        P_child->set_base_cell(&GREY);
     }
 
     // update the screen with the new changes

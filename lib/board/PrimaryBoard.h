@@ -50,6 +50,7 @@ private:
     void init_cells();
 
 public:
+    int selected;
     /**
      * A constructor for PrimaryBoard using dependency injection.
      *

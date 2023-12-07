@@ -73,7 +73,9 @@ void gameloop(INcHandler *const P_nchandler, const CELL_OWNER PLAYER,
     pSelected->set_cell_owner(selection, PLAYER);
 
     // select next board if valid
-    if (pSelected->get_winner() != NONE) {
+    const CELL_OWNER WINNER = pSelected->get_winner();
+    if (WINNER != NONE) {
+        P_board->mark_cell(P_board->selected, WINNER);
         pSelected = P_board->select_board(selection).value_or(nullptr);
     }
 }

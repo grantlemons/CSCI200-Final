@@ -103,6 +103,7 @@ public:
                     const uint64_t CELL_CHANNELS) override final;
     void draw_x(const int INDEX) override;
     void draw_o(const int INDEX) override;
+    void draw_tie(const int INDEX) override;
     std::array<IGraphicalArea *, CELL_COUNT> get_children() override final;
 
     // Inherited methods of NcPlaneWrapperI

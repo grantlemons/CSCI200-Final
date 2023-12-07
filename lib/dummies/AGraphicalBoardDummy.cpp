@@ -29,6 +29,7 @@ void AGraphicalBoardDummy::draw_board(
     const uint64_t CELL_CHANNELS) {}
 void AGraphicalBoardDummy::draw_x(const int INDEX) {}
 void AGraphicalBoardDummy::draw_o(const int INDEX) {}
+void AGraphicalBoardDummy::draw_tie(const int INDEX) {}
 
 std::array<IGraphicalArea *, CELL_COUNT> AGraphicalBoardDummy::get_children() {
     std::array<IGraphicalArea *, CELL_COUNT> planes{};

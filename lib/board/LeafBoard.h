@@ -67,6 +67,11 @@ public:
     get_cell_owner(const int INDEX) const override final;
 
     /**
+     * Checks if all cell owners are set without a winner.
+     */
+    [[nodiscard]] bool isTie() const;
+
+    /**
      * Attempts to set the owner of the given index.
      *
      * If setting the owner of this cell wins the LeafBoard instance as a whole,

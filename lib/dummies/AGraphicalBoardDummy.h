@@ -51,6 +51,7 @@ public:
                     const uint64_t CELL_CHANNELS) override final;
     void draw_x(const int INDEX) override final;
     void draw_o(const int INDEX) override final;
+    void draw_tie(const int INDEX) override final;
     std::array<IGraphicalArea *, CELL_COUNT> get_children() override final;
 
     void dim_yx(int &ROWS, int &COLS) const override final;

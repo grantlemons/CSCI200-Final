@@ -21,7 +21,8 @@ const std::array<const char *, SYMBOL_COUNT> PrimaryBoard::_SYMBOLS =
 
 PrimaryBoard::PrimaryBoard(INcHandler *const P_ncHandler,
                            std::unique_ptr<IGraphicalBoard> gBoard)
-    : ABoard::ABoard{P_ncHandler}, _gBoard{std::move(gBoard)}, _cells{} {
+    : ABoard::ABoard{P_ncHandler}, _gBoard{std::move(gBoard)}, _cells{},
+      selected{} {
     init_cells();
 }
 
@@ -29,7 +30,7 @@ PrimaryBoard::PrimaryBoard(INcHandler *const P_ncHandler)
     : ABoard::ABoard{P_ncHandler},
       _gBoard{std::unique_ptr<IGraphicalBoard>{new PrimaryGraphicalBoard{
           P_ncHandler, PrimaryBoard::defPrimaryNopts(P_ncHandler)}}},
-      _cells{} {
+      _cells{}, selected{} {
     init_cells();
 }
 
@@ -73,7 +74,11 @@ std::optional<LeafBoard *> PrimaryBoard::select_board(const int INDEX) {
     LeafBoard *const P_cell = _cells.at(gsl::narrow<unsigned int>(INDEX)).get();
     const std::optional<LeafBoard *> OPT = std::optional(P_cell);
 
-    return P_cell->get_winner() == NONE ? OPT : std::nullopt;
+    if (P_cell->get_winner() == NONE) {
+        selected = INDEX;
+        return OPT;
+    }
+    return std::nullopt;
 }
 
 ncplane_options PrimaryBoard::defPrimaryNopts(INcHandler *const P_ncHandler) {

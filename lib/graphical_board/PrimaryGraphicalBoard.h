@@ -60,6 +60,7 @@ public:
 
     void draw_x(const int INDEX) override final;
     void draw_o(const int INDEX) override final;
+    void draw_tie(const int INDEX) override final;
 
     /**
      * Marks all cells of a child board as belonging to the X player.
@@ -74,6 +75,8 @@ public:
      * @param INDEX The index of the child board to mark.
      */
     void fill_o(const int INDEX);
+
+    void fill_tie(const int INDEX);
 };
 
 #endif
