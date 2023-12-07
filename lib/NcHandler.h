@@ -5,7 +5,6 @@
 #include "lib/interfaces/INcPlaneWrapper.h"
 #include "wrappers/NcPlaneWrapper.h"
 
-#include <bits/types/FILE.h>
 #include <cstdint>
 #include <notcurses/notcurses.h>
 

@@ -78,6 +78,6 @@ lint-fix: .clang-tidy $(SRC_FILES)
 	@find lib *.cpp -regex '.*\.[(cpp)(h)]' -not -path '*/tests/*' | xargs -I{} clang-tidy -p compile-commands.json {} -fix
 
 zip:
-	@tar czf $(TARGET).tar.gz --exclude-ignore=.gitignore --exclude=".git" --exclude=".gitignore" .
+	@tar czf ../$(TARGET).tar.gz --exclude-ignore=.gitignore --exclude=".git" --exclude=".gitignore" .
 
 .PHONY: all clean depend docs memcheck lint lint-fix zip
