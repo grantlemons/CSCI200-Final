@@ -7,12 +7,14 @@
 #include "lib/factories/BoardFactory.h"
 #include "lib/factories/DummyBoardFactory.h"
 
+#include <chrono>
 #include <cstdint>
 #include <fstream>
 #include <ios>
 #include <memory>
 #include <notcurses/notcurses.h>
 #include <optional>
+#include <thread>
 
 int get_selection_blocking(INcHandler *const P_nchandler);
 void gameloop(INcHandler *const P_nchandler, std::ofstream &out,
@@ -25,6 +27,7 @@ int main() {
     std::ofstream out;
 
     out.open("moves.log", std::ios_base::app);
+    out << "==============================" << std::endl;
 
     pBoard->draw();
 
@@ -35,9 +38,16 @@ int main() {
         gameloop(factory->getNcHandler(), out, player, pBoard, pSelected);
         factory->getNcHandler()->render();
 
+        if (pBoard->check_win(pBoard->selected, player)) {
+            out << "Player " << player << " WINS!" << std::endl;
+            break;
+        }
         player = get_other_player(player);
     }
+    out << "==============================" << std::endl;
+    out.close();
 
+    std::this_thread::sleep_for(std::chrono::seconds(2));
     return EXIT_SUCCESS;
 }
 
