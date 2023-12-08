@@ -1,3 +1,11 @@
+/**
+ * Assignment: Final Project
+ * Author: Grant Lemons
+ * License: GPL3.0
+ * 
+ * All the work in this file is my own.
+ */
+
 #ifndef ABSTRACT_BOARD_FACTORY
 #define ABSTRACT_BOARD_FACTORY
 

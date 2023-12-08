@@ -1,3 +1,11 @@
+/**
+ * Assignment: Final Project
+ * Author: Grant Lemons
+ * License: GPL3.0
+ * 
+ * All the work in this file is my own.
+ */
+
 #include "lib/wrappers/NcPlaneWrapper.h"
 
 #include "gsl/assert"
